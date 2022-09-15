@@ -1,0 +1,6 @@
+right
+left
+top
+False
+D:\GitHub\Documentatie\Labels.xlsx
+D:
