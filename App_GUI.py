@@ -17,7 +17,7 @@ class Ui_MainWindow(object):
         MainWindow.resize(851, 685)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.visual = visual_pointcloud(self.centralwidget)
+        self.visual = interface(self.centralwidget)
         self.visual.setGeometry(QtCore.QRect(29, 20, 671, 461))
         self.visual.setObjectName("visual")
         self.Homing = QtWidgets.QPushButton(self.centralwidget)
@@ -94,6 +94,14 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.aabs.setText(_translate("Mainwidow","0"))
+        self.babs.setText(_translate("Mainwidow","0"))
+        self.cabs.setText(_translate("Mainwidow","0"))
+        self.dabs.setText(_translate("Mainwidow","0"))
+        self.eabs.setText(_translate("Mainwidow","0"))
+        self.xcoord.setText(_translate("Mainwidow","0"))
+        self.ycoord.setText(_translate("Mainwidow","0"))
+        self.zcoord.setText(_translate("Mainwidow","0"))
         self.Homing.setText(_translate("MainWindow", "Home"))
         self.Submit.setText(_translate("MainWindow", "Submit"))
         self.label.setText(_translate("MainWindow", "X"))
@@ -112,4 +120,5 @@ class Ui_MainWindow(object):
 "</style></head><body style=\" font-family:\'Ubuntu\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Press ENTER </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">when done</p></body></html>"))
-from App_space_mapping import visual_pointcloud
+from interface import interface
+#from App_space_mapping import visual_pointcloud

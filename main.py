@@ -7,7 +7,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
-from App_GUI import Ui_MainWindow
+from app_GUI import Ui_MainWindow
 
 def connect_to_ports(find_name):
     all_ports = list(port_list.comports())
@@ -17,14 +17,16 @@ def connect_to_ports(find_name):
     if pos_ports == []:
         all_ports = list(port_list.comports())
         ard = all_ports[0].device
+        ard = serial.Serial(port, 115200, timeout=0.1, write_timeout=0.1,inter_byte_timeout=0.1)
         return ard
 
     ## Search for Suitable Port
     print(pos_ports)
     for port in pos_ports: 
         print(".")
-        try:      ard = serial.Serial(port, 115200, timeout=0.1)
+        try:      ard = serial.Serial(port, 115200, timeout=0.1, write_timeout=0.1, inter_byte_timeout=0.1)
         except:   continue
+        #ard = serial.Serial(port, 115200, timeout=0.1, write_timeout=0.1, inter_byte_timeout=0.1)
         print("trying", port, "...", end="")
         response = read_info(ard)
         print(response, "...", end="")
@@ -48,7 +50,7 @@ def read_info(ard):
             print("Starting up device")
             time.sleep(.1)
             break         
-    ard.write(b"Info\r")
+    #ard.write(b"Info\r\n")
     Info = ard.readline().decode("utf-8").split("\r")[0]
     print("Device Info: "+ Info)  
     return Info
@@ -83,8 +85,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.coord_list = []
 
         if port is None:
-            port = connect_to_ports("")
-            self.device = serial.Serial(port, 155200, timeout=0.1)
+            self.device = connect_to_ports("")
             print(self.device)
         else:
             self.device = serial.Serial(port, 155200, timeout=0.1)
@@ -114,11 +115,16 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.coordlist.takeItem(last)
 
     def keyPressEvent(self, e):
-        if e.key() == Qt.Key_delete:
+        print(e.key())
+        #every key has a digit value press any key when screen is open to see value
+        #when entered into a label enter needs to be pressed 
+        delete = 16777216 #esc to undo
+        enter = 16777220 #enter to execute
+        if e.key() == delete:
             print("removing last coordinate")
             self.handle_list()
 
-        if e.key() == Qt.Key_Enter:
+        if e.key() == enter:
             print("starting execute of absolute coordinates.")
             self.query()
 
@@ -137,36 +143,44 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     ################################################################################
 
     @pyqtSlot()
-    def joint_a(self, a):
-        self.absolute_a = a
+    def joint_a(self):
+        self.absolute_a = self.aabs.text()
+        print(self.absolute_a)
 
     @pyqtSlot()
-    def joint_b(self, b):
-        self.absolute_b = b
+    def joint_b(self):
+        self.absolute_b = self.babs.text()
+        print(self.absolute_b)
 
     @pyqtSlot()
-    def joint_c(self, c):
-        self.absolute_c = c
+    def joint_c(self):
+        self.absolute_c = self.cabs.text()
+        print(self.absolute_c) 
 
     @pyqtSlot()
-    def joint_d(self, d):
-        self.absolute_d = d
+    def joint_d(self):
+        self.absolute_d = self.dabs.text()
+        print(self.absolute_d)
     
     @pyqtSlot()
-    def joint_e(self, e):
-        self.absolute_e = e  
+    def joint_e(self):
+        self.absolute_e = self.eabs.text()
+        print(self.absolute_e)  
     
     @pyqtSlot()
-    def x_location(self, x):
-        self.x_loc = x
+    def x_location(self):
+        self.x_loc = self.xcoord.text()
+        print(self.x_loc)
 
     @pyqtSlot()
-    def y_location(self, y):
-        self.y_loc = y
+    def y_location(self):
+        self.y_loc = self.ycoord.text()
+        print(self.y_loc)
 
     @pyqtSlot()
-    def z_location(self, z):
-        self.z_loc = z
+    def z_location(self):
+        self.z_loc = self.zcoord.text()
+        print(self.z_loc)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
