@@ -60,12 +60,12 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         super(app_stitching, self).__init__()
 
         self.setupUi(self)
-
+        self.graph = self.visual
         self.absolute_a = "0"
-        self.absolute_b = "0"
-        self.absolute_c = "0"
-        self.absolute_d = "0"
-        self.absolute_e = "0"
+        self.absolute_b = "100"
+        self.absolute_c = "-90"
+        self.absolute_d = "80"
+        self.absolute_e = "40"
 
         self.x_loc = "0"
         self.y_loc = "0"
@@ -135,10 +135,19 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 
     def query(self):
         print("query starting")
-        self.device.write(bytearray("$G1 x "+self.absolute_a+" y "+self.absolute_b+"\r","utf-8"))
+        positions = [self.absolute_a, self.absolute_b, self.absolute_c, self.absolute_d, self.absolute_e]
+        for n,pos in enumerate(positions):
+            if n > 0:
+                n+=1
+                self.graph.set_motor(n,pos)
+            else:
+                self.graph.set_motor(n,pos)
+
+        print("arduino commands currently turned off, GRBL settings not stable yet. 21/7")
+        """self.device.write(bytearray("$G1 x "+self.absolute_a+" y "+self.absolute_b+"\r","utf-8"))
         self.device.write(bytearray("$G1 z "+self.absolute_c+" a "+self.absolute_d+"\r","utf-8"))
         self.device.write(bytearray("$G1 b "+self.absolute_e))
-
+        """
     ################################################################################
     ####################### absolute movement ######################################
     ################################################################################
