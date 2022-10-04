@@ -85,8 +85,9 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.coord_list = []
 
         if port is None:
-            self.device = connect_to_ports("")
-            print(self.device)
+            #self.device = connect_to_ports("")
+            #print(self.device)
+            print("no current arduino present")
         else:
             self.device = serial.Serial(port, 155200, timeout=0.1)
         

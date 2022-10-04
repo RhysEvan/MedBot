@@ -1,6 +1,5 @@
 
 import numpy as np
-import torch
 from torch import nn
 import torch.nn.functional as F
 import torch.optim as optim
@@ -9,12 +8,7 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider, Button
 from functools import partial
 import torch
-
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.widgets import Slider, Button
 from functools import partial
-
 from scipy.spatial.transform import Rotation as R
 
 #############################################
