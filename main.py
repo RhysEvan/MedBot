@@ -1,9 +1,10 @@
+#libraries
 import sys
-import serial
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
+#file based code
 from app_GUI import Ui_MainWindow
 from Serial import *
 
