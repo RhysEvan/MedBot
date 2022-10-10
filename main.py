@@ -45,6 +45,9 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.x_loc = "0"
         self.y_loc = "0"
         self.z_loc = "0"
+        self.alfa_loc = "0"
+        self.beta_loc = "0"
+        self.gamma_loc = "0"
 
         ## call to button functions and their forward to internal functions ##
         self.Homing.clicked.connect(self.main_home)
@@ -78,12 +81,15 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def append_coord(self):
         print("coord-list")
-        self.coord_list.append([self.x_loc,self.y_loc,self.z_loc])
-        self.coordlist.addItem([self.x_loc,self.y_loc,self.z_loc])
+        self.coord_list.append([self.x_loc,self.y_loc,self.z_loc,self.alfa_loc,self.beta_loc,self.gamma_loc])
+        self.coordlist.addItem("x: "+str(self.x_loc)+" y: "+str(self.y_loc)+" z: "+str(self.z_loc)+ " α : "+str(self.alfa_loc)+ " β: "+str(self.beta_loc)+ " γ: "+str(self.gamma_loc))
+        print(self.coord_list)
 
     def handle_list(self):
+        self.coord_list.pop()
         last = self.coordlist.count()
-        self.coordlist.takeItem(last)
+        self.coordlist.takeItem(last-1)
+        print(self.coord_list)
 
     def keyPressEvent(self, e):
         print(e.key())
