@@ -7,23 +7,45 @@ from PyQt5.QtGui import *
 #file based imports
 from app_GUI import Ui_MainWindow
 from serial_com import *
+from cameras import *
+
 
 class app_stitching(QMainWindow, Ui_MainWindow):
     def __init__(self, port = None):
-        super(app_stitching, self).__init__()
+        super().__init__()
+
+        ## Initialisation of GUI ##
 
         self.setupUi(self)
+
+        ## Threaded Camera Left## 
+        self.cam_l = Feed_Left(0) ## Number represents the camera adress on the computer ##
+
+        self.cam_l.start()
+        self.cam_l.ImageUpdateLeft.connect(self.image_update_left)
+       
+        ## Threaded Camera Right## 
+        self.cam_r = Feed_Right(1) ## Number represents the camera adress on the computer ##
+
+        #self.cam_r.start()
+        self.cam_r.ImageUpdateRight.connect(self.image_update_right)
+
+        ## conection to interface to create matplot visual#
         self.graph = self.visual
+        
+        ## visual locations of the graph when initializing ##
         self.absolute_a = "0"
         self.absolute_b = "100"
         self.absolute_c = "-90"
         self.absolute_d = "80"
         self.absolute_e = "40"
 
+        ## initial values for the recording list of xyz values ##
         self.x_loc = "0"
         self.y_loc = "0"
         self.z_loc = "0"
 
+        ## call to button functions and their forward to internal functions ##
         self.Homing.clicked.connect(self.main_home)
         self.Submit.clicked.connect(self.append_coord)
         self.aabs.textEdited.connect(self.joint_a)
@@ -88,53 +110,56 @@ class app_stitching(QMainWindow, Ui_MainWindow):
                 self.graph.set_motor(n,pos)
 
         print("arduino commands currently turned off, GRBL settings not stable yet. 21/7")
-        self.com.send_com("$G1 x "+self.absolute_a+" y "+self.absolute_b)
-        self.com.send_com("$G1 z "+self.absolute_c+" a "+self.absolute_d)
-        self.com.send_com("$G1 b "+self.absolute_e)
+        self.com.send_move("x "+self.absolute_a+" y "+self.absolute_b)
+        self.com.send_move("z "+self.absolute_c+" a "+self.absolute_d)
+        self.com.send_move("b "+self.absolute_e)
         
     ################################################################################
     ####################### absolute movement ######################################
     ################################################################################
 
-    @pyqtSlot()
     def joint_a(self):
         self.absolute_a = self.aabs.text()
         print(self.absolute_a)
 
-    @pyqtSlot()
     def joint_b(self):
         self.absolute_b = self.babs.text()
         print(self.absolute_b)
 
-    @pyqtSlot()
     def joint_c(self):
         self.absolute_c = self.cabs.text()
         print(self.absolute_c) 
 
-    @pyqtSlot()
     def joint_d(self):
         self.absolute_d = self.dabs.text()
         print(self.absolute_d)
     
-    @pyqtSlot()
     def joint_e(self):
         self.absolute_e = self.eabs.text()
         print(self.absolute_e)  
-    
-    @pyqtSlot()
+
     def x_location(self):
         self.x_loc = self.xcoord.text()
         print(self.x_loc)
 
-    @pyqtSlot()
     def y_location(self):
         self.y_loc = self.ycoord.text()
         print(self.y_loc)
 
-    @pyqtSlot()
     def z_location(self):
         self.z_loc = self.zcoord.text()
         print(self.z_loc)
+    
+    ################################################################################
+    ####################### threading method  ######################################
+    ################################################################################
+
+    def image_update_left(self, Image):
+        self.camera_left.setPixmap(QPixmap.fromImage(Image))
+    
+    def image_update_right(self, Image):
+        self.camera_right.setPixmap(QPixmap.fromImage(Image))
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

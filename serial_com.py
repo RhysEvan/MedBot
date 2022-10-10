@@ -8,42 +8,36 @@ class serial_bridge:
     def __init__(self, port = None):
     
         if port is None:
-            #self.device = self.connect_to_ports("")
+            #self.device = self.bridge("")
             #print(self.device)
             print("no current arduino present")
             self.device = None
         else:
             self.device = serial.Serial(port, 155200, timeout=0.1)
+        
+        self.open_bridge()
     
-    def open_bridge(self):
+    def bridge(self):
 
         # Open grbl serial port        
         if platform == "linux" or platform == "linux2":
-            self.s = self.check_ports()
+            ports = self.check_ports()
+            s = self.connect_to_ports_linux(ports)
+            return s
 
         elif platform == "darwin":  ##OS X
             raise Exception( "Not Mac compatible yet" )
             
         elif platform == "win32":
-            self.s = self.check_ports()
-
-        if self.s is None:   return
-        # Open g-code file
-        # Wake up grbl
-        self.s.write(b"\r\n\r\n")
-        time.sleep(2)   # Wait for grbl to initialize
-        self.s.flushInput()  # Flush startup text in serial input
+            ports = self.check_ports()
+            s = self.connect_to_ports_win(ports)
+            return s
 
     def check_ports(self):
         all_ports = list(port_list.comports())
         pos_ports = [p.device for p in all_ports  if "Arduino" in p.description]
         [print(p.description) for p in all_ports]
-        if pos_ports == []:
-            ard = self.connect_to_ports_linux()
-            return ard
-        else:
-            ard = self.connect_to_ports_win(pos_ports)
-            return ard
+        return pos_ports
     
     def connect_to_ports_linux(self):
         all_ports = list(port_list.comports())
@@ -86,11 +80,25 @@ class serial_bridge:
         Info = ard.readline().decode("utf-8").split("\r")[0]
         print("Device Info: "+ Info)  
         return Info
-    
+
+        
+    def open_bridge(self):
+        if self.device is None:   return
+        # Open g-code file
+        # Wake up grbl
+        self.device.write(b"\r\n\r\n")
+        time.sleep(2)   # Wait for grbl to initialize
+        self.device.flushInput()  # Flush startup text in serial input
+
     def send_com(self, input):
         if self.device is None:
             return   
         self.device.write(bytearray(str(input)+"\r\n","utf-8"))
+    
+    def send_move(self, input):
+        if self.device is None:
+            return   
+        self.device.write(bytearray("$G1 "+str(input)+"\r\n","utf-8"))
     
     def home(self):
         print("homing")
