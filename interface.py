@@ -49,8 +49,6 @@ class interface(QWidget):
 
         if active[idx]=="r":            r[idx] = int(value)
         elif active[idx]=="t":          t[idx] = int(value)
-        print(r)
-        print(t)
         self.theta = t
         self.radius = r
         self.update()

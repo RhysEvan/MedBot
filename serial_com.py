@@ -1,3 +1,4 @@
+from queue import Empty
 from sys import platform
 import time
 import serial
@@ -18,14 +19,13 @@ class serial_bridge:
 
         # Open grbl serial port        
         if platform == "linux" or platform == "linux2":
-            raise Exception( "Not Linux compatible yet" )
-            #rasp /dev/ttyUSB0. For Pc COM
+            self.s = self.check_ports()
 
         elif platform == "darwin":  ##OS X
             raise Exception( "Not Mac compatible yet" )
             
         elif platform == "win32":
-            self.s = self.connect_to_ports_win()
+            self.s = self.check_ports()
 
         if self.s is None:   return
         # Open g-code file
@@ -34,17 +34,24 @@ class serial_bridge:
         time.sleep(2)   # Wait for grbl to initialize
         self.s.flushInput()  # Flush startup text in serial input
 
-    def connect_to_ports_win(self, find_name):
+    def check_ports(self):
         all_ports = list(port_list.comports())
         pos_ports = [p.device for p in all_ports  if "Arduino" in p.description]
         [print(p.description) for p in all_ports]
-
         if pos_ports == []:
-            all_ports = list(port_list.comports())
-            ard = all_ports[0].device
-            ard = serial.Serial(port, 115200, timeout=0.1, write_timeout=0.1,inter_byte_timeout=0.1)
+            ard = self.connect_to_ports_linux()
             return ard
+        else:
+            ard = self.connect_to_ports_win(pos_ports)
+            return ard
+    
+    def connect_to_ports_linux(self):
+        all_ports = list(port_list.comports())
+        port = all_ports[0].device
+        ard = serial.Serial(port, 115200, timeout=0.1, write_timeout=0.1,inter_byte_timeout=0.1)
+        return ard
 
+    def connect_to_ports_win(self, pos_ports, find_name):
         ## Search for Suitable Port
         print(pos_ports)
         for port in pos_ports: 
@@ -63,12 +70,6 @@ class serial_bridge:
                 ard = None
         print("")
 
-        return ard
-    
-    def connect_to_ports_linux(self):
-        all_ports = list(port_list.comports())
-        ard = all_ports[0].device
-        ard = serial.Serial(ard, 115200, timeout=0.1, write_timeout=0.1,inter_byte_timeout=0.1)
         return ard
 
     def read_info(self, ard):

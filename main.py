@@ -6,7 +6,7 @@ from PyQt5.QtGui import *
 
 #file based imports
 from app_GUI import Ui_MainWindow
-from Serial import *
+from serial_com import *
 
 class app_stitching(QMainWindow, Ui_MainWindow):
     def __init__(self, port = None):
