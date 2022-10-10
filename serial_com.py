@@ -97,7 +97,8 @@ class serial_bridge:
     
     def send_move(self, input):
         if self.device is None:
-            return   
+           print("no device")
+           return   
         self.device.write(bytearray("$G1 "+str(input)+"\r\n","utf-8"))
     
     def home(self):

@@ -18,6 +18,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 
         self.setupUi(self)
 
+        
         ## Threaded Camera Left## 
         self.cam_l = Feed_Left(0) ## Number represents the camera adress on the computer ##
 
@@ -27,7 +28,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         ## Threaded Camera Right## 
         self.cam_r = Feed_Right(1) ## Number represents the camera adress on the computer ##
 
-        #self.cam_r.start()
+        self.cam_r.start()
         self.cam_r.ImageUpdateRight.connect(self.image_update_right)
 
         ## conection to interface to create matplot visual#
@@ -56,6 +57,9 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.xcoord.textEdited.connect(self.x_location)
         self.ycoord.textEdited.connect(self.y_location)
         self.zcoord.textEdited.connect(self.z_location)
+        self.alfacoord.textEdited.connect(self.alfa_location)
+        self.betacoord.textEdited.connect(self.beta_location)
+        self.gammacoord.textEdited.connect(self.gamma_location)
 
         self.coord_list = []
 
@@ -149,7 +153,19 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     def z_location(self):
         self.z_loc = self.zcoord.text()
         print(self.z_loc)
-    
+
+    def alfa_location(self):
+        self.alfa_loc = self.alfacoord.text()
+        print(self.alfa_loc)
+
+    def beta_location(self):
+        self.beta_loc = self.betacoord.text()
+        print(self.beta_loc)
+
+    def gamma_location(self):
+        self.gamma_loc = self.gammacoord.text()
+        print(self.gamma_loc)
+
     ################################################################################
     ####################### threading method  ######################################
     ################################################################################

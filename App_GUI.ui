@@ -50,7 +50,7 @@
    <widget class="QLineEdit" name="xcoord">
     <property name="geometry">
      <rect>
-      <x>23</x>
+      <x>20</x>
       <y>490</y>
       <width>81</width>
       <height>28</height>
@@ -63,8 +63,8 @@
    <widget class="QPushButton" name="Submit">
     <property name="geometry">
      <rect>
-      <x>253</x>
-      <y>530</y>
+      <x>140</x>
+      <y>570</y>
       <width>91</width>
       <height>28</height>
      </rect>
@@ -89,7 +89,7 @@
    <widget class="QLineEdit" name="ycoord">
     <property name="geometry">
      <rect>
-      <x>143</x>
+      <x>140</x>
       <y>490</y>
       <width>81</width>
       <height>28</height>
@@ -102,7 +102,7 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>233</x>
+      <x>230</x>
       <y>490</y>
       <width>16</width>
       <height>31</height>
@@ -115,7 +115,7 @@
    <widget class="QLineEdit" name="zcoord">
     <property name="geometry">
      <rect>
-      <x>253</x>
+      <x>250</x>
       <y>490</y>
       <width>81</width>
       <height>28</height>
@@ -128,7 +128,7 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>343</x>
+      <x>340</x>
       <y>490</y>
       <width>16</width>
       <height>31</height>
@@ -332,6 +332,84 @@ p, li { white-space: pre-wrap; }
       <y>440</y>
       <width>481</width>
       <height>371</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>530</y>
+      <width>16</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>γ</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_12">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>530</y>
+      <width>16</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>β</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="gammacoord">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>530</y>
+      <width>81</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_13">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>530</y>
+      <width>16</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>α</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="betacoord">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>530</y>
+      <width>81</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="alfacoord">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>530</y>
+      <width>81</width>
+      <height>28</height>
      </rect>
     </property>
     <property name="text">
