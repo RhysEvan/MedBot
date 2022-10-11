@@ -20,27 +20,31 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 
         
         ## Threaded Camera Left## 
-        self.cam_l = Feed_Left(0) ## Number represents the camera adress on the computer ##
+        self.cam_l = Feed_Left(1) ## Number represents the camera adress on the computer ##
 
         self.cam_l.start()
         self.cam_l.ImageUpdateLeft.connect(self.image_update_left)
        
         ## Threaded Camera Right## 
-        self.cam_r = Feed_Right(1) ## Number represents the camera adress on the computer ##
+        self.cam_r = Feed_Right(0) ## Number represents the camera adress on the computer ##
 
         self.cam_r.start()
         self.cam_r.ImageUpdateRight.connect(self.image_update_right)
 
         ## conection to interface to create matplot visual#
         self.graph = self.visual
-        
+
         ## visual locations of the graph when initializing ##
         self.absolute_a = "0"
+        self.text_aabs.setText("40")
         self.absolute_b = "100"
+        self.text_babs.setText("100")
         self.absolute_c = "270"
+        self.text_cabs.setText("270")
         self.absolute_d = "80"
+        self.text_dabs.setText("80")
         self.absolute_e = "40"
-
+        self.text_eabs.setText("40")
         ## initial values for the recording list of xyz values ##
         self.x_loc = "0"
         self.y_loc = "0"
@@ -122,26 +126,31 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 
     def joint_a(self):
         self.absolute_a = self.aabs.value()
+        self.text_aabs.setText(str(self.absolute_a))
         self.graph.set_motor(0,self.absolute_a)
         print(self.absolute_a)
 
     def joint_b(self):
         self.absolute_b = self.babs.value()
+        self.text_babs.setText(str(self.absolute_b))
         self.graph.set_motor(2,self.absolute_b)
         print(self.absolute_b)
 
     def joint_c(self):
         self.absolute_c = self.cabs.value()
+        self.text_cabs.setText(str(self.absolute_c))
         self.graph.set_motor(3,self.absolute_c)
         print(self.absolute_c) 
 
     def joint_d(self):
         self.absolute_d = self.dabs.value()
+        self.text_dabs.setText(str(self.absolute_d))
         self.graph.set_motor(4,self.absolute_d)
         print(self.absolute_d)
     
     def joint_e(self):
         self.absolute_e = self.eabs.value()
+        self.text_eabs.setText(str(self.absolute_e))
         self.graph.set_motor(5,self.absolute_e)
         print(self.absolute_e)  
 
