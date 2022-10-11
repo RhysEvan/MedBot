@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1320</width>
+    <width>1928</width>
     <height>874</height>
    </rect>
   </property>
@@ -151,24 +151,11 @@
      <string>List of coordinates</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="aabs">
-    <property name="geometry">
-     <rect>
-      <x>610</x>
-      <y>110</y>
-      <width>81</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>0</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>700</x>
-      <y>110</y>
+      <x>710</x>
+      <y>20</y>
       <width>16</width>
       <height>31</height>
      </rect>
@@ -177,24 +164,11 @@
      <string>A</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="babs">
-    <property name="geometry">
-     <rect>
-      <x>610</x>
-      <y>150</y>
-      <width>81</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>100</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>700</x>
-      <y>150</y>
+      <x>750</x>
+      <y>20</y>
       <width>16</width>
       <height>31</height>
      </rect>
@@ -203,24 +177,11 @@
      <string>B</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="cabs">
-    <property name="geometry">
-     <rect>
-      <x>610</x>
-      <y>190</y>
-      <width>81</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>90</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>700</x>
-      <y>190</y>
+      <x>790</x>
+      <y>20</y>
       <width>16</width>
       <height>31</height>
      </rect>
@@ -229,25 +190,12 @@
      <string>C</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="dabs">
-    <property name="geometry">
-     <rect>
-      <x>610</x>
-      <y>230</y>
-      <width>81</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>45</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>700</x>
-      <y>230</y>
-      <width>16</width>
+      <x>830</x>
+      <y>20</y>
+      <width>21</width>
       <height>31</height>
      </rect>
     </property>
@@ -255,24 +203,11 @@
      <string>D</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="eabs">
-    <property name="geometry">
-     <rect>
-      <x>610</x>
-      <y>270</y>
-      <width>81</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>40</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_9">
     <property name="geometry">
      <rect>
-      <x>700</x>
-      <y>270</y>
+      <x>870</x>
+      <y>20</y>
       <width>16</width>
       <height>31</height>
      </rect>
@@ -285,7 +220,7 @@
     <property name="geometry">
      <rect>
       <x>600</x>
-      <y>70</y>
+      <y>20</y>
       <width>101</width>
       <height>31</height>
      </rect>
@@ -294,29 +229,11 @@
      <string>Absolute values</string>
     </property>
    </widget>
-   <widget class="QTextEdit" name="textEdit">
-    <property name="geometry">
-     <rect>
-      <x>610</x>
-      <y>310</y>
-      <width>101</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="html">
-     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-size:10pt;&quot;&gt;Press ENTER &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-size:10pt;&quot;&gt;when done&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="camera_left">
     <property name="geometry">
      <rect>
-      <x>740</x>
-      <y>20</y>
+      <x>920</x>
+      <y>50</y>
       <width>481</width>
       <height>371</height>
      </rect>
@@ -328,8 +245,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QLabel" name="camera_right">
     <property name="geometry">
      <rect>
-      <x>740</x>
-      <y>440</y>
+      <x>1420</x>
+      <y>50</y>
       <width>481</width>
       <height>371</height>
      </rect>
@@ -414,6 +331,117 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="text">
      <string/>
+    </property>
+   </widget>
+   <widget class="QSlider" name="aabs">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>50</y>
+      <width>31</width>
+      <height>551</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>-100</number>
+    </property>
+    <property name="maximum">
+     <number>200</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QSlider" name="babs">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>50</y>
+      <width>31</width>
+      <height>551</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>20</number>
+    </property>
+    <property name="maximum">
+     <number>200</number>
+    </property>
+    <property name="value">
+     <number>100</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QSlider" name="cabs">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>50</y>
+      <width>31</width>
+      <height>551</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>270</number>
+    </property>
+    <property name="value">
+     <number>270</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QSlider" name="dabs">
+    <property name="geometry">
+     <rect>
+      <x>820</x>
+      <y>50</y>
+      <width>31</width>
+      <height>551</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>180</number>
+    </property>
+    <property name="value">
+     <number>80</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QSlider" name="eabs">
+    <property name="geometry">
+     <rect>
+      <x>860</x>
+      <y>50</y>
+      <width>31</width>
+      <height>551</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>180</number>
+    </property>
+    <property name="value">
+     <number>40</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="coord_query">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>570</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Query</string>
     </property>
    </widget>
   </widget>

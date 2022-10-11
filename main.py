@@ -37,7 +37,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         ## visual locations of the graph when initializing ##
         self.absolute_a = "0"
         self.absolute_b = "100"
-        self.absolute_c = "-90"
+        self.absolute_c = "270"
         self.absolute_d = "80"
         self.absolute_e = "40"
 
@@ -52,11 +52,11 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         ## call to button functions and their forward to internal functions ##
         self.Homing.clicked.connect(self.main_home)
         self.Submit.clicked.connect(self.append_coord)
-        self.aabs.textEdited.connect(self.joint_a)
-        self.babs.textEdited.connect(self.joint_b)
-        self.cabs.textEdited.connect(self.joint_c)
-        self.dabs.textEdited.connect(self.joint_d)
-        self.eabs.textEdited.connect(self.joint_e)
+        self.aabs.valueChanged.connect(self.joint_a)
+        self.babs.valueChanged.connect(self.joint_b)
+        self.cabs.valueChanged.connect(self.joint_c)
+        self.dabs.valueChanged.connect(self.joint_d)
+        self.eabs.valueChanged.connect(self.joint_e)
         self.xcoord.textEdited.connect(self.x_location)
         self.ycoord.textEdited.connect(self.y_location)
         self.zcoord.textEdited.connect(self.z_location)
@@ -111,14 +111,6 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 
     def query(self):
         print("query starting")
-        positions = [self.absolute_a, self.absolute_b, self.absolute_c, self.absolute_d, self.absolute_e]
-        for n,pos in enumerate(positions):
-            if n > 0:
-                n+=1
-                self.graph.set_motor(n,pos)
-            else:
-                self.graph.set_motor(n,pos)
-
         print("arduino commands currently turned off, GRBL settings not stable yet. 21/7")
         self.com.send_move("x "+self.absolute_a+" y "+self.absolute_b)
         self.com.send_move("z "+self.absolute_c+" a "+self.absolute_d)
@@ -129,23 +121,28 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     ################################################################################
 
     def joint_a(self):
-        self.absolute_a = self.aabs.text()
+        self.absolute_a = self.aabs.value()
+        self.graph.set_motor(0,self.absolute_a)
         print(self.absolute_a)
 
     def joint_b(self):
-        self.absolute_b = self.babs.text()
+        self.absolute_b = self.babs.value()
+        self.graph.set_motor(2,self.absolute_b)
         print(self.absolute_b)
 
     def joint_c(self):
-        self.absolute_c = self.cabs.text()
+        self.absolute_c = self.cabs.value()
+        self.graph.set_motor(3,self.absolute_c)
         print(self.absolute_c) 
 
     def joint_d(self):
-        self.absolute_d = self.dabs.text()
+        self.absolute_d = self.dabs.value()
+        self.graph.set_motor(4,self.absolute_d)
         print(self.absolute_d)
     
     def joint_e(self):
-        self.absolute_e = self.eabs.text()
+        self.absolute_e = self.eabs.value()
+        self.graph.set_motor(5,self.absolute_e)
         print(self.absolute_e)  
 
     def x_location(self):
