@@ -26,7 +26,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.cam_l.ImageUpdate.connect(self.image_update_left)
        
         ## Threaded Camera Right## 
-        self.cam_r = Feed(2) ## Number represents the camera adress on the computer ##
+        self.cam_r = Feed(0) ## Number represents the camera adress on the computer ##
 
         self.cam_r.start()
         self.cam_r.ImageUpdate.connect(self.image_update_right)
