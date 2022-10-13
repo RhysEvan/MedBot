@@ -107,7 +107,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         print(self.coord_list)
 
     def append_motor(self):
-        self.motor_list.append([{"X":self.absolute_a,"Y":self.absolute_b},{"Z":self.absolute_c,"A":self.absolute_d},{"B":self.absolute_e}])
+        self.motor_list.append([{"0":"X "+self.absolute_a + " Y "+self.absolute_b,"1":"Z "+self.absolute_c+" A "+self.absolute_d,"2":"B "+self.absolute_e}])
         self.motorlist.addItem("A: "+str(self.absolute_a)+" B: "+str(self.absolute_b)+" C: "+str(self.absolute_c)+ " D : "+str(self.absolute_d)+ " E: "+str(self.absolute_e))
 
     def handle_motorlist(self):
@@ -143,7 +143,9 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         recording = self.file.unpack()
         for y,ls in enumerate(recording):
             for i in range(len(ls)):
-                print(ls[i])
+                self.com.send_move(ls[i]["0"])
+                self.com.send_move(ls[i]["1"])
+                self.com.send_move(ls[i]["2"])
 
 
     ################################################################################
@@ -162,32 +164,32 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     ################################################################################
 
     def joint_a(self):
-        self.absolute_a = self.aabs.value()
-        self.text_aabs.setText(str(self.absolute_a))
+        self.absolute_a = str(self.aabs.value())
+        self.text_aabs.setText(self.absolute_a)
         self.graph.set_motor(0,self.absolute_a)
         print(self.absolute_a)
 
     def joint_b(self):
-        self.absolute_b = self.babs.value()
-        self.text_babs.setText(str(self.absolute_b))
+        self.absolute_b = str(self.babs.value())
+        self.text_babs.setText(self.absolute_b)
         self.graph.set_motor(2,self.absolute_b)
         print(self.absolute_b)
 
     def joint_c(self):
-        self.absolute_c = self.cabs.value()
-        self.text_cabs.setText(str(self.absolute_c))
+        self.absolute_c = str(self.cabs.value())
+        self.text_cabs.setText(self.absolute_c)
         self.graph.set_motor(3,self.absolute_c)
         print(self.absolute_c) 
 
     def joint_d(self):
-        self.absolute_d = self.dabs.value()
-        self.text_dabs.setText(str(self.absolute_d))
+        self.absolute_d = str(self.dabs.value())
+        self.text_dabs.setText(self.absolute_d)
         self.graph.set_motor(4,self.absolute_d)
         print(self.absolute_d)
     
     def joint_e(self):
-        self.absolute_e = self.eabs.value()
-        self.text_eabs.setText(str(self.absolute_e))
+        self.absolute_e = str(self.eabs.value())
+        self.text_eabs.setText(self.absolute_e)
         self.graph.set_motor(5,self.absolute_e)
         print(self.absolute_e)  
 
