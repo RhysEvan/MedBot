@@ -8,7 +8,7 @@ class Feed_Left(QThread):
     def __init__(self , location = None, parent=None):
         super(Feed_Left,self).__init__(parent)
         self.loc = location
-    ImageUpdateLeft = pyqtSignal(QImage)
+    ImageUpdate= pyqtSignal(QImage)
     def run(self):
         self.ThreadActive = True
         cap = cv2.VideoCapture(self.loc)
@@ -19,7 +19,7 @@ class Feed_Left(QThread):
                 FlippedImage = cv2.flip(Image, 1)
                 ConvertToQtFormat = QImage(FlippedImage.data, FlippedImage.shape[1], FlippedImage.shape[0], QImage.Format_RGB888)
                 Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
-                self.ImageUpdateLeft.emit(Pic)
+                self.ImageUpdate.emit(Pic)
     def stop(self):
         self.ThreadActive = False
         self.quit()

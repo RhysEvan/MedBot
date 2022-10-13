@@ -92,6 +92,7 @@ class serial_bridge:
 
     def send_com(self, input):
         if self.device is None:
+            print("no device")
             return   
         self.device.write(bytearray(str(input)+"\r\n","utf-8"))
     

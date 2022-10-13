@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
 #file based imports
-from app_GUI import Ui_MainWindow
+from App_GUI import Ui_MainWindow
 from serial_com import *
 from cameras import *
 
@@ -20,16 +20,16 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 
         
         ## Threaded Camera Left## 
-        self.cam_l = Feed_Left(1) ## Number represents the camera adress on the computer ##
+        self.cam_l = Feed_Left(0) ## Number represents the camera adress on the computer ##
 
         self.cam_l.start()
-        self.cam_l.ImageUpdateLeft.connect(self.image_update_left)
+        self.cam_l.ImageUpdate.connect(self.image_update_left)
        
         ## Threaded Camera Right## 
-        self.cam_r = Feed_Right(0) ## Number represents the camera adress on the computer ##
+        self.cam_r = Feed_Left(1) ## Number represents the camera adress on the computer ##
 
         self.cam_r.start()
-        self.cam_r.ImageUpdateRight.connect(self.image_update_right)
+        self.cam_r.ImageUpdate.connect(self.image_update_right)
 
         ## conection to interface to create matplot visual#
         self.graph = self.visual
