@@ -8,6 +8,7 @@ from PyQt5.QtGui import *
 from App_GUI import Ui_MainWindow
 from serial_com import *
 from cameras import *
+from json_compiler import *
 
 
 class app_stitching(QMainWindow, Ui_MainWindow):
@@ -18,7 +19,6 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 
         self.setupUi(self)
 
-        
         ## Threaded Camera Left## 
         self.cam_l = Feed(1) ## Number represents the camera adress on the computer ##
 
@@ -36,7 +36,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 
         ## visual locations of the graph when initializing ##
         self.absolute_a = "0"
-        self.text_aabs.setText("40")
+        self.text_aabs.setText("0")
         self.absolute_b = "100"
         self.text_babs.setText("100")
         self.absolute_c = "270"
@@ -56,6 +56,11 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         ## call to button functions and their forward to internal functions ##
         self.Homing.clicked.connect(self.main_home)
         self.Submit.clicked.connect(self.append_coord)
+        self.recording.clicked.connect(self.append_motor)
+        self.compiling.clicked.connect(self.json_file)
+        self.remove_motor.clicked.connect(self.handle_motorlist)
+        self.executing.clicked.connect(self.run_json)
+
         self.aabs.valueChanged.connect(self.joint_a)
         self.babs.valueChanged.connect(self.joint_b)
         self.cabs.valueChanged.connect(self.joint_c)
@@ -69,8 +74,13 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.gammacoord.textEdited.connect(self.gamma_location)
 
         self.coord_list = []
+        self.motor_list = []
 
         self.com = serial_bridge()
+
+        ## json compiler initiation
+        self.file = json_handler()
+
 
     @pyqtSlot()
     def main_home(self):
@@ -82,18 +92,31 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     ####################### coordinate list ########################################
     ################################################################################
 
-    @pyqtSlot()
-    def append_coord(self):
-        print("coord-list")
-        self.coord_list.append([self.x_loc,self.y_loc,self.z_loc,self.alfa_loc,self.beta_loc,self.gamma_loc])
-        self.coordlist.addItem("x: "+str(self.x_loc)+" y: "+str(self.y_loc)+" z: "+str(self.z_loc)+ " α : "+str(self.alfa_loc)+ " β: "+str(self.beta_loc)+ " γ: "+str(self.gamma_loc))
-        print(self.coord_list)
-
-    def handle_list(self):
+    def handle_coordlist(self):
+        if self.coord_list == []:
+            print("no coords")
+            return
         self.coord_list.pop()
         last = self.coordlist.count()
         self.coordlist.takeItem(last-1)
         print(self.coord_list)
+
+    def append_coord(self):
+        self.coord_list.append([self.x_loc,self.y_loc,self.z_loc,self.alfa_loc,self.beta_loc,self.gamma_loc])
+        self.coordlist.addItem("x: "+str(self.x_loc)+" y: "+str(self.y_loc)+" z: "+str(self.z_loc)+ " α : "+str(self.alfa_loc)+ " β: "+str(self.beta_loc)+ " γ: "+str(self.gamma_loc))
+        print(self.coord_list)
+
+    def append_motor(self):
+        self.motor_list.append([{"X":self.absolute_a,"Y":self.absolute_b},{"Z":self.absolute_c,"A":self.absolute_d},{"B":self.absolute_e}])
+        self.motorlist.addItem("A: "+str(self.absolute_a)+" B: "+str(self.absolute_b)+" C: "+str(self.absolute_c)+ " D : "+str(self.absolute_d)+ " E: "+str(self.absolute_e))
+
+    def handle_motorlist(self):
+        if self.motor_list == []:
+            print("no motor positions")
+            return
+        self.motor_list.pop()
+        last = self.motorlist.count()
+        self.motorlist.takeItem(last-1)
 
     def keyPressEvent(self, e):
         print(e.key())
@@ -103,11 +126,25 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         enter = 16777220 #enter to execute
         if e.key() == delete:
             print("removing last coordinate")
-            self.handle_list()
+            self.handle_coordlist()
 
         if e.key() == enter:
             print("starting execute of absolute coordinates.")
             self.query()
+
+    ################################################################################
+    ######################## json file creation ####################################
+    ################################################################################
+
+    def json_file(self):
+        self.file.transfer(self.motor_list)
+    
+    def run_json(self):
+        recording = self.file.unpack()
+        for y,ls in enumerate(recording):
+            for i in range(len(ls)):
+                print(ls[i])
+
 
     ################################################################################
     ########################## movement query ######################################
