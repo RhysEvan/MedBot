@@ -141,6 +141,8 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     
     def run_json(self):
         recording = self.file.unpack()
+        self.com.open_bridge()
+        self.com.home()
         for y,ls in enumerate(recording):
             for i in range(len(ls)):
                 self.com.send_move(ls[i]["0"])
