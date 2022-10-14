@@ -16,7 +16,7 @@ class interface(QWidget):
     def __init__(self, parent):
         super(QWidget, self).__init__(parent)
         self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = get_DH_params(preset_models["HangingArm"])
-        
+        print(self.limits)
         self.update_position()
         self.setup_fig()
        
@@ -62,8 +62,8 @@ class interface(QWidget):
         
     def plot_plane(self,ax):
     
-        x = np.linspace(-100, 100, 10)
-        y = np.linspace(-100, 100, 30)
+        x = np.linspace(-100, 250, 10)
+        y = np.linspace(-10, 250, 30)
         X, Y = np.meshgrid(x, y)
         Z = X*Y*0
         ax.plot_surface(X, Y, Z, alpha=0.2)

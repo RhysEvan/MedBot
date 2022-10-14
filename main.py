@@ -20,13 +20,13 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         ## Threaded Camera Left## 
-        self.cam_l = Feed(1) ## Number represents the camera adress on the computer ##
+        self.cam_l = Feed(2) ## Number represents the camera adress on the computer ##
 
         self.cam_l.start()
         self.cam_l.ImageUpdate.connect(self.image_update_left)
        
         ## Threaded Camera Right## 
-        self.cam_r = Feed(0) ## Number represents the camera adress on the computer ##
+        self.cam_r = Feed(1) ## Number represents the camera adress on the computer ##
 
         self.cam_r.start()
         self.cam_r.ImageUpdate.connect(self.image_update_right)
@@ -141,7 +141,6 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     
     def run_json(self):
         recording = self.file.unpack()
-        self.com.open_bridge()
         self.com.home()
         for y,ls in enumerate(recording):
             for i in range(len(ls)):

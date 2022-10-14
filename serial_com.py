@@ -104,7 +104,6 @@ class serial_bridge:
     
     def home(self):
         print("homing")
-        self.com.send_com("$X")
-        self.com.send_com("$F 100")
-        self.com.send_com("$HX")
-        #self.com.send_com("$HY")
+        self.send_com("$X")
+        self.send_com("$F 100")
+        self.send_com("$H")
