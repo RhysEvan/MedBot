@@ -31,7 +31,10 @@ class interface(QWidget):
         self.widget = FigureCanvasQTAgg(self.fig)
         self.layoutvertical = QVBoxLayout(self)
         self.layoutvertical.addWidget(self.widget)
-        self.axes = self.widget.figure.add_subplot(111, projection='3d')
+        self.axes = self.widget.figure.add_subplot(111, projection='3d', position=(0,0,1,1))
+        plt.subplots_adjust(left=0, bottom=0,right=1, top=1)
+        #plt.tight_layout()
+
         ax = self.axes
         ax.set_xlabel('x')
         ax.set_ylabel('y')
@@ -39,15 +42,13 @@ class interface(QWidget):
 
         self.plot_plane(ax)
         self.plot_axes(ax)
-        plt.subplots_adjust(left=0.02, bottom=0.02,right=0.98, top=0.98,)
-        plt.tight_layout()
+
         # Data for a three-dimensional line
         line = ax.plot3D(x, y, z, 'gray', linewidth=5)[0]
         # adjust the main plot to make room for the sliders
         self.line = line
         self.ax = ax
         self.widget.show()
-
 
     ######################################
     #  will remove references to kinematics 
@@ -132,7 +133,7 @@ class interface(QWidget):
     def draw_path(self, position_list):
 
         x,y,z = np.array(position_list).T[:3]
-        path = self.ax.plot3D(x,y,z, 'bo', linewidth=1)[0]
+        path = self.ax.plot3D(x,y,z, 'bo-', linewidth=1)[0]
         self.path = path
 
     def animate(self, position_list):
