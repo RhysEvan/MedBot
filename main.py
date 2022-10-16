@@ -9,6 +9,9 @@ from App_GUI import Ui_MainWindow
 from serial_com import *
 from cameras import *
 from json_compiler import *
+from kinematics import Kinematics
+
+import numpy as np 
 
 
 class app_stitching(QMainWindow, Ui_MainWindow):
@@ -99,17 +102,12 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.coord_list.pop()
         last = self.coordlist.count()
         self.coordlist.takeItem(last-1)
-        print(self.coord_list)
 
     def append_coord(self):
         self.coord_list.append([self.x_loc,self.y_loc,self.z_loc,self.alfa_loc,self.beta_loc,self.gamma_loc])
         self.coordlist.addItem("x: "+str(self.x_loc)+" y: "+str(self.y_loc)+" z: "+str(self.z_loc)+ " α : "+str(self.alfa_loc)+ " β: "+str(self.beta_loc)+ " γ: "+str(self.gamma_loc))
-        print(self.coord_list)
 
-    def append_motor(self):
-        self.motor_list.append([{"0":"X "+self.absolute_a + " Y "+self.absolute_b,"1":"Z "+self.absolute_c+" A "+self.absolute_d,"2":"B "+self.absolute_e}])
-        self.motorlist.addItem("A: "+str(self.absolute_a)+" B: "+str(self.absolute_b)+" C: "+str(self.absolute_c)+ " D : "+str(self.absolute_d)+ " E: "+str(self.absolute_e))
-
+    #################################
     def handle_motorlist(self):
         if self.motor_list == []:
             print("no motor positions")
@@ -117,6 +115,32 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.motor_list.pop()
         last = self.motorlist.count()
         self.motorlist.takeItem(last-1)
+
+    def append_motor(self):
+        self.motor_list.append([self.absolute_a, self.absolute_b,self.absolute_c,self.absolute_d,self.absolute_e])
+        self.motorlist.addItem("A: "+str(self.absolute_a)+" B: "+str(self.absolute_b)+" C: "+str(self.absolute_c)+ " D : "+str(self.absolute_d)+ " E: "+str(self.absolute_e))
+    
+    def load_motor_table(self, motor_list):
+
+        self.motor_list = motor_list
+        #TODO: empty the list before you write to it
+        for mot in motor_list:
+            a,b,c,d,e = mot
+            self.motorlist.addItem("A: "+str(a)+" B: "+str(b)+" C: "+str(c)+ 
+                                  " D : "+str(d)+ " E: "+str(e))
+    
+    def load_realpos_table(self, endpositions):
+
+        self.coord_list = endpositions
+        ## Render end effector location and orientation
+        for end in endpositions:
+            x,y,z,a,b,g = np.round(end,1)
+            self.coordlist.addItem(
+                "x: "+str(x)+" y: "+str(y)+ " z: "+str(z) + 
+               " α: "+str(a)+" β: "+str(b)+ " γ: "+str(g)
+                )
+    
+    ########################################
 
     def keyPressEvent(self, e):
         print(e.key())
@@ -133,13 +157,15 @@ class app_stitching(QMainWindow, Ui_MainWindow):
             self.query()
 
     ################################################################################
-    ######################## json file creation ####################################
-    ################################################################################
 
     def json_file(self):
         self.file.transfer(self.motor_list)
     
     def run_json(self):
+
+        motor_pos = self.file.unpack()
+
+        # Breaking Json formatted differently
         recording = self.file.unpack()
         self.com.home()
         for y,ls in enumerate(recording):
@@ -147,7 +173,6 @@ class app_stitching(QMainWindow, Ui_MainWindow):
                 self.com.send_move(ls[i]["0"])
                 self.com.send_move(ls[i]["1"])
                 self.com.send_move(ls[i]["2"])
-
 
     ################################################################################
     ########################## movement query ######################################
@@ -167,31 +192,31 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     def joint_a(self):
         self.absolute_a = str(self.aabs.value())
         self.text_aabs.setText(self.absolute_a)
-        self.graph.set_motor(0,self.absolute_a)
+        self.graph.set_active_motor(0,self.absolute_a)
         print(self.absolute_a)
 
     def joint_b(self):
         self.absolute_b = str(self.babs.value())
         self.text_babs.setText(self.absolute_b)
-        self.graph.set_motor(2,self.absolute_b)
+        self.graph.set_active_motor(2,self.absolute_b)
         print(self.absolute_b)
 
     def joint_c(self):
         self.absolute_c = str(self.cabs.value())
         self.text_cabs.setText(self.absolute_c)
-        self.graph.set_motor(3,self.absolute_c)
+        self.graph.set_active_motor(3,self.absolute_c)
         print(self.absolute_c) 
 
     def joint_d(self):
         self.absolute_d = str(self.dabs.value())
         self.text_dabs.setText(self.absolute_d)
-        self.graph.set_motor(4,self.absolute_d)
+        self.graph.set_active_motor(4,self.absolute_d)
         print(self.absolute_d)
     
     def joint_e(self):
         self.absolute_e = str(self.eabs.value())
         self.text_eabs.setText(self.absolute_e)
-        self.graph.set_motor(5,self.absolute_e)
+        self.graph.set_active_motor(5,self.absolute_e)
         print(self.absolute_e)  
 
     def x_location(self):
@@ -232,5 +257,26 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     main = app_stitching()
+
+
+    ########################
+    main.kinematics = Kinematics()
+    
+    motorlist = main.kinematics.motorscan()
+    main.load_motor_table(motorlist)
+
+    main.kinematics.orientation= True
+    endpositions = main.kinematics.forward_list(motorlist)
+    main.load_realpos_table(endpositions)
+    
+    ## A second figure pops up somewhere, fix this 
     main.show()
+
+    ###########################
+    main.visual.draw_path(endpositions)
+    main.kinematics.orientation= False
+    all_positions = main.kinematics.forward_list(motorlist, end_only=False)
+    main.visual.animate(all_positions)
+    ##########################
+
     sys.exit(app.exec())
