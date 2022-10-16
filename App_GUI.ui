@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1928</width>
-    <height>874</height>
+    <width>3812</width>
+    <height>1740</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,20 +17,23 @@
    <widget class="interface" name="visual" native="true">
     <property name="geometry">
      <rect>
-      <x>29</x>
-      <y>20</y>
-      <width>561</width>
-      <height>411</height>
+      <x>9</x>
+      <y>10</y>
+      <width>1591</width>
+      <height>1091</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 0, 0);</string>
     </property>
    </widget>
    <widget class="QPushButton" name="Homing">
     <property name="geometry">
      <rect>
-      <x>23</x>
-      <y>440</y>
-      <width>80</width>
-      <height>30</height>
+      <x>20</x>
+      <y>1490</y>
+      <width>200</width>
+      <height>50</height>
      </rect>
     </property>
     <property name="text">
@@ -40,18 +43,18 @@
    <widget class="QListWidget" name="coordlist">
     <property name="geometry">
      <rect>
-      <x>373</x>
-      <y>720</y>
-      <width>231</width>
-      <height>123</height>
+      <x>2120</x>
+      <y>70</y>
+      <width>501</width>
+      <height>1651</height>
      </rect>
     </property>
    </widget>
    <widget class="QLineEdit" name="xcoord">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>740</y>
+      <x>1010</x>
+      <y>1160</y>
       <width>81</width>
       <height>20</height>
      </rect>
@@ -63,8 +66,8 @@
    <widget class="QPushButton" name="Submit">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>820</y>
+      <x>1130</x>
+      <y>1240</y>
       <width>91</width>
       <height>30</height>
      </rect>
@@ -76,8 +79,8 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>113</x>
-      <y>740</y>
+      <x>1103</x>
+      <y>1160</y>
       <width>16</width>
       <height>23</height>
      </rect>
@@ -89,8 +92,8 @@
    <widget class="QLineEdit" name="ycoord">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>740</y>
+      <x>1130</x>
+      <y>1160</y>
       <width>81</width>
       <height>20</height>
      </rect>
@@ -102,8 +105,8 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>740</y>
+      <x>1220</x>
+      <y>1160</y>
       <width>16</width>
       <height>23</height>
      </rect>
@@ -115,8 +118,8 @@
    <widget class="QLineEdit" name="zcoord">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>740</y>
+      <x>1240</x>
+      <y>1160</y>
       <width>81</width>
       <height>20</height>
      </rect>
@@ -128,8 +131,8 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>740</y>
+      <x>1330</x>
+      <y>1160</y>
       <width>16</width>
       <height>23</height>
      </rect>
@@ -141,8 +144,8 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>690</y>
+      <x>2260</x>
+      <y>20</y>
       <width>221</width>
       <height>23</height>
      </rect>
@@ -154,8 +157,8 @@
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>710</x>
-      <y>20</y>
+      <x>30</x>
+      <y>1200</y>
       <width>16</width>
       <height>31</height>
      </rect>
@@ -167,8 +170,8 @@
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>750</x>
-      <y>20</y>
+      <x>30</x>
+      <y>1250</y>
       <width>16</width>
       <height>31</height>
      </rect>
@@ -180,8 +183,8 @@
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>790</x>
-      <y>20</y>
+      <x>30</x>
+      <y>1310</y>
       <width>16</width>
       <height>31</height>
      </rect>
@@ -193,8 +196,8 @@
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>20</y>
+      <x>30</x>
+      <y>1360</y>
       <width>21</width>
       <height>31</height>
      </rect>
@@ -206,8 +209,8 @@
    <widget class="QLabel" name="label_9">
     <property name="geometry">
      <rect>
-      <x>870</x>
-      <y>20</y>
+      <x>30</x>
+      <y>1410</y>
       <width>16</width>
       <height>31</height>
      </rect>
@@ -219,24 +222,27 @@
    <widget class="QLabel" name="label_11">
     <property name="geometry">
      <rect>
-      <x>600</x>
-      <y>20</y>
-      <width>101</width>
+      <x>210</x>
+      <y>1150</y>
+      <width>251</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>Absolute values</string>
+     <string>Motor Positions</string>
     </property>
    </widget>
    <widget class="QLabel" name="camera_left">
     <property name="geometry">
      <rect>
-      <x>920</x>
-      <y>50</y>
-      <width>481</width>
-      <height>371</height>
+      <x>2630</x>
+      <y>0</y>
+      <width>1181</width>
+      <height>921</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 0, 0);</string>
     </property>
     <property name="text">
      <string/>
@@ -245,11 +251,14 @@
    <widget class="QLabel" name="camera_right">
     <property name="geometry">
      <rect>
-      <x>1420</x>
-      <y>50</y>
-      <width>481</width>
-      <height>371</height>
+      <x>2630</x>
+      <y>930</y>
+      <width>1181</width>
+      <height>791</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 0, 0);</string>
     </property>
     <property name="text">
      <string/>
@@ -258,8 +267,8 @@
    <widget class="QLabel" name="label_10">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>780</y>
+      <x>1330</x>
+      <y>1200</y>
       <width>16</width>
       <height>23</height>
      </rect>
@@ -271,8 +280,8 @@
    <widget class="QLabel" name="label_12">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>780</y>
+      <x>1220</x>
+      <y>1200</y>
       <width>16</width>
       <height>23</height>
      </rect>
@@ -284,8 +293,8 @@
    <widget class="QLineEdit" name="gammacoord">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>780</y>
+      <x>1240</x>
+      <y>1200</y>
       <width>81</width>
       <height>20</height>
      </rect>
@@ -297,8 +306,8 @@
    <widget class="QLabel" name="label_13">
     <property name="geometry">
      <rect>
-      <x>110</x>
-      <y>780</y>
+      <x>1100</x>
+      <y>1200</y>
       <width>16</width>
       <height>23</height>
      </rect>
@@ -310,8 +319,8 @@
    <widget class="QLineEdit" name="betacoord">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>780</y>
+      <x>1130</x>
+      <y>1200</y>
       <width>81</width>
       <height>20</height>
      </rect>
@@ -323,8 +332,8 @@
    <widget class="QLineEdit" name="alfacoord">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>780</y>
+      <x>1010</x>
+      <y>1200</y>
       <width>81</width>
       <height>20</height>
      </rect>
@@ -336,10 +345,10 @@
    <widget class="QSlider" name="aabs">
     <property name="geometry">
      <rect>
-      <x>700</x>
-      <y>50</y>
-      <width>31</width>
-      <height>551</height>
+      <x>70</x>
+      <y>1190</y>
+      <width>500</width>
+      <height>50</height>
      </rect>
     </property>
     <property name="minimum">
@@ -349,16 +358,16 @@
      <number>200</number>
     </property>
     <property name="orientation">
-     <enum>Qt::Vertical</enum>
+     <enum>Qt::Horizontal</enum>
     </property>
    </widget>
    <widget class="QSlider" name="babs">
     <property name="geometry">
      <rect>
-      <x>740</x>
-      <y>50</y>
-      <width>31</width>
-      <height>551</height>
+      <x>60</x>
+      <y>1250</y>
+      <width>500</width>
+      <height>50</height>
      </rect>
     </property>
     <property name="minimum">
@@ -371,16 +380,16 @@
      <number>100</number>
     </property>
     <property name="orientation">
-     <enum>Qt::Vertical</enum>
+     <enum>Qt::Horizontal</enum>
     </property>
    </widget>
    <widget class="QSlider" name="cabs">
     <property name="geometry">
      <rect>
-      <x>780</x>
-      <y>50</y>
-      <width>31</width>
-      <height>551</height>
+      <x>60</x>
+      <y>1410</y>
+      <width>500</width>
+      <height>50</height>
      </rect>
     </property>
     <property name="maximum">
@@ -390,16 +399,16 @@
      <number>270</number>
     </property>
     <property name="orientation">
-     <enum>Qt::Vertical</enum>
+     <enum>Qt::Horizontal</enum>
     </property>
    </widget>
    <widget class="QSlider" name="dabs">
     <property name="geometry">
      <rect>
-      <x>820</x>
-      <y>50</y>
-      <width>31</width>
-      <height>551</height>
+      <x>70</x>
+      <y>1350</y>
+      <width>500</width>
+      <height>50</height>
      </rect>
     </property>
     <property name="maximum">
@@ -409,16 +418,16 @@
      <number>80</number>
     </property>
     <property name="orientation">
-     <enum>Qt::Vertical</enum>
+     <enum>Qt::Horizontal</enum>
     </property>
    </widget>
    <widget class="QSlider" name="eabs">
     <property name="geometry">
      <rect>
-      <x>860</x>
-      <y>50</y>
-      <width>31</width>
-      <height>551</height>
+      <x>60</x>
+      <y>1300</y>
+      <width>500</width>
+      <height>50</height>
      </rect>
     </property>
     <property name="maximum">
@@ -428,14 +437,14 @@
      <number>40</number>
     </property>
     <property name="orientation">
-     <enum>Qt::Vertical</enum>
+     <enum>Qt::Horizontal</enum>
     </property>
    </widget>
    <widget class="QPushButton" name="coord_query">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>820</y>
+      <x>1010</x>
+      <y>1240</y>
       <width>93</width>
       <height>30</height>
      </rect>
@@ -447,10 +456,10 @@
    <widget class="QLabel" name="text_aabs">
     <property name="geometry">
      <rect>
-      <x>705</x>
-      <y>606</y>
-      <width>21</width>
-      <height>16</height>
+      <x>590</x>
+      <y>1200</y>
+      <width>100</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
@@ -460,10 +469,10 @@
    <widget class="QLabel" name="text_babs">
     <property name="geometry">
      <rect>
-      <x>745</x>
-      <y>607</y>
-      <width>21</width>
-      <height>16</height>
+      <x>590</x>
+      <y>1250</y>
+      <width>100</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
@@ -473,10 +482,10 @@
    <widget class="QLabel" name="text_dabs">
     <property name="geometry">
      <rect>
-      <x>827</x>
-      <y>605</y>
-      <width>21</width>
-      <height>20</height>
+      <x>590</x>
+      <y>1360</y>
+      <width>100</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
@@ -486,10 +495,10 @@
    <widget class="QLabel" name="text_cabs">
     <property name="geometry">
      <rect>
-      <x>786</x>
-      <y>604</y>
-      <width>21</width>
-      <height>20</height>
+      <x>590</x>
+      <y>1320</y>
+      <width>100</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
@@ -499,10 +508,10 @@
    <widget class="QLabel" name="text_eabs">
     <property name="geometry">
      <rect>
-      <x>865</x>
-      <y>604</y>
-      <width>21</width>
-      <height>20</height>
+      <x>590</x>
+      <y>1410</y>
+      <width>100</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
@@ -512,9 +521,9 @@
    <widget class="QLabel" name="label_14">
     <property name="geometry">
      <rect>
-      <x>377</x>
-      <y>460</y>
-      <width>221</width>
+      <x>1720</x>
+      <y>20</y>
+      <width>341</width>
       <height>23</height>
      </rect>
     </property>
@@ -525,21 +534,24 @@
    <widget class="QListWidget" name="motorlist">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>490</y>
-      <width>231</width>
-      <height>123</height>
+      <x>1620</x>
+      <y>70</y>
+      <width>491</width>
+      <height>1651</height>
      </rect>
     </property>
    </widget>
    <widget class="QPushButton" name="recording">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>500</y>
-      <width>93</width>
-      <height>30</height>
+      <x>220</x>
+      <y>1490</y>
+      <width>200</width>
+      <height>50</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="text">
      <string>Record</string>
@@ -548,10 +560,10 @@
    <widget class="QPushButton" name="compiling">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>540</y>
-      <width>93</width>
-      <height>30</height>
+      <x>430</x>
+      <y>1490</y>
+      <width>200</width>
+      <height>50</height>
      </rect>
     </property>
     <property name="text">
@@ -561,10 +573,10 @@
    <widget class="QPushButton" name="executing">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>580</y>
-      <width>93</width>
-      <height>28</height>
+      <x>640</x>
+      <y>1490</y>
+      <width>200</width>
+      <height>50</height>
      </rect>
     </property>
     <property name="text">
@@ -574,33 +586,33 @@
    <widget class="QTextBrowser" name="information_window">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>500</y>
-      <width>231</width>
-      <height>211</height>
+      <x>20</x>
+      <y>1550</y>
+      <width>1581</width>
+      <height>171</height>
      </rect>
     </property>
     <property name="html">
      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;By pressing ENTER the current slider positions will be sent to the motors.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Whenever the &amp;quot;Record&amp;quot; button has been pressed the current slider positions will be saved.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The &amp;quot;Save&amp;quot; button will make a json file with all the &amp;quot;Recorded&amp;quot; motor positions.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The &amp;quot;Run&amp;quot; button will initiate the recorded list file that you create when pressing &amp;quot;Save&amp;quot;.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The &amp;quot;Remove last&amp;quot; button removes the last motor positon input. &lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The recording options beneath are in xyz recorded forms. Submit adds it to the list and Query initiates the list. By Pressing ESC you remove the last value from the list.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.1pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:7.8pt;&quot;&gt;By pressing ENTER the current slider positions will be sent to the motors.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:7.8pt;&quot;&gt;Whenever the &amp;quot;Record&amp;quot; button has been pressed the current slider positions will be saved.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:7.8pt;&quot;&gt;The &amp;quot;Save&amp;quot; button will make a json file with all the &amp;quot;Recorded&amp;quot; motor positions.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:7.8pt;&quot;&gt;The &amp;quot;Run&amp;quot; button will initiate the recorded list file that you create when pressing &amp;quot;Save&amp;quot;.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:7.8pt;&quot;&gt;The &amp;quot;Remove last&amp;quot; button removes the last motor positon input. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:7.8pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:7.8pt;&quot;&gt;The recording options beneath are in xyz recorded forms. Submit adds it to the list and Query initiates the list. By Pressing ESC you remove the last value from the list.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QPushButton" name="remove_motor">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>620</y>
-      <width>93</width>
-      <height>28</height>
+      <x>850</x>
+      <y>1490</y>
+      <width>271</width>
+      <height>50</height>
      </rect>
     </property>
     <property name="text">
