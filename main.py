@@ -3,6 +3,7 @@ import sys
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
+import numpy as np 
 
 #file based imports
 from App_GUI import Ui_MainWindow
@@ -10,8 +11,6 @@ from serial_com import *
 from cameras import *
 from json_compiler import *
 from kinematics import Kinematics
-
-import numpy as np 
 
 
 class app_stitching(QMainWindow, Ui_MainWindow):
@@ -21,7 +20,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         ## Initialisation of GUI ##
 
         self.setupUi(self)
-
+        
         ## Threaded Camera Left## 
         self.cam_l = Feed(2) ## Number represents the camera adress on the computer ##
 
