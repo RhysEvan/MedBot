@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>1101</width>
-    <height>785</height>
+    <height>830</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
       <x>24</x>
       <y>25</y>
       <width>1041</width>
-      <height>681</height>
+      <height>651</height>
      </rect>
     </property>
     <property name="text">
@@ -31,6 +31,19 @@
     </property>
     <property name="scaledContents">
      <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="distance">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>710</y>
+      <width>171</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Distance</string>
     </property>
    </widget>
   </widget>

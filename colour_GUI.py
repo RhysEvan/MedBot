@@ -15,13 +15,16 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
-        MainWindow.resize(1101, 785)
+        MainWindow.resize(1101, 830)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(24, 25, 1041, 681))
+        self.label.setGeometry(QtCore.QRect(24, 25, 1041, 651))
         self.label.setScaledContents(True)
         self.label.setObjectName("label")
+        self.distance = QtWidgets.QPushButton(self.centralwidget)
+        self.distance.setGeometry(QtCore.QRect(90, 710, 171, 51))
+        self.distance.setObjectName("distance")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1101, 26))
@@ -38,3 +41,4 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label.setText(_translate("MainWindow", "TextLabel"))
+        self.distance.setText(_translate("MainWindow", "Distance"))

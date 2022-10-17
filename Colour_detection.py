@@ -11,12 +11,20 @@ from colour_GUI import Ui_MainWindow
 class Colour_detect():
     def __init__(self, imageFrame=None):
         self.image = imageFrame 
-           
+        self.x_green = 0.0
+        self.y_green = 0.0
+        self.w_green = 0.0
+        self.h_green = 0.0
+        self.x_red = 0.0
+        self.y_red = 0.0
+        self.w_red = 0.0
+        self.h_red = 0.0
+
     def encase(self, imageFrame):
         hsvFrame = cv2.cvtColor(imageFrame, cv2.COLOR_BGR2HSV)
         # Set range for red color and 
         # define mask
-        red_lower = np.array([150, 87, 111], np.uint8)
+        red_lower = np.array([150, 120, 160], np.uint8)
         red_upper = np.array([180, 255, 255], np.uint8)
         red_mask = cv2.inRange(hsvFrame, red_lower, red_upper)
         # Set range for green color and 
@@ -27,7 +35,7 @@ class Colour_detect():
         # Set range for blue color and
         # define mask
         blue_lower = np.array([94, 80, 2], np.uint8)
-        blue_upper = np.array([120, 255, 255], np.uint8)
+        blue_upper = np.array([130, 255, 255], np.uint8)
         blue_mask = cv2.inRange(hsvFrame, blue_lower, blue_upper)
         # Morphological Transform, Dilation
         # for each color and bitwise_and operator
@@ -53,11 +61,11 @@ class Colour_detect():
         for pic, contour in enumerate(contours):
             area = cv2.contourArea(contour)
             if(area > 300):
-                x, y, w, h = cv2.boundingRect(contour)
-                imageFrame = cv2.rectangle(imageFrame, (x, y), 
-                                        (x + w, y + h), 
+                self.x_red, self.y_red, self.w_red, self.h_red = cv2.boundingRect(contour)
+                imageFrame = cv2.rectangle(imageFrame, (self.x_red, self.y_red), 
+                                        (self.x_red + self.w_red, self.y_red + self.h_red), 
                                         (0, 0, 255), 2)
-                  
+        
     
         # Creating contour to track green color
         contours, hierarchy = cv2.findContours(green_mask,
@@ -67,12 +75,15 @@ class Colour_detect():
         for pic, contour in enumerate(contours):
             area = cv2.contourArea(contour)
             if(area > 300):
-                x, y, w, h = cv2.boundingRect(contour)
-                imageFrame = cv2.rectangle(imageFrame, (x, y), 
-                                        (x + w, y + h),
+                self.x_green, self.y_green, self.w_green, self.h_green = cv2.boundingRect(contour)
+                imageFrame = cv2.rectangle(imageFrame, (self.x_green, self.y_green), 
+                                        (self.x_green + self.w_green, self.y_green + self.h_green),
                                         (0, 255, 0), 2)
                 
         return imageFrame
+
+    def calc(self):
+        return ((self.x_green-self.x_red)**2+(self.y_green-self.y_red)**2)**(1/2)
 
 
 class Feed(QThread):
@@ -97,7 +108,7 @@ class Feed(QThread):
                 cap.release()
                 time.sleep(1)
                 cap = cv2.VideoCapture(self.loc)
-
+    
     def stop(self):
         self.ThreadActive = False
         self.quit()
@@ -110,9 +121,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.cam = Feed(0)
         self.cam.start()
         self.cam.ImageUpdate.connect(self.illustrate)
+        self.distance.clicked.connect(self.distance_calc)
 
     def illustrate(self, Image):
         self.label.setPixmap(QPixmap.fromImage(Image))
+    
+    def distance_calc(self):
+        dis = self.cam.colouring.calc()
+        print(dis)
 
 app = QApplication(sys.argv)
 window = MainWindow()
