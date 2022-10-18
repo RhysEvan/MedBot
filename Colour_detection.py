@@ -60,7 +60,7 @@ class Colour_detect():
                                             cv2.CHAIN_APPROX_SIMPLE)
         for pic, contour in enumerate(contours):
             area = cv2.contourArea(contour)
-            if(area > 300):
+            if(area > 50):
                 self.x_red, self.y_red, self.w_red, self.h_red = cv2.boundingRect(contour)
                 imageFrame = cv2.rectangle(imageFrame, (self.x_red, self.y_red), 
                                         (self.x_red + self.w_red, self.y_red + self.h_red), 
@@ -74,7 +74,7 @@ class Colour_detect():
         
         for pic, contour in enumerate(contours):
             area = cv2.contourArea(contour)
-            if(area > 300):
+            if(area > 50    ):
                 self.x_green, self.y_green, self.w_green, self.h_green = cv2.boundingRect(contour)
                 imageFrame = cv2.rectangle(imageFrame, (self.x_green, self.y_green), 
                                         (self.x_green + self.w_green, self.y_green + self.h_green),
@@ -83,7 +83,22 @@ class Colour_detect():
         return imageFrame
 
     def calc(self):
-        return ((self.x_green-self.x_red)**2+(self.y_green-self.y_red)**2)**(1/2)
+        L=100
+        mid_red_x = self.x_red+self.w_red/2
+        mid_red_y = self.y_red+self.h_red/2
+        mid_green_x = self.x_green+self.w_green/2
+        mid_green_y = self.y_green+self.h_green/2
+        disx = ((mid_green_x-mid_red_x)**2+(mid_green_y-mid_red_y)**2)**(1/2)
+        A_green = self.w_green*self.h_green
+        A_red = self.w_red*self.h_red
+        if A_green > A_red:
+            print("green is higher")
+            k = A_red/A_green 
+            disy = k*L
+        elif A_green< A_red:
+            print("red is higher, should not be possible")
+            disy = None
+        return [disx, disy]
 
 
 class Feed(QThread):
@@ -127,8 +142,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.label.setPixmap(QPixmap.fromImage(Image))
     
     def distance_calc(self):
-        dis = self.cam.colouring.calc()
-        print(dis)
+        [disx, disy]= self.cam.colouring.calc()
+        print(disx)
+        print(disy)
 
 app = QApplication(sys.argv)
 window = MainWindow()
