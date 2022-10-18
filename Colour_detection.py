@@ -60,7 +60,7 @@ class Colour_detect():
                                             cv2.CHAIN_APPROX_SIMPLE)
         for pic, contour in enumerate(contours):
             area = cv2.contourArea(contour)
-            if(area > 50):
+            if(area > 150):
                 self.x_red, self.y_red, self.w_red, self.h_red = cv2.boundingRect(contour)
                 imageFrame = cv2.rectangle(imageFrame, (self.x_red, self.y_red), 
                                         (self.x_red + self.w_red, self.y_red + self.h_red), 
@@ -74,7 +74,7 @@ class Colour_detect():
         
         for pic, contour in enumerate(contours):
             area = cv2.contourArea(contour)
-            if(area > 50    ):
+            if(area > 150):
                 self.x_green, self.y_green, self.w_green, self.h_green = cv2.boundingRect(contour)
                 imageFrame = cv2.rectangle(imageFrame, (self.x_green, self.y_green), 
                                         (self.x_green + self.w_green, self.y_green + self.h_green),
@@ -93,13 +93,17 @@ class Colour_detect():
         A_red = self.w_red*self.h_red
         if A_green > A_red:
             print("green is higher")
-            k = -A_red/A_green 
-            disy = k*L
+            k = A_green/A_red
+            print(k)
+            disy = -(L-L/k)
+            return [disx, disy]
         elif A_green< A_red:
             print("red is higher")
             k = A_green/A_red 
-            disy = k*L
-        return [disx, disy]
+            disy = -(L-L/k)
+            return [disx, disy]
+        else:
+            return([0,0])
 
 
 class Feed(QThread):
