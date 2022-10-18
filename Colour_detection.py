@@ -60,7 +60,7 @@ class Colour_detect():
                                             cv2.CHAIN_APPROX_SIMPLE)
         for pic, contour in enumerate(contours):
             area = cv2.contourArea(contour)
-            if(area > 150):
+            if(area > 200):
                 self.x_red, self.y_red, self.w_red, self.h_red = cv2.boundingRect(contour)
                 imageFrame = cv2.rectangle(imageFrame, (self.x_red, self.y_red), 
                                         (self.x_red + self.w_red, self.y_red + self.h_red), 
@@ -74,7 +74,7 @@ class Colour_detect():
         
         for pic, contour in enumerate(contours):
             area = cv2.contourArea(contour)
-            if(area > 150):
+            if(area > 200):
                 self.x_green, self.y_green, self.w_green, self.h_green = cv2.boundingRect(contour)
                 imageFrame = cv2.rectangle(imageFrame, (self.x_green, self.y_green), 
                                         (self.x_green + self.w_green, self.y_green + self.h_green),
@@ -92,13 +92,11 @@ class Colour_detect():
         A_green = self.w_green*self.h_green
         A_red = self.w_red*self.h_red
         if A_green > A_red:
-            print("green is higher")
             k = A_green/A_red
             print(k)
             disy = -(L-L/k)
             return [disx, disy]
         elif A_green< A_red:
-            print("red is higher")
             k = A_green/A_red 
             disy = -(L-L/k)
             return [disx, disy]
@@ -150,6 +148,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         [disx, disy]= self.cam.colouring.calc()
         print(disx)
         print(disy)
+        print("add implementation that states that if colour becomes invisble it returns the print 'open gripper'.")
 
 app = QApplication(sys.argv)
 window = MainWindow()
