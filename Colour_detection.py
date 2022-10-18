@@ -93,11 +93,12 @@ class Colour_detect():
         A_red = self.w_red*self.h_red
         if A_green > A_red:
             print("green is higher")
-            k = A_red/A_green 
+            k = -A_red/A_green 
             disy = k*L
         elif A_green< A_red:
-            print("red is higher, should not be possible")
-            disy = None
+            print("red is higher")
+            k = A_green/A_red 
+            disy = k*L
         return [disx, disy]
 
 
