@@ -43,7 +43,20 @@
      </rect>
     </property>
     <property name="text">
-     <string>Distance</string>
+     <string>Calculate</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="sending">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>710</y>
+      <width>151</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Send</string>
     </property>
    </widget>
   </widget>

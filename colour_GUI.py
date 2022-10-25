@@ -25,6 +25,9 @@ class Ui_MainWindow(object):
         self.distance = QtWidgets.QPushButton(self.centralwidget)
         self.distance.setGeometry(QtCore.QRect(90, 710, 171, 51))
         self.distance.setObjectName("distance")
+        self.sending = QtWidgets.QPushButton(self.centralwidget)
+        self.sending.setGeometry(QtCore.QRect(320, 710, 151, 51))
+        self.sending.setObjectName("sending")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1101, 26))
@@ -41,4 +44,5 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label.setText(_translate("MainWindow", "TextLabel"))
-        self.distance.setText(_translate("MainWindow", "Distance"))
+        self.distance.setText(_translate("MainWindow", "Calculate"))
+        self.sending.setText(_translate("MainWindow", "Send"))

@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 import time
 
+from serial_com import serial_bridge
 from colour_GUI import Ui_MainWindow
 
 class Colour_detect():
@@ -19,7 +20,6 @@ class Colour_detect():
         self.y_red = 0.0
         self.w_red = 0.0
         self.h_red = 0.0
-
     def encase(self, imageFrame):
         hsvFrame = cv2.cvtColor(imageFrame, cv2.COLOR_BGR2HSV)
         # Set range for red color and 
@@ -64,46 +64,40 @@ class Colour_detect():
                 self.x_red, self.y_red, self.w_red, self.h_red = cv2.boundingRect(contour)
                 imageFrame = cv2.rectangle(imageFrame, (self.x_red, self.y_red), 
                                         (self.x_red + self.w_red, self.y_red + self.h_red), 
-                                        (0, 0, 255), 2)
-        
-    
+                                        (0, 0, 255), 2)            
         # Creating contour to track green color
         contours, hierarchy = cv2.findContours(green_mask,
                                             cv2.RETR_TREE,
-                                            cv2.CHAIN_APPROX_SIMPLE)
-        
+                                            cv2.CHAIN_APPROX_SIMPLE)        
         for pic, contour in enumerate(contours):
             area = cv2.contourArea(contour)
             if(area > 200):
                 self.x_green, self.y_green, self.w_green, self.h_green = cv2.boundingRect(contour)
                 imageFrame = cv2.rectangle(imageFrame, (self.x_green, self.y_green), 
                                         (self.x_green + self.w_green, self.y_green + self.h_green),
-                                        (0, 255, 0), 2)
-                
+                                        (0, 255, 0), 2)                
         return imageFrame
-
     def calc(self):
         L=100
         mid_red_x = self.x_red+self.w_red/2
         mid_red_y = self.y_red+self.h_red/2
         mid_green_x = self.x_green+self.w_green/2
         mid_green_y = self.y_green+self.h_green/2
-        disx = ((mid_green_x-mid_red_x)**2+(mid_green_y-mid_red_y)**2)**(1/2)
+        disx = (mid_green_x-mid_red_x)
+        disy = (mid_green_y-mid_red_y)
         A_green = self.w_green*self.h_green
         A_red = self.w_red*self.h_red
         if A_green > A_red:
             k = A_green/A_red
             print(k)
-            disy = -(L-L/k)
-            return [disx, disy]
+            disd = -(L-L/k)
+            return [disx, disy, disd]
         elif A_green< A_red:
             k = A_green/A_red 
-            disy = -(L-L/k)
-            return [disx, disy]
+            disd = -(L-L/k)
+            return [disx, disy, disd]
         else:
-            return([0,0])
-
-
+            return([0,0,0])
 class Feed(QThread):
     def __init__(self , location = None, parent=None):
         super(Feed,self).__init__(parent)
@@ -125,8 +119,7 @@ class Feed(QThread):
             else:
                 cap.release()
                 time.sleep(1)
-                cap = cv2.VideoCapture(self.loc)
-    
+                cap = cv2.VideoCapture(self.loc)    
     def stop(self):
         self.ThreadActive = False
         self.quit()
@@ -136,19 +129,32 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle("My App")
+        self.com = serial_bridge()
         self.cam = Feed(0)
         self.cam.start()
+        self.disx = '0'
+        self.disy = '0'
+        self.disd = '0'
         self.cam.ImageUpdate.connect(self.illustrate)
         self.distance.clicked.connect(self.distance_calc)
-
+        self.sending.clicked.connect(self.sender)
     def illustrate(self, Image):
-        self.label.setPixmap(QPixmap.fromImage(Image))
-    
+        self.label.setPixmap(QPixmap.fromImage(Image))    
     def distance_calc(self):
-        [disx, disy]= self.cam.colouring.calc()
-        print(disx)
-        print(disy)
+        [self.disx, self.disy, self.disd]= self.cam.colouring.calc()
+        print(self.disx)
+        print(self.disy)
+        print(self.disd)
         print("add implementation that states that if colour becomes invisble it returns the print 'open gripper'.")
+    def sender(self):
+        print("sending")
+        self.com.home()
+        # I will be assuming some math parameters and I will try and make a pre-emtive version of the camera calculations.
+        self.com.send_move(self.disx)
+        self.com.send_move(self.disy)
+        self.com.send_move(self.disd)
+
+        
 
 app = QApplication(sys.argv)
 window = MainWindow()
