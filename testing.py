@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     cam = GenericRGBCamera()
 
-    check = cam.Open('GUI')
+    check = cam.Open("2BA200004267")
     f = cam.GetFrame()
     cam.Close()
     plotimage(f)

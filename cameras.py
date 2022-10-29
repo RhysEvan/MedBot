@@ -1,30 +1,31 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-import cv2
 import time
 
+from CameraModel.Pleora.RGB.GenericRGBCamera import GenericRGBCamera
 
 class Feed(QThread):
     def __init__(self , location = None, parent=None):
         super(Feed,self).__init__(parent)
+        self.cam = GenericRGBCamera()
         self.loc = location
     ImageUpdate= pyqtSignal(QImage)
     def run(self):
         self.ThreadActive = True
-        cap = cv2.VideoCapture(self.loc)
+        self.cam.Open(self.loc)
+        self.cam.SetParameterDouble("ExposureTime", 2000)
+        self.cam.SetParameterDouble("Gain", 10)
         while self.ThreadActive:
-            ret, frame = cap.read()
-            if ret:
-                Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                FlippedImage = cv2.flip(Image, 1)
-                ConvertToQtFormat = QImage(FlippedImage.data, FlippedImage.shape[1], FlippedImage.shape[0], QImage.Format_RGB888)
+            Image = self.cam.GetFrame()
+            if Image is not None:
+                ConvertToQtFormat = QImage(Image.data, Image.shape[1], Image.shape[0], QImage.Format_RGB888)
                 Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
                 self.ImageUpdate.emit(Pic)
             else:
-                cap.release()
+                self.cam.Close()
                 time.sleep(1)
-                cap = cv2.VideoCapture(self.loc)
+                ret = self.cam.Open(self.loc)
 
     def stop(self):
         self.ThreadActive = False
