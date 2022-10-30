@@ -84,6 +84,25 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.file = json_handler()
 
 
+           ########################
+        self.kinematics = Kinematics()
+        
+        motorlist = self.kinematics.motorscan()
+        self.load_motor_table(motorlist)
+
+        self.kinematics.orientation= True
+        endpositions = self.kinematics.forward_list(motorlist)
+        self.load_realpos_table(endpositions)
+        
+        ## A second figure pops up somewhere, fix this 
+        self.show()
+        ###########################
+        self.graph.draw_path(endpositions)
+        self.kinematics.orientation= False
+        all_positions = self.kinematics.forward_list(motorlist, end_only=False)
+        self.graph.animate(all_positions)
+        ##########################
+
     @pyqtSlot()
     def main_home(self):
         self.com.home()
@@ -257,25 +276,8 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     main = app_stitching()
 
-
-    ########################
-    main.kinematics = Kinematics()
-    
-    motorlist = main.kinematics.motorscan()
-    main.load_motor_table(motorlist)
-
-    main.kinematics.orientation= True
-    endpositions = main.kinematics.forward_list(motorlist)
-    main.load_realpos_table(endpositions)
-    
-    ## A second figure pops up somewhere, fix this 
-    main.show()
-
-    ###########################
-    main.visual.draw_path(endpositions)
-    main.kinematics.orientation= False
-    all_positions = main.kinematics.forward_list(motorlist, end_only=False)
-    main.visual.animate(all_positions)
-    ##########################
-
     sys.exit(app.exec())
+
+ 
+   
+    

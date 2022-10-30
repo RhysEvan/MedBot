@@ -32,7 +32,6 @@ class interface(QWidget):
         self.layoutvertical = QVBoxLayout(self)
         self.layoutvertical.addWidget(self.widget)
         self.axes = self.widget.figure.add_subplot(111, projection='3d', position=(0,0,1,1))
-        plt.subplots_adjust(left=0, bottom=0,right=1, top=1)
         #plt.tight_layout()
 
         ax = self.axes
@@ -141,9 +140,7 @@ class interface(QWidget):
         for pos in position_list:
             x,y,z = pos
             self.line.set_data_3d(x,y,z)
-            self.fig.canvas.draw_idle()
+            self.widget.draw_idle()  
+            self.widget
+            plt.subplots_adjust(left=0, bottom=0,right=1, top=1) 
             plt.pause(0.1)
-
-
-
-

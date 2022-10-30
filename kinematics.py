@@ -36,7 +36,6 @@ class Kinematics():
         if DH is None:   DH = self.get_motor_positions()
 
         position = forward_all(*DH) 
-        print(position.shape)
 
         if end_only:
             position = position[:3,-1]    
@@ -45,9 +44,7 @@ class Kinematics():
             DH = self.get_motor_positions()
             orient = self.forward_orientation(DH)
             position = np.append(position,orient)
-        print(position.shape)
         
-
         return position
 
     def forward_orientation(self,DH):
