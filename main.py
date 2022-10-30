@@ -39,7 +39,6 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 
         ## conection to interface to create matplot visual#
         self.graph = self.visual
-        self.graph.resize
 
         ## visual locations of the graph when initializing ##
         self.absolute_a = "0"
