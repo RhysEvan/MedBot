@@ -8,9 +8,13 @@ import numpy as np
 #file based imports
 from App_GUI import Ui_MainWindow
 from serial_com import *
-from cameras import *
+
 from json_compiler import *
 from kinematics import Kinematics
+try:
+    from cameras import *
+except:
+    print("Pleora Library not Installed")
 
 
 class app_stitching(QMainWindow, Ui_MainWindow):
