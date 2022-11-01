@@ -88,7 +88,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.file = json_handler()
 
 
-           ########################
+        ########################
         self.kinematics = Kinematics()
         
         motorlist = self.kinematics.motorscan()
@@ -107,7 +107,6 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.graph.animate(all_positions)
         ##########################
 
-    @pyqtSlot()
     def main_home(self):
         self.com.home()
         print("UI update to home position")

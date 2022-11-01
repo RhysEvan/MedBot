@@ -6,6 +6,7 @@ from functools import partial
 from PyQt5.QtWidgets import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
+import time
 
 #files
 from kinematics import forward_all, get_DH_params
@@ -141,6 +142,7 @@ class interface(QWidget):
             x,y,z = pos
             self.line.set_data_3d(x,y,z)
             self.widget.draw_idle()  
-            self.widget
-            plt.subplots_adjust(left=0, bottom=0,right=1, top=1) 
-            plt.pause(0.1)
+            self.widget.figure.subplots_adjust(left=0, bottom=0,right=1, top=1)
+            self.widget.draw()
+            self.widget.show()
+            time.sleep(0.1)
