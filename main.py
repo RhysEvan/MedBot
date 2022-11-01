@@ -98,7 +98,6 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         endpositions = self.kinematics.forward_list(motorlist)
         self.load_realpos_table(endpositions)
         
-        ## A second figure pops up somewhere, fix this 
         self.show()
         ###########################
         self.graph.draw_path(endpositions)
@@ -106,11 +105,10 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         all_positions = self.kinematics.forward_list(motorlist, end_only=False)
         self.graph.animate(all_positions)
         ##########################
-
+        
     def main_home(self):
         self.com.home()
         print("UI update to home position")
-
     
     ################################################################################
     ####################### coordinate list ########################################
