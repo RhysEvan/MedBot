@@ -66,6 +66,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.compiling.clicked.connect(self.json_file)
         self.remove_motor.clicked.connect(self.handle_motorlist)
         self.executing.clicked.connect(self.run_json)
+        self.pushButton.clicked.connect(self.initiate_animate)
 
         self.aabs.valueChanged.connect(self.joint_a)
         self.babs.valueChanged.connect(self.joint_b)
@@ -104,11 +105,17 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.kinematics.orientation= False
         all_positions = self.kinematics.forward_list(motorlist, end_only=False)
         self.graph.animate(all_positions)
+        self.paused = False
         ##########################
         
     def main_home(self):
         self.com.home()
         print("UI update to home position")
+
+    def initiate_animate(self):
+        print("TODO make it so that the list of motor positions can be recalled and reanimated. Make use of the init functions added by Edgar to create a new funcition within.")
+        #self.graph.animate(all_positions)
+
     
     ################################################################################
     ####################### coordinate list ########################################

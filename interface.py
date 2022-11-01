@@ -6,6 +6,7 @@ from functools import partial
 from PyQt5.QtWidgets import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
+from matplotlib import animation
 
 #files
 from kinematics import forward_all, get_DH_params
@@ -136,10 +137,10 @@ class interface(QWidget):
         self.path = path
 
     def animate(self, position_list):
-
-        for pos in position_list:
-            x,y,z = pos
-            self.line.set_data_3d(x,y,z)
-            self.widget.draw_idle()  
-            plt.subplots_adjust(left=0, bottom=0,right=1, top=1) 
-            plt.pause(0.1)
+        frms = len(position_list)
+        self.posp = position_list
+        self.animation = animation.FuncAnimation(self.widget.figure, self.update_animation, frames = frms, interval = 1,repeat = False)
+    
+    def update_animation(self,i):
+        x,y,z = self.posp[i]
+        self.line.set_data_3d(x,y,z)
