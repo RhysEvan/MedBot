@@ -87,10 +87,22 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 
         ## json compiler initiation
         self.file = json_handler()
-
-
+ 
         ########################
         self.kinematics = Kinematics()
+        self.show()
+        self.animation_seq()
+        ###########################
+        
+    def main_home(self):
+        self.com.home()
+        print("UI update to home position")
+
+    def initiate_animate(self):
+        print('updating and animating')
+        self.animation_seq()
+    
+    def animation_seq(self):
         
         motorlist = self.kinematics.motorscan()
         self.load_motor_table(motorlist)
@@ -98,24 +110,11 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.kinematics.orientation= True
         endpositions = self.kinematics.forward_list(motorlist)
         self.load_realpos_table(endpositions)
-        
-        self.show()
-        ###########################
         self.graph.draw_path(endpositions)
         self.kinematics.orientation= False
         all_positions = self.kinematics.forward_list(motorlist, end_only=False)
         self.graph.animate(all_positions)
-        self.paused = False
-        ##########################
         
-    def main_home(self):
-        self.com.home()
-        print("UI update to home position")
-
-    def initiate_animate(self):
-        print("TODO make it so that the list of motor positions can be recalled and reanimated. Make use of the init functions added by Edgar to create a new funcition within.")
-        #self.graph.animate(all_positions)
-
     
     ################################################################################
     ####################### coordinate list ########################################

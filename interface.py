@@ -139,7 +139,8 @@ class interface(QWidget):
     def animate(self, position_list):
         frms = len(position_list)
         self.posp = position_list
-        self.animation = animation.FuncAnimation(self.widget.figure, self.update_animation, frames = frms, interval = 1,repeat = False)
+        self.update()
+        self.animation = animation.FuncAnimation(self.widget.figure, self.update_animation, frames = frms, interval = 50,repeat = False)
     
     def update_animation(self,i):
         x,y,z = self.posp[i]
