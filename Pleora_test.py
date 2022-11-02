@@ -6,7 +6,7 @@ import sys
 import numpy as np
 from typing import Dict
 
-from colour_GUI import Ui_MainWindow
+from static.colour_GUI import Ui_MainWindow
 from connections.serial_com import serial_bridge
 from CameraModel.Pleora.RGB.GenericRGBCamera import GenericRGBCamera
 from CameraModel.Pleora.PleoraCamera import *

@@ -7,7 +7,7 @@ import numpy as np
 import time
 
 from connections.serial_com import serial_bridge
-from colour_GUI import Ui_MainWindow
+from static.colour_GUI import Ui_MainWindow
 
 class Colour_detect():
     def __init__(self, imageFrame=None):
