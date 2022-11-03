@@ -10,13 +10,13 @@ from functools import partial
 import torch
 from scipy.spatial.transform import Rotation as R
 
-import static.presets as presets
+import static.presets_robot_models as presets_robot_models
 
 class Kinematics():
     
     def __init__(self):
 
-        atrdal = get_DH_params(presets.preset_models["HangingArm"])
+        atrdal = get_DH_params(presets_robot_models.preset_models["HangingArm"])
 
         self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = atrdal
 

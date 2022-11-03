@@ -11,12 +11,14 @@ from connections.serial_com import *
 
 from json_compiler import *
 from kinematics import Kinematics
+from static.backend_GUI import backend
 try:
     from connections.cameras import *
     pleora_lib = True
 except:
     print("Pleora Library not Installed")
     pleora_lib = False
+
 
 
 class app_stitching(QMainWindow, Ui_MainWindow):
@@ -41,34 +43,16 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 
         ## conection to interface to create matplot visual#
         self.graph = self.visual
-
-        ## visual locations of the graph when initializing ##
-        self.absolute_a = "0"
-        self.text_aabs.setText("0")
-        self.absolute_b = "100"
-        self.text_babs.setText("100")
-        self.absolute_c = "270"
-        self.text_cabs.setText("270")
-        self.absolute_d = "80"
-        self.text_dabs.setText("80")
-        self.absolute_e = "40"
-        self.text_eabs.setText("40")
-        ## initial values for the recording list of xyz values ##
-        self.x_loc = "0"
-        self.y_loc = "0"
-        self.z_loc = "0"
-        self.alfa_loc = "0"
-        self.beta_loc = "0"
-        self.gamma_loc = "0"
+        self.var = backend(self)
 
         ## call to button functions and their forward to internal functions ##
-        self.Homing.clicked.connect(self.main_home)
-        self.Submit.clicked.connect(self.append_coord)
+        self.homing.clicked.connect(self.main_home)
+        self.submit.clicked.connect(self.append_coord)
         self.recording.clicked.connect(self.append_motor)
         self.compiling.clicked.connect(self.json_file)
         self.remove_motor.clicked.connect(self.handle_motorlist)
         self.executing.clicked.connect(self.run_json)
-        self.pushButton.clicked.connect(self.initiate_animate)
+        self.animating.clicked.connect(self.initiate_animate)
 
         self.aabs.valueChanged.connect(self.joint_a)
         self.babs.valueChanged.connect(self.joint_b)

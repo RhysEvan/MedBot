@@ -10,7 +10,7 @@ from matplotlib import animation
 
 #files
 from kinematics import forward_all, get_DH_params
-import static.presets as presets
+import static.presets_robot_models as presets_robot_models
 
 ################################################
 class interface(QWidget):
@@ -18,7 +18,7 @@ class interface(QWidget):
     def __init__(self, parent):
         super(QWidget, self).__init__(parent)
 
-        atrdal = get_DH_params(presets.preset_models["HangingArm"])
+        atrdal = get_DH_params(presets_robot_models.preset_models["HangingArm"])
 
         self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = atrdal
 

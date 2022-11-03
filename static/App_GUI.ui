@@ -6,440 +6,206 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>2139</width>
-    <height>1107</height>
+    <width>1836</width>
+    <height>927</height>
    </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>2139</width>
-     <height>1107</height>
-    </size>
-   </property>
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="14" column="8" colspan="2">
-     <widget class="QPushButton" name="coord_query">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>93</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>93</width>
-        <height>30</height>
-       </size>
-      </property>
+   <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0">
+    <property name="topMargin">
+     <number>11</number>
+    </property>
+    <item row="5" column="7">
+     <widget class="QLabel" name="label_15">
       <property name="text">
-       <string>Query</string>
+       <string>X</string>
       </property>
      </widget>
     </item>
-    <item row="15" column="7" colspan="5">
-     <widget class="QPushButton" name="executing">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>Run</string>
-      </property>
-     </widget>
+    <item row="6" column="6">
+     <widget class="QLineEdit" name="alfacoord"/>
     </item>
-    <item row="0" column="0" rowspan="3" colspan="7" alignment="Qt::AlignLeft|Qt::AlignTop">
-     <widget class="interface" name="visual" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>611</width>
-        <height>371</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>1591</width>
-        <height>1091</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(0, 0, 0);</string>
-      </property>
-     </widget>
-    </item>
-    <item row="15" column="2" colspan="2">
-     <widget class="QPushButton" name="pushButton">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>Animate</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="8" rowspan="3" colspan="7">
-     <widget class="QListWidget" name="motorlist">
-      <property name="minimumSize">
-       <size>
-        <width>200</width>
-        <height>461</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>491</width>
-        <height>1651</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="15" column="4">
-     <widget class="QPushButton" name="recording">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string>Record</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="8" colspan="7">
-     <widget class="QLabel" name="label_14">
-      <property name="minimumSize">
-       <size>
-        <width>311</width>
-        <height>23</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>341</width>
-        <height>23</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>List of Motor Positions</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_5">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>16</width>
-        <height>31</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16</width>
-        <height>31</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>A</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="17" rowspan="6">
-     <widget class="QLabel" name="camera_left">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>400</width>
-        <height>400</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>1181</width>
-        <height>921</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(0, 0, 0);</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="16" rowspan="16">
-     <widget class="QListWidget" name="coordlist">
-      <property name="minimumSize">
-       <size>
-        <width>311</width>
-        <height>881</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>400</width>
-        <height>1651</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="17" rowspan="10">
-     <widget class="QLabel" name="camera_right">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>400</width>
-        <height>400</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>1181</width>
-        <height>791</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(0, 0, 0);</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="13" column="8">
-     <widget class="QLineEdit" name="alfacoord">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>81</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>81</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="14">
-     <widget class="QLineEdit" name="zcoord">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>81</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>81</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="13" rowspan="2">
-     <widget class="QLabel" name="label_2">
-      <property name="minimumSize">
-       <size>
-        <width>16</width>
-        <height>23</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16</width>
-        <height>23</height>
-       </size>
-      </property>
+    <item row="5" column="9">
+     <widget class="QLabel" name="label_16">
       <property name="text">
        <string>Y</string>
       </property>
      </widget>
     </item>
-    <item row="13" column="9" colspan="2">
-     <widget class="QLabel" name="label_13">
-      <property name="minimumSize">
-       <size>
-        <width>16</width>
-        <height>23</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16</width>
-        <height>23</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>α</string>
-      </property>
-     </widget>
+    <item row="5" column="10">
+     <widget class="QLineEdit" name="zcoord"/>
     </item>
-    <item row="13" column="11" colspan="2">
-     <widget class="QLineEdit" name="betacoord">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>81</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>81</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
+    <item row="5" column="8">
+     <widget class="QLineEdit" name="ycoord"/>
     </item>
-    <item row="13" column="13">
-     <widget class="QLabel" name="label_12">
-      <property name="minimumSize">
-       <size>
-        <width>16</width>
-        <height>23</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16</width>
-        <height>23</height>
-       </size>
-      </property>
+    <item row="6" column="9">
+     <widget class="QLabel" name="label_19">
       <property name="text">
        <string>β</string>
       </property>
      </widget>
     </item>
-    <item row="10" column="15" rowspan="2">
-     <widget class="QLabel" name="label_3">
-      <property name="minimumSize">
-       <size>
-        <width>16</width>
-        <height>23</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16</width>
-        <height>23</height>
-       </size>
-      </property>
+    <item row="0" column="7" colspan="2">
+     <widget class="QLabel" name="label_14">
       <property name="text">
-       <string>Z</string>
+       <string>List of Motor Positions</string>
       </property>
      </widget>
     </item>
-    <item row="16" column="0" colspan="15">
-     <widget class="QTextBrowser" name="information_window">
+    <item row="7" column="4">
+     <widget class="QLabel" name="text_eabs">
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="6">
+     <widget class="QLineEdit" name="xcoord"/>
+    </item>
+    <item row="6" column="11">
+     <widget class="QLabel" name="label_20">
+      <property name="text">
+       <string>γ</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1" colspan="3">
+     <widget class="QSlider" name="aabs">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1" colspan="3">
+     <widget class="QSlider" name="eabs">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1" colspan="3">
+     <widget class="QSlider" name="cabs">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1" colspan="3">
+     <widget class="QSlider" name="dabs">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="0">
+     <widget class="QPushButton" name="homing">
+      <property name="text">
+       <string>Home</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1" colspan="3">
+     <widget class="QSlider" name="fabs">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1" colspan="3">
+     <widget class="QSlider" name="babs">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0" alignment="Qt::AlignRight">
+     <widget class="QLabel" name="label_6">
+      <property name="text">
+       <string>F</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="3">
+     <widget class="QPushButton" name="compiling">
+      <property name="text">
+       <string>Save</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="8">
+     <widget class="QLineEdit" name="betacoord"/>
+    </item>
+    <item row="3" column="4">
+     <widget class="QLabel" name="text_aabs">
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="7" rowspan="3" colspan="5">
+     <widget class="QListWidget" name="motorlist">
       <property name="minimumSize">
        <size>
-        <width>900</width>
-        <height>171</height>
+        <width>300</width>
+        <height>0</height>
        </size>
       </property>
-      <property name="maximumSize">
-       <size>
-        <width>1581</width>
-        <height>171</height>
-       </size>
+     </widget>
+    </item>
+    <item row="9" column="5">
+     <widget class="QPushButton" name="remove_motor">
+      <property name="text">
+       <string>Remove</string>
       </property>
+     </widget>
+    </item>
+    <item row="5" column="4">
+     <widget class="QLabel" name="text_cabs">
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="4">
+     <widget class="QPushButton" name="executing">
+      <property name="text">
+       <string>Run</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="2">
+     <widget class="QPushButton" name="recording">
+      <property name="text">
+       <string>Record</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="1">
+     <widget class="QPushButton" name="animating">
+      <property name="text">
+       <string>Animate</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0" alignment="Qt::AlignRight">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>A</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_13">
+      <property name="text">
+       <string>Motor Positions</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="0" colspan="12">
+     <widget class="QTextBrowser" name="information_window">
       <property name="html">
        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -455,613 +221,154 @@ p, li { white-space: pre-wrap; }
       </property>
      </widget>
     </item>
-    <item row="13" column="15">
-     <widget class="QLabel" name="label_10">
-      <property name="minimumSize">
-       <size>
-        <width>16</width>
-        <height>23</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16</width>
-        <height>23</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>γ</string>
-      </property>
-     </widget>
-    </item>
-    <item row="13" column="14">
-     <widget class="QLineEdit" name="gammacoord">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>81</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>81</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="14" column="11" colspan="2">
-     <widget class="QPushButton" name="Submit">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>91</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>91</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>Submit</string>
-      </property>
-     </widget>
-    </item>
-    <item row="15" column="5" colspan="2">
-     <widget class="QPushButton" name="compiling">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>Save</string>
-      </property>
-     </widget>
-    </item>
-    <item row="15" column="12" colspan="3">
-     <widget class="QPushButton" name="remove_motor">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>151</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>271</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>Remove Last</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_11">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>91</width>
-        <height>31</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>251</width>
-        <height>31</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>Motor Positions</string>
-      </property>
-     </widget>
-    </item>
-    <item row="15" column="0" colspan="2">
-     <widget class="QPushButton" name="Homing">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>Home</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="16">
-     <widget class="QLabel" name="label_4">
-      <property name="minimumSize">
-       <size>
-        <width>221</width>
-        <height>23</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>221</width>
-        <height>23</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>List of coordinates</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="0">
-     <widget class="QLabel" name="label_6">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>16</width>
-        <height>31</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16</width>
-        <height>31</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>B</string>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="1">
-     <widget class="QSlider" name="eabs">
-      <property name="minimumSize">
-       <size>
-        <width>500</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>500</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="maximum">
-       <number>180</number>
-      </property>
-      <property name="value">
-       <number>40</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="12" column="0">
-     <widget class="QLabel" name="label_9">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>16</width>
-        <height>31</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16</width>
-        <height>31</height>
-       </size>
-      </property>
+    <item row="7" column="0" alignment="Qt::AlignRight">
+     <widget class="QLabel" name="label_5">
       <property name="text">
        <string>E</string>
       </property>
      </widget>
     </item>
-    <item row="8" column="0">
-     <widget class="QLabel" name="label_7">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>16</width>
-        <height>31</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16</width>
-        <height>31</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>C</string>
-      </property>
-     </widget>
-    </item>
-    <item row="12" column="1">
-     <widget class="QSlider" name="cabs">
-      <property name="minimumSize">
-       <size>
-        <width>500</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>500</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="maximum">
-       <number>270</number>
-      </property>
-      <property name="value">
-       <number>270</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="11" colspan="2">
-     <widget class="QLineEdit" name="ycoord">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>81</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>81</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="1">
-     <widget class="QSlider" name="dabs">
-      <property name="minimumSize">
-       <size>
-        <width>500</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>500</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="maximum">
-       <number>180</number>
-      </property>
-      <property name="value">
-       <number>80</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="0">
-     <widget class="QLabel" name="label_8">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>21</width>
-        <height>31</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>21</width>
-        <height>31</height>
-       </size>
-      </property>
+    <item row="6" column="0" alignment="Qt::AlignRight">
+     <widget class="QLabel" name="label_4">
       <property name="text">
        <string>D</string>
       </property>
      </widget>
     </item>
-    <item row="6" column="1">
-     <widget class="QSlider" name="babs">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>500</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>500</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="minimum">
-       <number>20</number>
-      </property>
-      <property name="maximum">
-       <number>200</number>
-      </property>
-      <property name="value">
-       <number>100</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QSlider" name="aabs">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>500</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>500</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="minimum">
-       <number>-100</number>
-      </property>
-      <property name="maximum">
-       <number>200</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="8">
-     <widget class="QLineEdit" name="xcoord">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>81</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>81</width>
-        <height>20</height>
-       </size>
-      </property>
+    <item row="5" column="0" alignment="Qt::AlignRight">
+     <widget class="QLabel" name="label_3">
       <property name="text">
-       <string/>
+       <string>C</string>
       </property>
      </widget>
     </item>
-    <item row="10" column="9">
-     <widget class="QLabel" name="label">
+    <item row="4" column="0" alignment="Qt::AlignRight">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>B</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="12" rowspan="10">
+     <widget class="QListWidget" name="coordlist">
       <property name="minimumSize">
        <size>
-        <width>16</width>
-        <height>23</height>
+        <width>300</width>
+        <height>0</height>
        </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16</width>
-        <height>23</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>X</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="5">
-     <widget class="QLabel" name="text_aabs">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>100</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>100</width>
-        <height>30</height>
-       </size>
-      </property>
+    <item row="0" column="12">
+     <widget class="QLabel" name="label_21">
       <property name="text">
-       <string>TextLabel</string>
+       <string>List of coordinates</string>
       </property>
      </widget>
     </item>
-    <item row="6" column="5">
-     <widget class="QLabel" name="text_babs">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>100</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>100</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>TextLabel</string>
-      </property>
-     </widget>
+    <item row="6" column="10">
+     <widget class="QLineEdit" name="gammacoord"/>
     </item>
-    <item row="8" column="5">
-     <widget class="QLabel" name="text_cabs">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>100</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>100</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>TextLabel</string>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="5">
+    <item row="6" column="4">
      <widget class="QLabel" name="text_dabs">
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="7">
+     <widget class="QLabel" name="label_18">
+      <property name="text">
+       <string>α</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="4">
+     <widget class="QLabel" name="text_babs">
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="11">
+     <widget class="QLabel" name="label_17">
+      <property name="text">
+       <string>Z</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="7">
+     <widget class="interface" name="visual" native="true">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
       <property name="minimumSize">
        <size>
-        <width>100</width>
-        <height>30</height>
+        <width>450</width>
+        <height>450</height>
        </size>
       </property>
-      <property name="maximumSize">
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(0, 0, 0);</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="4">
+     <widget class="QLabel" name="text_fabs">
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="13" rowspan="2">
+     <widget class="QLabel" name="camera_left">
+      <property name="minimumSize">
        <size>
-        <width>100</width>
-        <height>30</height>
+        <width>500</width>
+        <height>473</height>
        </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(0,0,0);</string>
       </property>
       <property name="text">
        <string>TextLabel</string>
       </property>
      </widget>
     </item>
-    <item row="12" column="5">
-     <widget class="QLabel" name="text_eabs">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
+    <item row="4" column="13" rowspan="7">
+     <widget class="QLabel" name="camera_right">
       <property name="minimumSize">
        <size>
-        <width>100</width>
-        <height>30</height>
+        <width>500</width>
+        <height>373</height>
        </size>
       </property>
-      <property name="maximumSize">
-       <size>
-        <width>100</width>
-        <height>30</height>
-       </size>
+      <property name="styleSheet">
+       <string notr="true">background-color:rgb(0,0,0);</string>
       </property>
       <property name="text">
        <string>TextLabel</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="6">
+     <widget class="QPushButton" name="coord_query">
+      <property name="text">
+       <string>Query</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="8">
+     <widget class="QPushButton" name="submit">
+      <property name="text">
+       <string>Submit</string>
       </property>
      </widget>
     </item>
