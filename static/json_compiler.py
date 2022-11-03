@@ -6,6 +6,10 @@ class json_handler():
         self.filename = "data.json"
 
     def transfer(self,data):
+        print(data)
+        if data == []:
+            print("nothing to compile")
+            return
         jsonString = json.dumps(data)
         jsonFile = open(self.filename, "w")
         jsonFile.write(jsonString)

@@ -9,7 +9,7 @@ import numpy as np
 from static.App_GUI import Ui_MainWindow
 from connections.serial_com import *
 
-from json_compiler import *
+from static.json_compiler import *
 from kinematics import Kinematics
 from static.backend_GUI import backend
 try:
@@ -24,10 +24,10 @@ except:
 class app_stitching(QMainWindow, Ui_MainWindow):
     def __init__(self, port = None, pleora= True):
         super().__init__()
-
+        self.robot = "HangingArm"
         ## Initialisation of GUI ##
-
-        self.setupUi(self)
+        ## if changes are made to GUI then please add chosen_bot callable to the setupUi function and to self.visual = interface(self.centralwidget, robot=chosen_bot)
+        self.setupUi(self,choice = self.robot)
         if pleora:
             ## Threaded Camera Left## 
             self.cam_l = Feed("2BA200004267") ## Number represents the camera adress on the computer ##
@@ -40,19 +40,25 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 
             self.cam_r.start()
             self.cam_r.ImageUpdate.connect(self.image_update_right)
-
-        ## conection to interface to create matplot visual#
+        ## conection to interface to create matplot visual ##
         self.graph = self.visual
+        self.kinematics = Kinematics(robot=self.robot)
+        ## connection to arduino GRBL ##
+        self.com = serial_bridge()
+        ## json compiler initiation ##
+        self.file = json_handler()
+        ## all background related functions ##
         self.var = backend(self)
 
         ## call to button functions and their forward to internal functions ##
-        self.homing.clicked.connect(self.main_home)
-        self.submit.clicked.connect(self.append_coord)
-        self.recording.clicked.connect(self.append_motor)
-        self.compiling.clicked.connect(self.json_file)
-        self.remove_motor.clicked.connect(self.handle_motorlist)
-        self.executing.clicked.connect(self.run_json)
-        self.animating.clicked.connect(self.initiate_animate)
+        self.homing.clicked.connect(self.var.main_home)
+        self.submit.clicked.connect(self.var.append_coord)
+        self.recording.clicked.connect(self.var.append_motor)
+        self.compiling.clicked.connect(self.var.json_file)
+        self.remove_motor.clicked.connect(self.var.handle_motorlist)
+        self.executing.clicked.connect(self.var.run_json)
+        self.animating.clicked.connect(self.var.initiate_animate)
+        self.robot_options.clicked.connect(self.var.test.clicked)
 
         self.aabs.valueChanged.connect(self.joint_a)
         self.babs.valueChanged.connect(self.joint_b)
@@ -65,92 +71,12 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.alfacoord.textEdited.connect(self.alfa_location)
         self.betacoord.textEdited.connect(self.beta_location)
         self.gammacoord.textEdited.connect(self.gamma_location)
-
-        self.coord_list = []
-        self.motor_list = []
-
-        self.com = serial_bridge()
-
-        ## json compiler initiation
-        self.file = json_handler()
  
         ########################
-        self.kinematics = Kinematics()
         self.show()
-        self.animation_seq()
+        self.var.animation_seq()
         ###########################
-        
-    def main_home(self):
-        self.com.home()
-        print("UI update to home position")
 
-    def initiate_animate(self):
-        print('updating and animating')
-        self.animation_seq()
-    
-    def animation_seq(self):
-        
-        motorlist = self.kinematics.motorscan()
-        self.load_motor_table(motorlist)
-
-        self.kinematics.orientation= True
-        endpositions = self.kinematics.forward_list(motorlist)
-        self.load_realpos_table(endpositions)
-        self.graph.draw_path(endpositions)
-        self.kinematics.orientation= False
-        all_positions = self.kinematics.forward_list(motorlist, end_only=False)
-        self.graph.animate(all_positions)
-        
-    
-    ################################################################################
-    ####################### coordinate list ########################################
-    ################################################################################
-
-    def handle_coordlist(self):
-        if self.coord_list == []:
-            print("no coords")
-            return
-        self.coord_list.pop()
-        last = self.coordlist.count()
-        self.coordlist.takeItem(last-1)
-
-    def append_coord(self):
-        self.coord_list.append([self.x_loc,self.y_loc,self.z_loc,self.alfa_loc,self.beta_loc,self.gamma_loc])
-        self.coordlist.addItem("x: "+str(self.x_loc)+" y: "+str(self.y_loc)+" z: "+str(self.z_loc)+ " α : "+str(self.alfa_loc)+ " β: "+str(self.beta_loc)+ " γ: "+str(self.gamma_loc))
-
-    #################################
-    def handle_motorlist(self):
-        if self.motor_list == []:
-            print("no motor positions")
-            return
-        self.motor_list.pop()
-        last = self.motorlist.count()
-        self.motorlist.takeItem(last-1)
-
-    def append_motor(self):
-        self.motor_list.append([self.absolute_a, self.absolute_b,self.absolute_c,self.absolute_d,self.absolute_e])
-        self.motorlist.addItem("A: "+str(self.absolute_a)+" B: "+str(self.absolute_b)+" C: "+str(self.absolute_c)+ " D : "+str(self.absolute_d)+ " E: "+str(self.absolute_e))
-    
-    def load_motor_table(self, motor_list):
-
-        self.motor_list = motor_list
-        #TODO: empty the list before you write to it
-        for mot in motor_list:
-            a,b,c,d,e = mot
-            self.motorlist.addItem("A: "+str(a)+" B: "+str(b)+" C: "+str(c)+ 
-                                  " D : "+str(d)+ " E: "+str(e))
-    
-    def load_realpos_table(self, endpositions):
-
-        self.coord_list = endpositions
-        ## Render end effector location and orientation
-        for end in endpositions:
-            x,y,z,a,b,g = np.round(end,1)
-            self.coordlist.addItem(
-                "x: "+str(x)+" y: "+str(y)+ " z: "+str(z) + 
-               " α: "+str(a)+" β: "+str(b)+ " γ: "+str(g)
-                )
-    
     ########################################
 
     def keyPressEvent(self, e):
@@ -161,41 +87,12 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         enter = 16777220 #enter to execute
         if e.key() == delete:
             print("removing last coordinate")
-            self.handle_coordlist()
+            self.var.handle_coordlist()
 
         if e.key() == enter:
             print("starting execute of absolute coordinates.")
-            self.query()
+            self.var.query()
 
-    ################################################################################
-
-    def json_file(self):
-        self.file.transfer(self.motor_list)
-    
-    def run_json(self):
-
-        motor_pos = self.file.unpack()
-
-        # Breaking Json formatted differently
-        recording = self.file.unpack()
-        self.com.home()
-        for y,ls in enumerate(recording):
-            for i in range(len(ls)):
-                self.com.send_move(ls[i]["0"])
-                self.com.send_move(ls[i]["1"])
-                self.com.send_move(ls[i]["2"])
-
-    ################################################################################
-    ########################## movement query ######################################
-    ################################################################################
-
-    def query(self):
-        print("query starting")
-        print("arduino commands currently turned off, GRBL settings not stable yet. 21/7")
-        self.com.send_move("x "+self.absolute_a+" y "+self.absolute_b)
-        self.com.send_move("z "+self.absolute_c+" a "+self.absolute_d)
-        self.com.send_move("b "+self.absolute_e)
-        
     ################################################################################
     ####################### absolute movement ######################################
     ################################################################################
@@ -270,7 +167,3 @@ if __name__ == "__main__":
     main = app_stitching(pleora=pleora_lib)
 
     sys.exit(app.exec())
-
- 
-   
-    

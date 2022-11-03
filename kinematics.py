@@ -14,9 +14,9 @@ import static.presets_robot_models as presets_robot_models
 
 class Kinematics():
     
-    def __init__(self):
+    def __init__(self, robot="HangingArm"):
 
-        atrdal = get_DH_params(presets_robot_models.preset_models["HangingArm"])
+        atrdal = get_DH_params(presets_robot_models.preset_models[robot])
 
         self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = atrdal
 

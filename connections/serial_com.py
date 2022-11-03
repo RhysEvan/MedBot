@@ -100,6 +100,7 @@ class serial_bridge:
         if self.device is None:
            print("no device")
            return   
+        print(input)
         self.device.write(bytearray("$G1 "+str(input)+"\r\n","utf-8"))
     
     def home(self):
