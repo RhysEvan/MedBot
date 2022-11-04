@@ -9,8 +9,10 @@ class backend():
         self.dynamic = dynamic_gui(self)
         ## visual locations of the graph when initializing ##
         self.slider_text = [self.main.text_aabs, self.main.text_babs, self.main.text_cabs, self.main.text_dabs, self.main.text_eabs, self.main.text_fabs]
+        self.joint=[self.main.aabs, self.main.babs, self.main.cabs, self.main.dabs, self.main.eabs, self.main.fabs]
         self.copying()
         self.slider_visual()
+        self.slider_limits()
         ## initial values for the recording list of xyz values ##
         self.x_loc = "0"
         self.y_loc = "0"
@@ -28,6 +30,12 @@ class backend():
         self.radius = copy.deepcopy(self.main.graph.radius)
         self.theta = copy.deepcopy(self.main.graph.theta)
     
+    def slider_limits(self):
+        for i, lim in enumerate(self.limits):
+            self.joint[i].setMinimum(lim[0])
+            self.joint[i].setMaximum(lim[1])
+            self.joint[i].setValue(int(self.absolute[i]))
+
     def slider_visual(self):
         self.absolute= []
         for i in range(len(self.main.graph.active)):

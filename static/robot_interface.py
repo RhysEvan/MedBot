@@ -15,9 +15,9 @@ class dynamic_gui:
             self.backend.main.graph.hide_path()
         elif self.backend.main.vis_path == True or click == True:
             self.backend.main.graph.draw_path(self.backend.endpositions, self.first)
-            self.first = 1
-        if click == False and animate == False:
+        if click == False and animate == False or self.first == 0:
             self.backend.main.vis_path = not self.backend.main.vis_path
+        self.first = 1
         click = False
         animate = False
 
@@ -43,17 +43,15 @@ class dynamic_gui:
         self.backend.slider_visual()
 
     def slider_input(self):
-        joint = [self.backend.main.aabs, self.backend.main.babs, self.backend.main.cabs, self.backend.main.dabs, self.backend.main.eabs, self.backend.main.fabs]
         try:    reference = self.backend.main.graph.limits.index([])
         except: reference = len(self.backend.main.graph.limits)
         for i in range(len(self.backend.limits)):
-            print(i)
             if i < reference:
-                self.backend.absolute[i] = str(joint[i].value())
+                self.backend.absolute[i] = str(self.backend.joint[i].value())
                 self.backend.slider_text[i].setText(self.backend.absolute[i])
                 self.backend.main.graph.set_active_motor(i,self.backend.absolute[i])
             else:
-                self.backend.absolute[i] = str(joint[i].value())
+                self.backend.absolute[i] = str(self.backend.joint[i].value())
                 self.backend.slider_text[i].setText(self.backend.absolute[i])
                 self.backend.main.graph.set_active_motor(i+1,self.backend.absolute[i])
 

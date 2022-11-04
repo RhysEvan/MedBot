@@ -82,7 +82,7 @@ class interface(QWidget):
     def set_active_motor(self,idx,value):
         
         t,r = self.theta, self.radius
-        print(self.active)
+
         if self.active[idx]=="r":            r[idx] = int(value)
         elif self.active[idx]=="t":          t[idx] = int(value)
         
