@@ -1,23 +1,25 @@
 import copy
 import numpy as np
 from functools import partial
-from .robot_interface import test
+from .robot_interface import dynamic_gui
 
 class backend():
     def __init__(self, main):
         self.main = main
-        self.test = test(self)
+        self.dynamic = dynamic_gui(self)
         ## visual locations of the graph when initializing ##
-        self.absolute_a = "0"
-        self.main.text_aabs.setText("0")
-        self.absolute_b = "100"
-        self.main.text_babs.setText("100")
+        self.absolute_a = "0" # change for self.val(1) for example. You want to make dynamic code that can
+        self.main.text_aabs.setText("0") #open the models and change these values with the change of model
+        self.absolute_b = "100" # depending on the active value being r or t you need to take a different string value
+        self.main.text_babs.setText("100") # buffer for "" need to be added as well, plus a new variable for f too.
         self.absolute_c = "270"
         self.main.text_cabs.setText("270")
         self.absolute_d = "80"
         self.main.text_dabs.setText("80")
         self.absolute_e = "40"
         self.main.text_eabs.setText("40")
+        self.absolute_f = "0"
+        self.main.text_fabs.setText("0")
         ## initial values for the recording list of xyz values ##
         self.x_loc = "0"
         self.y_loc = "0"
@@ -116,7 +118,6 @@ class backend():
                 self.main.com.send_move(ls[i]["1"])
                 self.main.com.send_move(ls[i]["2"])
         
-
     def main_home(self):
         self.main.com.home()
         print("UI update to home position")
@@ -134,6 +135,6 @@ class backend():
         self.endpositions = self.main.kinematics.forward_list(motorlist)
         self.load_realpos_table(self.endpositions)
         self.main.kinematics.orientation= False
-        self.test.visible_path(animate=True)
+        self.dynamic.visible_path(animate=True)
         all_positions = self.main.kinematics.forward_list(motorlist, end_only=False)
         self.main.graph.animate(all_positions)

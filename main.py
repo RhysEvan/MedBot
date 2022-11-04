@@ -59,8 +59,8 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.remove_motor.clicked.connect(self.var.handle_motorlist)
         self.executing.clicked.connect(self.var.run_json)
         self.animating.clicked.connect(self.var.initiate_animate)
-        self.path.clicked.connect(self.var.test.visible_path)
-        self.robot_options.clicked.connect(self.var.test.clicked)
+        self.path.clicked.connect(self.var.dynamic.visible_path)
+        self.robot_options.clicked.connect(self.var.dynamic.clicked)
 
         self.aabs.valueChanged.connect(self.joint_a)
         self.babs.valueChanged.connect(self.joint_b)

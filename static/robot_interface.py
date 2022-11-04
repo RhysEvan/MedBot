@@ -1,10 +1,12 @@
 from static.presets_robot_models import preset_models
 from kinematics import get_DH_params
+from functools import partial
 
-class test:
+class dynamic_gui:
     def __init__(self, backend):
         self.backend = backend
         self.first = 0
+        self.val = partial(self.slider_change)
         for i,key in enumerate(preset_models.keys()):
             self.backend.main.robot_options.insertItem(i,key)
         
@@ -19,7 +21,6 @@ class test:
             self.backend.main.vis_path = not self.backend.main.vis_path
         click = False
         animate = False
-
 
     def clicked(self):
         robot = self.backend.main.robot_options.currentItem()
@@ -36,3 +37,8 @@ class test:
         
         self.backend.main.graph.update_position()
         self.backend.main.graph.update()
+        self.slider_change()
+
+    def slider_change(self):
+        print("hehe")
+        limits = self.backend.main.graph.limits
