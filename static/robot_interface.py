@@ -42,6 +42,22 @@ class dynamic_gui:
         self.backend.copying()
         self.backend.slider_visual()
 
+    def slider_input(self):
+        joint = [self.backend.main.aabs, self.backend.main.babs, self.backend.main.cabs, self.backend.main.dabs, self.backend.main.eabs, self.backend.main.fabs]
+        try:    reference = self.backend.main.graph.limits.index([])
+        except: reference = len(self.backend.main.graph.limits)
+        for i in range(len(self.backend.limits)):
+            print(i)
+            if i < reference:
+                self.backend.absolute[i] = str(joint[i].value())
+                self.backend.slider_text[i].setText(self.backend.absolute[i])
+                self.backend.main.graph.set_active_motor(i,self.backend.absolute[i])
+            else:
+                self.backend.absolute[i] = str(joint[i].value())
+                self.backend.slider_text[i].setText(self.backend.absolute[i])
+                self.backend.main.graph.set_active_motor(i+1,self.backend.absolute[i])
+
+
 def val(i, pos, limits, radius, theta, active):
     if i ==0 and pos != False:
         limits.pop(pos)

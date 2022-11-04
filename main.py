@@ -62,11 +62,12 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.path.clicked.connect(self.var.dynamic.visible_path)
         self.robot_options.clicked.connect(self.var.dynamic.clicked)
 
-        self.aabs.valueChanged.connect(self.joint_a)
-        self.babs.valueChanged.connect(self.joint_b)
-        self.cabs.valueChanged.connect(self.joint_c)
-        self.dabs.valueChanged.connect(self.joint_d)
-        self.eabs.valueChanged.connect(self.joint_e)
+        self.aabs.valueChanged.connect(self.var.dynamic.slider_input)
+        self.babs.valueChanged.connect(self.var.dynamic.slider_input)
+        self.cabs.valueChanged.connect(self.var.dynamic.slider_input)
+        self.dabs.valueChanged.connect(self.var.dynamic.slider_input)
+        self.eabs.valueChanged.connect(self.var.dynamic.slider_input)
+        self.fabs.valueChanged.connect(self.var.dynamic.slider_input)
         self.xcoord.textEdited.connect(self.x_location)
         self.ycoord.textEdited.connect(self.y_location)
         self.zcoord.textEdited.connect(self.z_location)
@@ -98,36 +99,6 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     ################################################################################
     ####################### absolute movement ######################################
     ################################################################################
-    
-    def joint_a(self):
-        self.absolute_a = str(self.aabs.value())
-        self.text_aabs.setText(self.absolute_a)
-        self.graph.set_active_motor(0,self.absolute_a)
-        print(self.absolute_a)
-
-    def joint_b(self):
-        self.absolute_b = str(self.babs.value())
-        self.text_babs.setText(self.absolute_b)
-        self.graph.set_active_motor(2,self.absolute_b)
-        print(self.absolute_b)
-
-    def joint_c(self):
-        self.absolute_c = str(self.cabs.value())
-        self.text_cabs.setText(self.absolute_c)
-        self.graph.set_active_motor(3,self.absolute_c)
-        print(self.absolute_c) 
-
-    def joint_d(self):
-        self.absolute_d = str(self.dabs.value())
-        self.text_dabs.setText(self.absolute_d)
-        self.graph.set_active_motor(4,self.absolute_d)
-        print(self.absolute_d)
-    
-    def joint_e(self):
-        self.absolute_e = str(self.eabs.value())
-        self.text_eabs.setText(self.absolute_e)
-        self.graph.set_active_motor(5,self.absolute_e)
-        print(self.absolute_e)  
 
     def x_location(self):
         self.x_loc = self.xcoord.text()
