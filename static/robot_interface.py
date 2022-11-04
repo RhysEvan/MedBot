@@ -10,19 +10,19 @@ class dynamic_gui:
         for i,key in enumerate(preset_models.keys()):
             self.backend.main.robot_options.insertItem(i,key)
         
-    def visible_path(self, click = False, animate = False):
-        if self.backend.main.vis_path == False and click != True and animate != True and self.first != 0:
+    def visible_path(self, animate = False):
+        if self.backend.main.vis_path == False and self.first != 0:
             self.backend.main.graph.hide_path()
-        elif self.backend.main.vis_path == True or click == True:
+        elif self.backend.main.vis_path == True:
             self.backend.main.graph.draw_path(self.backend.endpositions, self.first)
-        if click == False and animate == False or self.first == 0:
+        if animate == False or self.first == 0:
             self.backend.main.vis_path = not self.backend.main.vis_path
         self.first = 1
-        click = False
         animate = False
 
     def clicked(self):
         robot = self.backend.main.robot_options.currentItem()
+        print(robot.text())
         atrdal = get_DH_params(preset_models[robot.text()])
         self.backend.main.graph.alpha, self.backend.main.graph.theta, self.backend.main.graph.radius, self.backend.main.graph.dists, self.backend.main.graph.active, self.backend.main.graph.limits = atrdal
         
@@ -32,7 +32,6 @@ class dynamic_gui:
         self.backend.endpositions = self.backend.main.kinematics.forward_list(motorlist)
         self.backend.load_realpos_table(self.backend.endpositions)
         self.backend.main.kinematics.orientation= False
-        self.visible_path(click = True)
         
         self.backend.main.graph.update_position()
         self.backend.main.graph.update()

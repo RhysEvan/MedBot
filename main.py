@@ -77,6 +77,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
  
         ########################
         self.show()
+        
         self.var.animation_seq()
         ###########################
 

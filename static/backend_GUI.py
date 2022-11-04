@@ -7,12 +7,15 @@ class backend():
     def __init__(self, main):
         self.main = main
         self.dynamic = dynamic_gui(self)
+        
         ## visual locations of the graph when initializing ##
         self.slider_text = [self.main.text_aabs, self.main.text_babs, self.main.text_cabs, self.main.text_dabs, self.main.text_eabs, self.main.text_fabs]
         self.joint=[self.main.aabs, self.main.babs, self.main.cabs, self.main.dabs, self.main.eabs, self.main.fabs]
         self.copying()
         self.slider_visual()
         self.slider_limits()
+
+
         ## initial values for the recording list of xyz values ##
         self.x_loc = "0"
         self.y_loc = "0"
