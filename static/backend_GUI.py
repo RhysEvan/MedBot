@@ -78,15 +78,14 @@ class backend():
         for mot in motor_list:
             s = ""
             for i,val in enumerate(mot):
-                part = partial(self.motorliststring,i,val)
-                s += part()
+                part = self.motorliststring(i,val)
+                s += part
             self.main.motorlist.addItem(s)
     
     def motorliststring(self, i, val):
         mot_id = ["A: ", "B: ", "C: ", "D: ", "E: "]
         st = mot_id[i]+str(val)+" "
         return st
-
 
     def load_realpos_table(self, endpositions):
 
@@ -132,9 +131,9 @@ class backend():
         self.load_motor_table(motorlist)
 
         self.main.kinematics.orientation= True
-        endpositions = self.main.kinematics.forward_list(motorlist)
-        self.load_realpos_table(endpositions)
-        self.main.graph.draw_path(endpositions)
+        self.endpositions = self.main.kinematics.forward_list(motorlist)
+        self.load_realpos_table(self.endpositions)
         self.main.kinematics.orientation= False
+        self.test.visible_path(animate=True)
         all_positions = self.main.kinematics.forward_list(motorlist, end_only=False)
         self.main.graph.animate(all_positions)

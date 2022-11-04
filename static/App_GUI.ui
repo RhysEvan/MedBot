@@ -277,20 +277,6 @@
       </property>
      </widget>
     </item>
-    <item row="9" column="4">
-     <widget class="QPushButton" name="compiling">
-      <property name="text">
-       <string>Save</string>
-      </property>
-     </widget>
-    </item>
-    <item row="9" column="6">
-     <widget class="QPushButton" name="remove_motor">
-      <property name="text">
-       <string>Remove</string>
-      </property>
-     </widget>
-    </item>
     <item row="3" column="5">
      <widget class="QLabel" name="text_aabs">
       <property name="sizePolicy">
@@ -337,13 +323,6 @@
       </property>
      </widget>
     </item>
-    <item row="9" column="3">
-     <widget class="QPushButton" name="recording">
-      <property name="text">
-       <string>Record</string>
-      </property>
-     </widget>
-    </item>
     <item row="3" column="0" alignment="Qt::AlignRight">
      <widget class="QLabel" name="label">
       <property name="sizePolicy">
@@ -354,13 +333,6 @@
       </property>
       <property name="text">
        <string>A</string>
-      </property>
-     </widget>
-    </item>
-    <item row="9" column="5">
-     <widget class="QPushButton" name="executing">
-      <property name="text">
-       <string>Run</string>
       </property>
      </widget>
     </item>
@@ -499,6 +471,41 @@ p, li { white-space: pre-wrap; }
         <width>16777215</width>
         <height>28</height>
        </size>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="9">
+     <widget class="QPushButton" name="remove_motor">
+      <property name="text">
+       <string>Remove</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="6">
+     <widget class="QPushButton" name="executing">
+      <property name="text">
+       <string>Run</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="5">
+     <widget class="QPushButton" name="compiling">
+      <property name="text">
+       <string>Save</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="4">
+     <widget class="QPushButton" name="recording">
+      <property name="text">
+       <string>Record</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="3">
+     <widget class="QPushButton" name="path">
+      <property name="text">
+       <string>Show Path</string>
       </property>
      </widget>
     </item>

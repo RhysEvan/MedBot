@@ -9,7 +9,7 @@ from matplotlib.figure import Figure
 from matplotlib import animation
 
 #files
-from kinematics import forward_all, get_DH_params
+from kinematics import Kinematics,forward_all, get_DH_params
 import static.presets_robot_models as presets_robot_models
 
 ################################################
@@ -21,7 +21,7 @@ class interface(QWidget):
         atrdal = get_DH_params(presets_robot_models.preset_models[robot])
 
         self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = atrdal
-
+        self.kin = Kinematics(self)
         self.update_position()
         self.setup_fig()
        
@@ -130,11 +130,20 @@ class interface(QWidget):
         ax.plot3D(zero, y, zero, 'green')
         ax.plot3D(zero, zero, z, 'blue')
         
-    def draw_path(self, position_list):
-
+    def draw_path(self, position_list, i):
         x,y,z = np.array(position_list).T[:3]
-        path = self.ax.plot3D(x,y,z, 'bo-', linewidth=1)[0]
-        self.path = path
+        if i == 0:
+            self.path = self.ax.plot3D(x,y,z, 'bo-', linewidth=1)[0]
+        else :
+            self.path.set_data_3d(x,y,z)
+        self.update()
+        self.fig.canvas.draw()
+    
+    def hide_path(self):
+        self.path.set_data_3d([],[],[])
+        self.update()
+        self.fig.canvas.draw()
+        
 
     def animate(self, position_list):
         frms = len(position_list)

@@ -25,6 +25,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     def __init__(self, port = None, pleora= True):
         super().__init__()
         self.robot = "HangingArm"
+        self.vis_path = True
         ## Initialisation of GUI ##
         ## if changes are made to GUI then please add chosen_bot callable to the setupUi function and to self.visual = interface(self.centralwidget, robot=chosen_bot)
         self.setupUi(self,choice = self.robot)
@@ -42,7 +43,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
             self.cam_r.ImageUpdate.connect(self.image_update_right)
         ## conection to interface to create matplot visual ##
         self.graph = self.visual
-        self.kinematics = Kinematics(robot=self.robot)
+        self.kinematics = self.graph.kin
         ## connection to arduino GRBL ##
         self.com = serial_bridge()
         ## json compiler initiation ##
@@ -58,6 +59,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.remove_motor.clicked.connect(self.var.handle_motorlist)
         self.executing.clicked.connect(self.var.run_json)
         self.animating.clicked.connect(self.var.initiate_animate)
+        self.path.clicked.connect(self.var.test.visible_path)
         self.robot_options.clicked.connect(self.var.test.clicked)
 
         self.aabs.valueChanged.connect(self.joint_a)
