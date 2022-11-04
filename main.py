@@ -98,7 +98,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     ################################################################################
     ####################### absolute movement ######################################
     ################################################################################
-
+    
     def joint_a(self):
         self.absolute_a = str(self.aabs.value())
         self.text_aabs.setText(self.absolute_a)

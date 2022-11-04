@@ -1,25 +1,16 @@
 import copy
 import numpy as np
 from functools import partial
-from .robot_interface import dynamic_gui
+from .robot_interface import dynamic_gui, val
 
 class backend():
     def __init__(self, main):
         self.main = main
         self.dynamic = dynamic_gui(self)
         ## visual locations of the graph when initializing ##
-        self.absolute_a = "0" # change for self.val(1) for example. You want to make dynamic code that can
-        self.main.text_aabs.setText("0") #open the models and change these values with the change of model
-        self.absolute_b = "100" # depending on the active value being r or t you need to take a different string value
-        self.main.text_babs.setText("100") # buffer for "" need to be added as well, plus a new variable for f too.
-        self.absolute_c = "270"
-        self.main.text_cabs.setText("270")
-        self.absolute_d = "80"
-        self.main.text_dabs.setText("80")
-        self.absolute_e = "40"
-        self.main.text_eabs.setText("40")
-        self.absolute_f = "0"
-        self.main.text_fabs.setText("0")
+        self.slider_text = [self.main.text_aabs, self.main.text_babs, self.main.text_cabs, self.main.text_dabs, self.main.text_eabs, self.main.text_fabs]
+        self.copying()
+        self.slider_visual()
         ## initial values for the recording list of xyz values ##
         self.x_loc = "0"
         self.y_loc = "0"
@@ -31,6 +22,23 @@ class backend():
         self.coord_list = []
         self.motor_list = []
 
+    def copying(self):
+        self.limits = copy.deepcopy(self.main.graph.limits)
+        self.active = copy.deepcopy(self.main.graph.active)
+        self.radius = copy.deepcopy(self.main.graph.radius)
+        self.theta = copy.deepcopy(self.main.graph.theta)
+    
+    def slider_visual(self):
+        self.absolute= []
+        for i in range(len(self.main.graph.active)):
+            try: pop_pos=self.main.graph.active.index("")
+            except: pop_pos=False
+            self.absolute.append(val(i, pop_pos, self.limits, self.radius, self.theta, self.active))
+        for i in range(len(self.slider_text)):
+            if i < len(self.absolute):
+                self.slider_text[i].setText(self.absolute[i])
+            else:
+                self.slider_text[i].setText(None)
 
     ################################################################################
     ########################## movement query ######################################

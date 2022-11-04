@@ -17,7 +17,6 @@ class dynamic_gui:
             self.backend.main.graph.draw_path(self.backend.endpositions, self.first)
             self.first = 1
         if click == False and animate == False:
-            print("entered")
             self.backend.main.vis_path = not self.backend.main.vis_path
         click = False
         animate = False
@@ -40,5 +39,18 @@ class dynamic_gui:
         self.slider_change()
 
     def slider_change(self):
-        print("hehe")
-        limits = self.backend.main.graph.limits
+        self.backend.copying()
+        self.backend.slider_visual()
+
+def val(i, pos, limits, radius, theta, active):
+    if i ==0 and pos != False:
+        limits.pop(pos)
+        active.pop(pos)
+        radius.pop(pos)
+        theta.pop(pos)
+    if i < len(limits): 
+        type = active[i]
+        if type == "r":
+            return str(radius[i])
+        elif type == "t":
+            return str(theta[i])
