@@ -56,6 +56,7 @@ class dynamic_gui:
 
 
 def val(i, pos, limits, radius, theta, active):
+    print(radius)
     if i ==0 and pos != False:
         limits.pop(pos)
         active.pop(pos)
