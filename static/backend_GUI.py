@@ -144,17 +144,12 @@ class backend():
         self.main.com.home()
         print("UI update to home position")
 
-    def initiate_animate(self):
-        print('updating and animating')
-        self.animation_seq()
-    
     def animation_seq(self):
         all_positions = self.model_build()
         if self.first_animation == 1:    
             self.dynamic.visible_path(animate=True)
         self.main.graph.animate(all_positions)
         self.first_animation = 2
-
 
     def model_build(self):
         motorlist = self.main.kinematics.motorscan()
