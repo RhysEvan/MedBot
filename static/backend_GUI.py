@@ -81,8 +81,10 @@ class backend():
         self.main.coordlist.takeItem(last-1)
 
     def append_coord(self):
+        templs = []
         for i,var in enumerate(self.location_3d):
-            self.coord_list.append(var)
+            templs.append(var)
+        self.coord_list.append(templs)
         self.main.coordlist.addItem("x: "+str(self.location_3d[0])+" y: "+str(self.location_3d[1])+" z: "+str(self.location_3d[2])+ " α : "+str(self.location_3d[3])+ " β: "+str(self.location_3d[4])+ " γ: "+str(self.location_3d[5]))
 
     #################################
