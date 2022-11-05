@@ -26,6 +26,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.robot = "HangingArm"
         self.vis_path = True
+        self.animate = False
         ## Initialisation of GUI ##
         ## if changes are made to GUI then please add chosen_bot callable to the setupUi function and to self.visual = interface(self.centralwidget, robot=chosen_bot)
         self.setupUi(self,choice = self.robot)
@@ -77,8 +78,6 @@ class app_stitching(QMainWindow, Ui_MainWindow):
  
         ########################
         self.show()
-        
-        self.var.animation_seq()
         ###########################
 
     ########################################

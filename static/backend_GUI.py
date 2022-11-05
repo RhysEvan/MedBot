@@ -15,6 +15,8 @@ class backend():
         self.slider_visual()
         self.slider_limits()
 
+        if self.main.animate:
+            self.animation_seq()
 
         ## initial values for the recording list of xyz values ##
         self.x_loc = "0"

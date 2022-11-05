@@ -11,11 +11,13 @@ class dynamic_gui:
             self.backend.main.robot_options.insertItem(i,key)
         
     def visible_path(self, animate = False, click = False):
-        if self.backend.main.vis_path == False and self.first != 0 and click != True:
+        try: self.backend.endpositions
+        except: self.backend.model_build()
+        if self.backend.main.vis_path == False and self.first != 0 and click != True and animate != True:
             self.backend.main.graph.hide_path()
-        elif self.backend.main.vis_path == True or [click == True and self.backend.main.vis_path == False]:
+        elif self.backend.main.vis_path == True and animate == False and click == False or click == True and self.backend.main.vis_path == False or self.first == 0:
             self.backend.main.graph.draw_path(self.backend.endpositions, self.first)
-        if [animate == False or self.first == 0] and click != True:
+        if click == False and animate == False or self.first == 0:
             self.backend.main.vis_path = not self.backend.main.vis_path
         self.first = 1
         animate = False
