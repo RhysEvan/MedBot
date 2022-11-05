@@ -14,8 +14,9 @@ class backend():
         self.copying()
         self.slider_visual()
         self.slider_limits()
-
+        self.first_animation = 0
         if self.main.animate:
+            self.first_animation = 1
             self.animation_seq()
 
         ## initial values for the recording list of xyz values ##
@@ -149,8 +150,11 @@ class backend():
     
     def animation_seq(self):
         all_positions = self.model_build()
-        self.dynamic.visible_path(animate=True)
+        if self.first_animation == 1:    
+            self.dynamic.visible_path(animate=True)
         self.main.graph.animate(all_positions)
+        self.first_animation = 2
+
 
     def model_build(self):
         motorlist = self.main.kinematics.motorscan()

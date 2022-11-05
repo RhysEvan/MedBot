@@ -20,8 +20,7 @@ class dynamic_gui:
         if click == False and animate == False or self.first == 0:
             self.backend.main.vis_path = not self.backend.main.vis_path
         self.first = 1
-        animate = False
-        click = False
+
 
     def clicked(self):
         robot = self.backend.main.robot_options.currentItem()
