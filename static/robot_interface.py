@@ -35,7 +35,11 @@ class dynamic_gui:
     def slider_change(self):
         self.backend.copying()
         self.backend.slider_visual()
-
+    
+    ################################################################################
+    ####################### absolute movement ######################################
+    ################################################################################
+    
     def slider_input(self):
         try:    reference = self.main.graph.limits.index([])
         except: reference = len(self.main.graph.limits)
@@ -48,7 +52,7 @@ class dynamic_gui:
                 self.backend.absolute[i] = str(self.backend.joint[i].value())
                 self.backend.slider_text[i].setText(self.backend.absolute[i])
                 self.main.graph.set_active_motor(i+1,self.backend.absolute[i])
-
+    
     def location(self):
         print(self.backend.location_input)
         for i,var in enumerate(self.backend.location_input):

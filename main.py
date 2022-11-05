@@ -97,34 +97,6 @@ class app_stitching(QMainWindow, Ui_MainWindow):
             self.var.query()
 
     ################################################################################
-    ####################### absolute movement ######################################
-    ################################################################################
-
-    def x_location(self):
-        self.x_loc = self.xcoord.text()
-        print(self.x_loc)
-
-    def y_location(self):
-        self.y_loc = self.ycoord.text()
-        print(self.y_loc)
-
-    def z_location(self):
-        self.z_loc = self.zcoord.text()
-        print(self.z_loc)
-
-    def alfa_location(self):
-        self.alfa_loc = self.alfacoord.text()
-        print(self.alfa_loc)
-
-    def beta_location(self):
-        self.beta_loc = self.betacoord.text()
-        print(self.beta_loc)
-
-    def gamma_location(self):
-        self.gamma_loc = self.gammacoord.text()
-        print(self.gamma_loc)
-
-    ################################################################################
     ####################### threading method  ######################################
     ################################################################################
 
