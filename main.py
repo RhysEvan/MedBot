@@ -24,12 +24,12 @@ except:
 class app_stitching(QMainWindow, Ui_MainWindow):
     def __init__(self, port = None, pleora= True):
         super().__init__()
-        self.robot = "HangingArm"
-        self.vis_path = True
+        robot = "HangingArm"
+        self.vis_path = False
         self.animate = False
         ## Initialisation of GUI ##
         ## if changes are made to GUI then please add chosen_bot callable to the setupUi function and to self.visual = interface(self.centralwidget, robot=chosen_bot)
-        self.setupUi(self,choice = self.robot)
+        self.setupUi(self,choice=robot)
         if pleora:
             ## Threaded Camera Left## 
             self.cam_l = Feed("2BA200004267") ## Number represents the camera adress on the computer ##
@@ -51,6 +51,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.file = json_handler()
         ## all background related functions ##
         self.var = backend(self)
+        self.var.model_build()
 
         ## call to button functions and their forward to internal functions ##
         self.homing.clicked.connect(self.var.main_home)

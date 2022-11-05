@@ -23,12 +23,17 @@ class dynamic_gui:
         self.first = 1
 
     def clicked(self):
-        robot = self.main.robot_options.currentItem()
-        self.main.graph.model_param(robot.text())
+        self.robot = self.main.robot_options.currentItem()
+        self.main.graph.model_param(self.robot.text())
+        self.backend.motor_list = []
+        self.backend.coord_list = []
+        self.main.motorlist.clear()
+        self.main.coordlist.clear()
         self.slider_change()
         motorlist = self.main.kinematics.motorscan()
         self.backend.model_build()
-        self.visible_path(click = True)
+        if self.main.vis_path == False and self.first != 0:
+            self.visible_path(click = True)
         self.main.graph.update_position()
         self.main.graph.update()
 
@@ -39,7 +44,7 @@ class dynamic_gui:
     ################################################################################
     ####################### absolute movement ######################################
     ################################################################################
-    
+
     def slider_input(self):
         try:    reference = self.main.graph.limits.index([])
         except: reference = len(self.main.graph.limits)
@@ -54,12 +59,11 @@ class dynamic_gui:
                 self.main.graph.set_active_motor(i+1,self.backend.absolute[i])
     
     def location(self):
-        print(self.backend.location_input)
         for i,var in enumerate(self.backend.location_input):
             if var.text() != "":
-                self.backend.location_3d[i] = var.text()
-            else:
-                self.backend.location_3d[i] = "0"
+                try: int(var.text())
+                except: return
+                self.backend.location_3d[i] = int(var.text())
 
 def val(i, pos, limits, radius, theta, active):
     if i ==0 and pos != False:

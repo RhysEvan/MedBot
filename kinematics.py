@@ -191,7 +191,6 @@ class Kinematics():
         
         mot_pos = self.get_motor_positions()
         active = self.interface.active
-
         i = 0
         for n in range(mot_pos.shape[1]):
             if active[n]=="": continue

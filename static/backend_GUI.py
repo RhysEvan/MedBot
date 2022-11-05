@@ -8,12 +8,12 @@ class backend():
         self.main = main
         self.dynamic = dynamic_gui(self)
         ## initial values for the recording list of xyz values ##
-        self.x_loc = "0"
-        self.y_loc = "0"
-        self.z_loc = "0"
-        self.alpha_loc = "0"
-        self.beta_loc = "0"
-        self.gamma_loc = "0"
+        self.x_loc = None
+        self.y_loc = None
+        self.z_loc = None
+        self.alpha_loc = None
+        self.beta_loc = None
+        self.gamma_loc = None
         #
         self.coord_list = []
         self.motor_list = []
@@ -81,11 +81,27 @@ class backend():
         self.main.coordlist.takeItem(last-1)
 
     def append_coord(self):
-        templs = []
-        for i,var in enumerate(self.location_3d):
-            templs.append(var)
-        self.coord_list.append(templs)
-        self.main.coordlist.addItem("x: "+str(self.location_3d[0])+" y: "+str(self.location_3d[1])+" z: "+str(self.location_3d[2])+ " α : "+str(self.location_3d[3])+ " β: "+str(self.location_3d[4])+ " γ: "+str(self.location_3d[5]))
+        print("appending coord with right angles")
+        self.coord_string(np.array(self.location_3d))
+
+    def calculated_coord(self):
+        active = []
+        for i,val in enumerate(self.location_3d):
+            if val != None:    
+                active.append(val)
+        coordlist = np.array(active)
+        self.main.kinematics.orientation= True
+        new_string = self.main.kinematics.forward_list([coordlist])
+        self.main.kinematics.orientation= False
+        self.coord_string(new_string[0])
+
+    def coord_string(self,end):
+        try: x,y,z,a,b,g = np.round(end,1)
+        except: x,y,z,a,b,g = end
+        self.main.coordlist.addItem(
+                "x: "+str(x)+" y: "+str(y)+ " z: "+str(z) + 
+               " α: "+str(a)+" β: "+str(b)+ " γ: "+str(g)
+                )
 
     #################################
     def handle_motorlist(self):
@@ -121,11 +137,7 @@ class backend():
         self.coord_list = endpositions
         ## Render end effector location and orientation
         for end in endpositions:
-            x,y,z,a,b,g = np.round(end,1)
-            self.main.coordlist.addItem(
-                "x: "+str(x)+" y: "+str(y)+ " z: "+str(z) + 
-               " α: "+str(a)+" β: "+str(b)+ " γ: "+str(g)
-                )
+            self.coord_string(end)
 
     ################################################################################
 
@@ -164,4 +176,6 @@ class backend():
         self.load_realpos_table(self.endpositions)
         self.main.kinematics.orientation= False
         all_positions = self.main.kinematics.forward_list(motorlist, end_only=False)
+        if self.main.vis_path:
+            self.dynamic.visible_path()
         return all_positions
