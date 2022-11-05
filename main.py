@@ -58,7 +58,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.submit.clicked.connect(self.var.append_coord)
         self.recording.clicked.connect(self.var.append_motor)
         self.compiling.clicked.connect(self.var.json_file)
-        self.remove_motor.clicked.connect(self.var.handle_motorlist)
+        self.remove_motor.clicked.connect(self.var.handle_lists)
         self.executing.clicked.connect(self.var.run_json)
         self.animating.clicked.connect(self.var.animation_seq)
         self.path.clicked.connect(self.var.dynamic.visible_path)
@@ -89,10 +89,6 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         #when entered into a label enter needs to be pressed 
         delete = 16777216 #esc to undo
         enter = 16777220 #enter to execute
-        if e.key() == delete:
-            print("removing last coordinate")
-            self.var.handle_coordlist()
-
         if e.key() == enter:
             print("starting execute of absolute coordinates.")
             self.var.query()

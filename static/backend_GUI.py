@@ -72,13 +72,19 @@ class backend():
     ####################### coordinate list ########################################
     ################################################################################
     
-    def handle_coordlist(self):
+    def handle_lists(self):
         if self.coord_list == []:
             print("no coords")
             return
         self.coord_list.pop()
         last = self.main.coordlist.count()
         self.main.coordlist.takeItem(last-1)
+        if self.motor_list == []:
+            print("no motor positions")
+            return
+        self.motor_list.pop()
+        last = self.main.motorlist.count()
+        self.main.motorlist.takeItem(last-1)
 
     def append_coord(self):
         print("appending coord with right angles")
@@ -103,14 +109,7 @@ class backend():
                " α: "+str(a)+" β: "+str(b)+ " γ: "+str(g)
                 )
 
-    #################################
-    def handle_motorlist(self):
-        if self.motor_list == []:
-            print("no motor positions")
-            return
-        self.motor_list.pop()
-        last = self.main.motorlist.count()
-        self.main.motorlist.takeItem(last-1)
+    #################################        
 
     def append_motor(self):
         self.motor_list.append(self.joint)
