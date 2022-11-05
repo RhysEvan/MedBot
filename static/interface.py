@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 from matplotlib import animation
-
+import copy
 #files
 from kinematics import Kinematics,forward_all, get_DH_params
 import static.presets_robot_models as presets_robot_models
@@ -18,13 +18,16 @@ class interface(QWidget):
     def __init__(self, parent, robot="Prismatic3"):
         super(QWidget, self).__init__(parent)
 
-        atrdal = get_DH_params(presets_robot_models.preset_models[robot])
-
-        self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = atrdal
+        self.model_param(robot)
         self.kin = Kinematics(self)
         self.update_position()
         self.setup_fig()
-       
+    
+    def model_param(self,robot):
+        atrdal = get_DH_params(presets_robot_models.preset_models[robot])
+        parameters = copy.deepcopy(atrdal)
+        self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = parameters
+
     def setup_fig(self):
         x,y,z = self.positions
         n = range(len(x))

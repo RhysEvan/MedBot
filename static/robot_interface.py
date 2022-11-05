@@ -10,32 +10,27 @@ class dynamic_gui:
         for i,key in enumerate(preset_models.keys()):
             self.backend.main.robot_options.insertItem(i,key)
         
-    def visible_path(self, animate = False):
-        if self.backend.main.vis_path == False and self.first != 0:
+    def visible_path(self, animate = False, click = False):
+        if self.backend.main.vis_path == False and self.first != 0 and click != True:
             self.backend.main.graph.hide_path()
-        elif self.backend.main.vis_path == True:
+        elif self.backend.main.vis_path == True or [click == True and self.backend.main.vis_path == False]:
             self.backend.main.graph.draw_path(self.backend.endpositions, self.first)
-        if animate == False or self.first == 0:
+        if [animate == False or self.first == 0] and click != True:
             self.backend.main.vis_path = not self.backend.main.vis_path
         self.first = 1
         animate = False
+        click = False
 
     def clicked(self):
         robot = self.backend.main.robot_options.currentItem()
-        print(robot.text())
-        atrdal = get_DH_params(preset_models[robot.text()])
-        self.backend.main.graph.alpha, self.backend.main.graph.theta, self.backend.main.graph.radius, self.backend.main.graph.dists, self.backend.main.graph.active, self.backend.main.graph.limits = atrdal
-        
+        self.backend.main.graph.model_param(robot.text())
+        self.slider_change()
         motorlist = self.backend.main.kinematics.motorscan()
-        self.backend.load_motor_table(motorlist)
-        self.backend.main.kinematics.orientation= True
-        self.backend.endpositions = self.backend.main.kinematics.forward_list(motorlist)
-        self.backend.load_realpos_table(self.backend.endpositions)
-        self.backend.main.kinematics.orientation= False
-        
+        self.backend.model_build()
+        self.visible_path(click = True)
         self.backend.main.graph.update_position()
         self.backend.main.graph.update()
-        self.slider_change()
+
 
     def slider_change(self):
         self.backend.copying()
@@ -56,7 +51,6 @@ class dynamic_gui:
 
 
 def val(i, pos, limits, radius, theta, active):
-    print(radius)
     if i ==0 and pos != False:
         limits.pop(pos)
         active.pop(pos)

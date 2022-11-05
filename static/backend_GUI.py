@@ -146,14 +146,16 @@ class backend():
         self.animation_seq()
     
     def animation_seq(self):
-        
+        all_positions = self.model_build()
+        self.dynamic.visible_path(animate=True)
+        self.main.graph.animate(all_positions)
+
+    def model_build(self):
         motorlist = self.main.kinematics.motorscan()
         self.load_motor_table(motorlist)
-
         self.main.kinematics.orientation= True
         self.endpositions = self.main.kinematics.forward_list(motorlist)
         self.load_realpos_table(self.endpositions)
         self.main.kinematics.orientation= False
-        self.dynamic.visible_path(animate=True)
         all_positions = self.main.kinematics.forward_list(motorlist, end_only=False)
-        self.main.graph.animate(all_positions)
+        return all_positions
