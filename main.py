@@ -69,12 +69,12 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.dabs.valueChanged.connect(self.var.dynamic.slider_input)
         self.eabs.valueChanged.connect(self.var.dynamic.slider_input)
         self.fabs.valueChanged.connect(self.var.dynamic.slider_input)
-        self.xcoord.textEdited.connect(self.x_location)
-        self.ycoord.textEdited.connect(self.y_location)
-        self.zcoord.textEdited.connect(self.z_location)
-        self.alfacoord.textEdited.connect(self.alfa_location)
-        self.betacoord.textEdited.connect(self.beta_location)
-        self.gammacoord.textEdited.connect(self.gamma_location)
+        self.xcoord.textEdited.connect(self.var.dynamic.location)
+        self.ycoord.textEdited.connect(self.var.dynamic.location)
+        self.zcoord.textEdited.connect(self.var.dynamic.location)
+        self.alphacoord.textEdited.connect(self.var.dynamic.location)
+        self.betacoord.textEdited.connect(self.var.dynamic.location)
+        self.gammacoord.textEdited.connect(self.var.dynamic.location)
  
         ########################
         self.show()

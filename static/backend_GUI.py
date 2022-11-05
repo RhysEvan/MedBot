@@ -7,10 +7,21 @@ class backend():
     def __init__(self, main):
         self.main = main
         self.dynamic = dynamic_gui(self)
-        
+        ## initial values for the recording list of xyz values ##
+        self.x_loc = "0"
+        self.y_loc = "0"
+        self.z_loc = "0"
+        self.alpha_loc = "0"
+        self.beta_loc = "0"
+        self.gamma_loc = "0"
+        #
+        self.coord_list = []
+        self.motor_list = []
         ## visual locations of the graph when initializing ##
         self.slider_text = [self.main.text_aabs, self.main.text_babs, self.main.text_cabs, self.main.text_dabs, self.main.text_eabs, self.main.text_fabs]
-        self.joint=[self.main.aabs, self.main.babs, self.main.cabs, self.main.dabs, self.main.eabs, self.main.fabs]
+        self.joint = [self.main.aabs, self.main.babs, self.main.cabs, self.main.dabs, self.main.eabs, self.main.fabs]
+        self.location_3d = [self.x_loc, self.y_loc, self.z_loc, self.alpha_loc, self.beta_loc, self.gamma_loc]
+        self.location_input = [self.main.xcoord, self.main.ycoord, self.main.zcoord, self.main.alphacoord, self.main.betacoord, self.main.gammacoord]
         self.copying()
         self.slider_visual()
         self.slider_limits()
@@ -18,17 +29,6 @@ class backend():
         if self.main.animate:
             self.first_animation = 1
             self.animation_seq()
-
-        ## initial values for the recording list of xyz values ##
-        self.x_loc = "0"
-        self.y_loc = "0"
-        self.z_loc = "0"
-        self.alfa_loc = "0"
-        self.beta_loc = "0"
-        self.gamma_loc = "0"
-        #
-        self.coord_list = []
-        self.motor_list = []
 
     def copying(self):
         self.limits = copy.deepcopy(self.main.graph.limits)
@@ -41,6 +41,8 @@ class backend():
             self.joint[i].setMinimum(lim[0])
             self.joint[i].setMaximum(lim[1])
             self.joint[i].setValue(int(self.absolute[i]))
+            if self.absolute[i] == None:
+                print("needs to become black")
 
     def slider_visual(self):
         self.absolute= []
@@ -79,8 +81,9 @@ class backend():
         self.main.coordlist.takeItem(last-1)
 
     def append_coord(self):
-        self.coord_list.append([self.x_loc,self.y_loc,self.z_loc,self.alfa_loc,self.beta_loc,self.gamma_loc])
-        self.main.coordlist.addItem("x: "+str(self.x_loc)+" y: "+str(self.y_loc)+" z: "+str(self.z_loc)+ " α : "+str(self.alfa_loc)+ " β: "+str(self.beta_loc)+ " γ: "+str(self.gamma_loc))
+        for i,var in enumerate(self.location_3d):
+            self.coord_list.append(var)
+        self.main.coordlist.addItem("x: "+str(self.location_3d[0])+" y: "+str(self.location_3d[1])+" z: "+str(self.location_3d[2])+ " α : "+str(self.location_3d[3])+ " β: "+str(self.location_3d[4])+ " γ: "+str(self.location_3d[5]))
 
     #################################
     def handle_motorlist(self):
