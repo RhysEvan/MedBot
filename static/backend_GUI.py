@@ -86,9 +86,9 @@ class backend():
 
     def calculated_coord(self):
         active = []
-        for i,val in enumerate(self.location_3d):
+        for i,val in enumerate(self.joint):
             if val != None:    
-                active.append(val)
+                active.append(val.value())
         coordlist = np.array(active)
         self.main.kinematics.orientation= True
         new_string = self.main.kinematics.forward_list([coordlist])
@@ -113,8 +113,10 @@ class backend():
         self.main.motorlist.takeItem(last-1)
 
     def append_motor(self):
-        self.motor_list.append([self.absolute_a, self.absolute_b,self.absolute_c,self.absolute_d,self.absolute_e])
-        self.main.motorlist.addItem("A: "+str(self.absolute_a)+" B: "+str(self.absolute_b)+" C: "+str(self.absolute_c)+ " D : "+str(self.absolute_d)+ " E: "+str(self.absolute_e))
+        self.motor_list.append(self.joint)
+        self.calculated_coord()
+        item = partial(motor_record,self.limits,self.joint)
+        self.main.motorlist.addItem(item())
     
     def load_motor_table(self, motor_list):
 
@@ -179,3 +181,10 @@ class backend():
         if self.main.vis_path:
             self.dynamic.visible_path()
         return all_positions
+
+def motor_record(limit,motor):
+    item = ""
+    idx = ["A","B","C","D","E","F"]
+    for i in range(len(limit)):
+        item += idx[i]+": "+str(motor[i].value())
+    return item
