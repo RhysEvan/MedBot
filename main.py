@@ -12,6 +12,7 @@ from connections.serial_com import *
 from static.json_compiler import *
 from kinematics import Kinematics
 from static.backend_GUI import backend
+from static.triggers import trigger
 try:
     from connections.cameras import *
     pleora_lib = True
@@ -51,35 +52,12 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.file = json_handler()
         ## all background related functions ##
         self.var = backend(self)
+        ## build the model in the interface and create the motor list and coordinate list ##
         self.var.model_build()
-
+        trigger(self)
         ## call to button functions and their forward to internal functions ##
-        self.homing.clicked.connect(self.var.main_home)
-        self.submit.clicked.connect(self.var.append_coord)
-        self.recording.clicked.connect(self.var.append_motor)
-        self.compiling.clicked.connect(self.var.json_file)
-        self.remove_motor.clicked.connect(self.var.handle_lists)
-        self.executing.clicked.connect(self.var.run_json)
-        self.animating.clicked.connect(self.var.animation_seq)
-        self.path.clicked.connect(self.var.dynamic.visible_path)
-        self.robot_options.clicked.connect(self.var.dynamic.clicked)
-
-        self.aabs.valueChanged.connect(self.var.dynamic.slider_input)
-        self.babs.valueChanged.connect(self.var.dynamic.slider_input)
-        self.cabs.valueChanged.connect(self.var.dynamic.slider_input)
-        self.dabs.valueChanged.connect(self.var.dynamic.slider_input)
-        self.eabs.valueChanged.connect(self.var.dynamic.slider_input)
-        self.fabs.valueChanged.connect(self.var.dynamic.slider_input)
-        self.xcoord.textEdited.connect(self.var.dynamic.location)
-        self.ycoord.textEdited.connect(self.var.dynamic.location)
-        self.zcoord.textEdited.connect(self.var.dynamic.location)
-        self.alphacoord.textEdited.connect(self.var.dynamic.location)
-        self.betacoord.textEdited.connect(self.var.dynamic.location)
-        self.gammacoord.textEdited.connect(self.var.dynamic.location)
- 
-        ########################
+        
         self.show()
-        ###########################
 
     ########################################
 
@@ -93,9 +71,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
             print("starting execute of absolute coordinates.")
             self.var.query()
 
-    ################################################################################
     ####################### threading method  ######################################
-    ################################################################################
 
     def image_update_left(self, Image):
         self.camera_left.setPixmap(QPixmap.fromImage(Image))

@@ -1,0 +1,25 @@
+class trigger():
+    def __init__(self, main):
+        main.homing.clicked.connect(main.var.main_home)
+        main.submit.clicked.connect(main.var.append_coord)
+        main.recording.clicked.connect(main.var.append_motor)
+        main.compiling.clicked.connect(main.var.json_file)
+        main.remove_motor.clicked.connect(main.var.handle_lists)
+        main.executing.clicked.connect(main.var.run_json)
+        main.animating.clicked.connect(main.var.animation_seq)
+        main.path.clicked.connect(main.var.dynamic.visible_path)
+        main.robot_options.clicked.connect(main.var.dynamic.clicked)
+
+        main.aabs.valueChanged.connect(main.var.dynamic.slider_input)
+        main.babs.valueChanged.connect(main.var.dynamic.slider_input)
+        main.cabs.valueChanged.connect(main.var.dynamic.slider_input)
+        main.dabs.valueChanged.connect(main.var.dynamic.slider_input)
+        main.eabs.valueChanged.connect(main.var.dynamic.slider_input)
+        main.fabs.valueChanged.connect(main.var.dynamic.slider_input)
+        main.xcoord.textEdited.connect(main.var.dynamic.location)
+        main.ycoord.textEdited.connect(main.var.dynamic.location)
+        main.zcoord.textEdited.connect(main.var.dynamic.location)
+        main.alphacoord.textEdited.connect(main.var.dynamic.location)
+        main.betacoord.textEdited.connect(main.var.dynamic.location)
+        main.gammacoord.textEdited.connect(main.var.dynamic.location)
+ 
