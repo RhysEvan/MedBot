@@ -12,7 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_MainWindow(object):
-    def setupUi(self, MainWindow, choice="HangingArm"):
+    def setupUi(self, MainWindow, choice = "Prismatic3"):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(2029, 972)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -79,7 +79,7 @@ class Ui_MainWindow(object):
         self.aabs.setOrientation(QtCore.Qt.Horizontal)
         self.aabs.setObjectName("aabs")
         self.gridLayout_2.addWidget(self.aabs, 3, 1, 1, 4)
-        self.visual = interface(self.centralwidget, robot = choice)
+        self.visual = interface(self.centralwidget, robot=choice)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -96,9 +96,6 @@ class Ui_MainWindow(object):
         self.alphacoord = QtWidgets.QLineEdit(self.centralwidget)
         self.alphacoord.setObjectName("alphacoord")
         self.gridLayout_2.addWidget(self.alphacoord, 6, 6, 1, 1)
-        self.coord_query = QtWidgets.QPushButton(self.centralwidget)
-        self.coord_query.setObjectName("coord_query")
-        self.gridLayout_2.addWidget(self.coord_query, 7, 6, 1, 1)
         self.label_17 = QtWidgets.QLabel(self.centralwidget)
         self.label_17.setObjectName("label_17")
         self.gridLayout_2.addWidget(self.label_17, 5, 12, 1, 1)
@@ -269,9 +266,6 @@ class Ui_MainWindow(object):
         self.robot_options.setMaximumSize(QtCore.QSize(16777215, 28))
         self.robot_options.setObjectName("robot_options")
         self.gridLayout_2.addWidget(self.robot_options, 9, 1, 1, 1)
-        self.remove_motor = QtWidgets.QPushButton(self.centralwidget)
-        self.remove_motor.setObjectName("remove_motor")
-        self.gridLayout_2.addWidget(self.remove_motor, 9, 9, 1, 1)
         self.executing = QtWidgets.QPushButton(self.centralwidget)
         self.executing.setObjectName("executing")
         self.gridLayout_2.addWidget(self.executing, 9, 6, 1, 1)
@@ -284,6 +278,12 @@ class Ui_MainWindow(object):
         self.path = QtWidgets.QPushButton(self.centralwidget)
         self.path.setObjectName("path")
         self.gridLayout_2.addWidget(self.path, 9, 3, 1, 1)
+        self.coord_query = QtWidgets.QPushButton(self.centralwidget)
+        self.coord_query.setObjectName("coord_query")
+        self.gridLayout_2.addWidget(self.coord_query, 9, 9, 1, 1)
+        self.remove_motor = QtWidgets.QPushButton(self.centralwidget)
+        self.remove_motor.setObjectName("remove_motor")
+        self.gridLayout_2.addWidget(self.remove_motor, 9, 11, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -293,7 +293,6 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.camera_right.setText(_translate("MainWindow", "TextLabel"))
-        self.coord_query.setText(_translate("MainWindow", "Query"))
         self.label_17.setText(_translate("MainWindow", "Z"))
         self.text_babs.setText(_translate("MainWindow", "TextLabel"))
         self.text_fabs.setText(_translate("MainWindow", "TextLabel"))
@@ -330,9 +329,10 @@ class Ui_MainWindow(object):
         self.label_21.setText(_translate("MainWindow", "List of coordinates"))
         self.label_18.setText(_translate("MainWindow", "α"))
         self.text_dabs.setText(_translate("MainWindow", "TextLabel"))
-        self.remove_motor.setText(_translate("MainWindow", "Remove"))
         self.executing.setText(_translate("MainWindow", "Run"))
         self.compiling.setText(_translate("MainWindow", "Save"))
         self.recording.setText(_translate("MainWindow", "Record"))
         self.path.setText(_translate("MainWindow", "Show Path"))
+        self.coord_query.setText(_translate("MainWindow", "Query"))
+        self.remove_motor.setText(_translate("MainWindow", "Remove"))
 from static.interface import interface

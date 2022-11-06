@@ -20,8 +20,6 @@ except:
     print("Pleora Library not Installed")
     pleora_lib = False
 
-
-
 class app_stitching(QMainWindow, Ui_MainWindow):
     def __init__(self, port = None, pleora= True):
         super().__init__()
@@ -29,7 +27,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.vis_path = False
         self.animate = False
         ## Initialisation of GUI ##
-        ## if changes are made to GUI then please add chosen_bot callable to the setupUi function and to self.visual = interface(self.centralwidget, robot=chosen_bot)
+        ## if changes are made to App_GUI.ui PLEASE add chosen_bot callable to the setupUi function and to self.visual = interface(self.centralwidget, robot=chosen_bot)
         self.setupUi(self,choice=robot)
         if pleora:
             ## Threaded Camera Left## 
@@ -54,6 +52,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.var = backend(self)
         ## build the model in the interface and create the motor list and coordinate list ##
         self.var.model_build()
+        ## all GUI variable function connections ##
         trigger(self)
         ## call to button functions and their forward to internal functions ##
         

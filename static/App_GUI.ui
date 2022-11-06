@@ -138,14 +138,7 @@
      <widget class="QLineEdit" name="xcoord"/>
     </item>
     <item row="6" column="6">
-     <widget class="QLineEdit" name="alfacoord"/>
-    </item>
-    <item row="7" column="6">
-     <widget class="QPushButton" name="coord_query">
-      <property name="text">
-       <string>Query</string>
-      </property>
-     </widget>
+     <widget class="QLineEdit" name="alphacoord"/>
     </item>
     <item row="5" column="12">
      <widget class="QLabel" name="label_17">
@@ -474,13 +467,6 @@ p, li { white-space: pre-wrap; }
       </property>
      </widget>
     </item>
-    <item row="9" column="9">
-     <widget class="QPushButton" name="remove_motor">
-      <property name="text">
-       <string>Remove</string>
-      </property>
-     </widget>
-    </item>
     <item row="9" column="6">
      <widget class="QPushButton" name="executing">
       <property name="text">
@@ -506,6 +492,20 @@ p, li { white-space: pre-wrap; }
      <widget class="QPushButton" name="path">
       <property name="text">
        <string>Show Path</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="9">
+     <widget class="QPushButton" name="coord_query">
+      <property name="text">
+       <string>Query</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="11">
+     <widget class="QPushButton" name="remove_motor">
+      <property name="text">
+       <string>Remove</string>
       </property>
      </widget>
     </item>

@@ -8,6 +8,7 @@ class trigger():
         main.executing.clicked.connect(main.var.run_json)
         main.animating.clicked.connect(main.var.animation_seq)
         main.path.clicked.connect(main.var.dynamic.visible_path)
+        main.coord_query.clicked.connect(main.var.query)
         main.robot_options.clicked.connect(main.var.dynamic.clicked)
 
         main.aabs.valueChanged.connect(main.var.dynamic.slider_input)
