@@ -25,10 +25,10 @@ class backend():
         self.copying()
         self.slider_visual()
         self.slider_limits()
-        self.first_animation = 0
         if self.main.animate:
-            self.first_animation = 1
             self.animation_seq()
+        if self.main.vis_path:
+            self.dynamic.visible_path()
 
     def copying(self):
         self.limits = copy.deepcopy(self.main.graph.limits)
@@ -168,10 +168,7 @@ class backend():
 
     def animation_seq(self):
         all_positions = self.model_build()
-        if self.first_animation == 1:    
-            self.dynamic.visible_path(animate=True)
         self.main.graph.animate(all_positions)
-        self.first_animation = 2
 
     def model_build(self):
         motorlist = self.main.kinematics.motorscan()
@@ -181,8 +178,6 @@ class backend():
         self.load_realpos_table(self.endpositions)
         self.main.kinematics.orientation= False
         all_positions = self.main.kinematics.forward_list(motorlist, end_only=False)
-        if self.main.vis_path:
-            self.dynamic.visible_path()
         return all_positions
 
 def motor_record(limit,motor):
