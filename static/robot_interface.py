@@ -10,16 +10,18 @@ class dynamic_gui:
         self.val = partial(self.slider_change)
         for i,key in enumerate(preset_models.keys()):
             self.main.robot_options.insertItem(i,key)
-        
-    def visible_path(self, click = False):
+
+    def show_path(self):
+        self.main.vis_path = not self.main.vis_path
+        self.visible_path()
+    
+    def visible_path(self):
         try: self.backend.endpositions
         except: self.backend.model_build()
-        if self.main.vis_path == False and self.first != 0 and click != True:
+        if self.main.vis_path == False:
             self.main.graph.hide_path()
-        elif self.main.vis_path == True and click == False or click == True and self.main.vis_path == False or self.first == 0:
+        elif self.main.vis_path == True:
             self.main.graph.draw_path(self.backend.endpositions, self.first)
-        if click == False or self.first == 0:
-            self.main.vis_path = not self.main.vis_path
         self.first = 1
 
     def clicked(self):
@@ -32,10 +34,10 @@ class dynamic_gui:
         self.slider_change()
         motorlist = self.main.kinematics.motorscan()
         self.backend.model_build()
-        if self.main.vis_path == False and self.first != 0:
-            self.visible_path(click = True)
         self.main.graph.update_position()
         self.main.graph.update()
+        if self.main.vis_path == True:
+            self.main.graph.draw_path(self.backend.endpositions, self.first)
 
     def slider_change(self):
         self.backend.copying()

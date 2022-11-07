@@ -7,7 +7,7 @@ class trigger():
         main.remove_motor.clicked.connect(main.var.handle_lists)
         main.executing.clicked.connect(main.var.run_json)
         main.animating.clicked.connect(main.var.animation_seq)
-        main.path.clicked.connect(main.var.dynamic.visible_path)
+        main.path.clicked.connect(main.var.dynamic.show_path)
         main.coord_query.clicked.connect(main.var.query)
         main.robot_options.clicked.connect(main.var.dynamic.clicked)
 
