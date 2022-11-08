@@ -64,14 +64,15 @@ class backend():
         print("query starting")
         print("arduino commands currently turned off, GRBL settings not stable yet. 21/7")
         motor_pos = copy.deepcopy(self.absolute)
-        idx = ["x ","y ","z ","a ","b ","c "]
         try: motor_pos.remove(None)
         except: motor_pos = motor_pos
+        idx = ["x ","y ","z ","a ","b ","c "]
         for i in range(len(motor_pos)):
             if i%2 == 0:
                 try: self.main.com.send_move(idx[i]+self.absolute[i]+" "+idx[i+1]+self.absolute[i+1])
                 except: self.main.com.send_move(idx[i]+self.absolute[i])
                 print(self.absolute[i])
+        
     ################################################################################
     ####################### coordinate list ########################################
     ################################################################################
@@ -147,7 +148,19 @@ class backend():
     ################################################################################
 
     def json_file(self):
-        self.main.file.transfer(self.motor_list)
+        idx = ["X ","Y ","Z ","A ","B ","C "]
+        dict_data = {}
+        json_list = []
+        k = 0
+        for i,val in enumerate(self.motor_list):
+            for j, pos in enumerate(val):
+                if j%2 == 0:
+                    try: dict_data[str(k)] = idx[j]+str(pos)+" "+idx[j+1]+str(val[j+1])
+                    except: dict_data[str(k)] = idx[j]+str(pos)
+                    k += 1
+                json_list.append([dict_data])
+            k=0
+        self.main.file.transfer(json_list)
     
     def run_json(self):
 
