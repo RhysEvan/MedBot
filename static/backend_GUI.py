@@ -163,12 +163,9 @@ class backend():
         self.main.file.transfer(json_list)
     
     def run_json(self):
-
-        motor_pos = self.main.file.unpack()
-
         # Breaking Json formatted differently
         recording = self.main.file.unpack()
-        self.main.com.home()
+        self.main_home()
         for y,ls in enumerate(recording):
             for i in range(len(ls)):
                 self.main.com.send_move(ls[i]["0"])

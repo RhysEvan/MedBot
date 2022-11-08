@@ -1,14 +1,15 @@
 import json
+import os
 
 class json_handler():
     def __init__(self, parent=None):
         super().__init__()
-        self.filename = "data.json"
+        self.filename = "./paths/data_test.json"
 
     def transfer(self,data):
         if data == []:
             print("nothing to compile")
-            return
+            return 
         jsonString = json.dumps(data)
         jsonFile = open(self.filename, "w")
         jsonFile.write(jsonString)
