@@ -335,4 +335,11 @@ class Ui_MainWindow(object):
         self.path.setText(_translate("MainWindow", "Show Path"))
         self.coord_query.setText(_translate("MainWindow", "Query"))
         self.remove_motor.setText(_translate("MainWindow", "Remove"))
+        self.compiling.clicked.connect(self.json_saving)
+
+    def json_saving(self):
+        name , done = QtWidgets.QInputDialog.getText(
+             self, 'Saving with name', 'Enter the name:')
+        self.file.filename = "./static/" + str(name)
+        self.var.json_file()    
 from static.interface import interface

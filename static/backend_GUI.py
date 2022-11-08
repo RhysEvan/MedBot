@@ -2,6 +2,7 @@ import copy
 import numpy as np
 from functools import partial
 from .robot_interface import dynamic_gui, val
+from PyQt5.QtWidgets import *
 
 class backend():
     def __init__(self, main):
@@ -146,6 +147,12 @@ class backend():
             self.coord_string(end)
 
     ################################################################################
+    
+    def json_saving(self):
+        name = QInputDialog.getText(
+             self, 'Saving with name', 'Enter the name:')
+        self.main.file.filename = "./static/" + str(name)
+        self.json_file()
 
     def json_file(self):
         idx = ["X ","Y ","Z ","A ","B ","C "]

@@ -3,7 +3,7 @@ class trigger():
         main.homing.clicked.connect(main.var.main_home)
         main.submit.clicked.connect(main.var.append_coord)
         main.recording.clicked.connect(main.var.append_motor)
-        main.compiling.clicked.connect(main.var.json_file)
+        #main.compiling.clicked.connect(main.var.json_saving)
         main.remove_motor.clicked.connect(main.var.handle_lists)
         main.executing.clicked.connect(main.var.run_json)
         main.animating.clicked.connect(main.var.animation_seq)
