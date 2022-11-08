@@ -149,10 +149,10 @@ class backend():
     ################################################################################
     
     def json_saving(self):
-        name = QInputDialog.getText(
+        name , done = QInputDialog.getText(
              self, 'Saving with name', 'Enter the name:')
-        self.main.file.filename = "./static/" + str(name)
-        self.json_file()
+        self.file.filename = "./static/" + str(name)
+        self.var.json_file()   
 
     def json_file(self):
         idx = ["X ","Y ","Z ","A ","B ","C "]
