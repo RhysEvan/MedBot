@@ -78,26 +78,17 @@ class Colour_detect():
                                         (0, 255, 0), 2)                
         return imageFrame
     def calc(self):
-        L=100
         mid_red_x = self.x_red+self.w_red/2
         mid_red_y = self.y_red+self.h_red/2
         mid_green_x = self.x_green+self.w_green/2
         mid_green_y = self.y_green+self.h_green/2
-        disx = (mid_green_x-mid_red_x)
-        disy = (mid_green_y-mid_red_y)
+        x_fact = mid_green_x/mid_red_x
+        y_fact = mid_green_y/mid_red_y
         A_green = self.w_green*self.h_green
         A_red = self.w_red*self.h_red
-        if A_green > A_red:
-            k = A_green/A_red
-            print(k)
-            disd = -(L-L/k)
-            return [disx, disy, disd]
-        elif A_green< A_red:
-            k = A_green/A_red 
-            disd = -(L-L/k)
-            return [disx, disy, disd]
-        else:
-            return([0,0,0])
+        k = A_green/A_red
+        return [x_fact, y_fact, k]
+
 class Feed(QThread):
     def __init__(self , location = None, parent=None):
         super(Feed,self).__init__(parent)
@@ -132,27 +123,35 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.com = serial_bridge()
         self.cam = Feed(0)
         self.cam.start()
-        self.disx = '0'
-        self.disy = '0'
-        self.disd = '0'
         self.cam.ImageUpdate.connect(self.illustrate)
         self.distance.clicked.connect(self.distance_calc)
         self.sending.clicked.connect(self.sender)
     def illustrate(self, Image):
         self.label.setPixmap(QPixmap.fromImage(Image))    
     def distance_calc(self):
-        [self.disx, self.disy, self.disd]= self.cam.colouring.calc()
-        print(self.disx)
-        print(self.disy)
-        print(self.disd)
+        [self.xfactor, self.yfactor, self.dfactor]= self.cam.colouring.calc()
+        print(self.dfactor)
+        print(self.xfactor)
+        print(self.yfactor)
         print("add implementation that states that if colour becomes invisble it returns the print 'open gripper'.")
     def sender(self):
         print("sending")
-        self.com.home()
         # I will be assuming some math parameters and I will try and make a pre-emtive version of the camera calculations.
-        self.com.send_move(self.disx)
-        self.com.send_move(self.disy)
-        self.com.send_move(self.disd)
+        Bar_1_length = 0.5 # meter
+        Bar_2_length = 0.5 # meter
+        Depth_distance = 1 # meter
+        X_distance = 0.5 # meter
+        Y_distance = 0.5 # meter
+        x_m = X_distance*self.xfactor
+        y_m = Y_distance*self.yfactor
+        theta_2 = np.arccos((x_m**2+y_m**2-Bar_1_length**2-Bar_2_length**2)/(2*Bar_2_length*Bar_1_length))
+        theta_1 = np.arctan(x_m/y_m) - np.arctan((Bar_2_length*np.sin(theta_2))/(Bar_1_length+Bar_2_length*np.cos(theta_2)))
+        print(theta_2)
+        print(theta_1)
+        self.com.send_move("x "+str(self.dfactor*Depth_distance))
+        self.com.send_move("y "+str(theta_1))
+        self.com.send_move("z "+str(theta_2))
+        
 
         
 
