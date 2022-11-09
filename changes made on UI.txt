@@ -1,0 +1,19 @@
+When changes have been made, do the following:
+
+					def setupUi(self, MainWindow, choice = "Prismatic3"):
+
+					self.visual = interface(self.centralwidget, robot=choice)	
+
+in def retranslateUi(self, MainWindow):
+
+add the following at the end
+
+					self.compiling.clicked.connect(self.json_saving)
+
+and in the UI class add the following definition
+
+    					def json_saving(self):
+       					name , done = QtWidgets.QInputDialog.getText(
+             					self, 'Saving with name', 'Enter the name:')
+        					self.file.filename = "./static/" + str(name)
+        					self.var.json_file() 
