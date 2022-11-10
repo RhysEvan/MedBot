@@ -137,20 +137,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def sender(self):
         print("sending")
         # I will be assuming some math parameters and I will try and make a pre-emtive version of the camera calculations.
-        Bar_1_length = 0.5 # meter
-        Bar_2_length = 0.5 # meter
-        Depth_distance = 1 # meter
-        X_distance = 0.5 # meter
-        Y_distance = 0.5 # meter
+        Bar_1_length = 500 # mm
+        Bar_2_length = 500 # mm
+        Depth_distance = 1000 # mm
+        X_distance = 500 # mm
+        Y_distance = 500 # mm
         x_m = X_distance*self.xfactor
         y_m = Y_distance*self.yfactor
         theta_2 = np.arccos((x_m**2+y_m**2-Bar_1_length**2-Bar_2_length**2)/(2*Bar_2_length*Bar_1_length))
         theta_1 = np.arctan(x_m/y_m) - np.arctan((Bar_2_length*np.sin(theta_2))/(Bar_1_length+Bar_2_length*np.cos(theta_2)))
-        print(theta_2)
-        print(theta_1)
+        print(theta_2) #radial
+        print(theta_1) #radial
+        print(theta_1*180/np.pi) #degrees
+        print(theta_2*180/np.pi) #degrees input of grbl is set that mm = degrees
         self.com.send_move("x "+str(self.dfactor*Depth_distance))
-        self.com.send_move("y "+str(theta_1))
-        self.com.send_move("z "+str(theta_2))
+        self.com.send_move("y "+str(theta_1*180/np.pi))
+        self.com.send_move("z "+str(theta_2*180/np.pi))
         
 
         
