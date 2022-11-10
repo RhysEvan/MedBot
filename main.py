@@ -49,13 +49,12 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         ## json compiler initiation ##
         self.file = json_handler()
         ## all background related functions ##
-        self.var = backend(self)
+        self.back = backend(self)
         ## build the model in the interface and create the motor list and coordinate list ##
-        self.var.model_build()
+        self.back.model_build()
         ## all GUI variable function connections ##
         trigger(self)
-        ## call to button functions and their forward to internal functions ##
-        
+        ## call to button functions and their forward to internal functions ##       
         self.show()
 
     ########################################

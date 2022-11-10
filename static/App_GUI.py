@@ -336,10 +336,22 @@ class Ui_MainWindow(object):
         self.coord_query.setText(_translate("MainWindow", "Query"))
         self.remove_motor.setText(_translate("MainWindow", "Remove"))
         self.compiling.clicked.connect(self.json_saving)
+        self.executing.clicked.connect(self.json_choosing)
 
     def json_saving(self):
         name , done = QtWidgets.QInputDialog.getText(
              self, 'Saving with name', 'Enter the name:')
-        self.file.filename = "./static/" + str(name)
-        self.var.json_file()    
+        if done:
+            self.file.filename = "./static/" + str(name)
+            self.back.json_file()
+    
+    def json_choosing(self):
+        options = QtWidgets.QFileDialog.Options()
+        name, done = QtWidgets.QFileDialog.getOpenFileName(
+            self, "Choose which path to run","./paths/","All Files (*)", options = options)
+        if done:
+            self.file.filename = name
+            self.back.run_json()
+    
+
 from static.interface import interface

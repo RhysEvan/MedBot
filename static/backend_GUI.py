@@ -147,12 +147,6 @@ class backend():
             self.coord_string(end)
 
     ################################################################################
-    
-    def json_saving(self):
-        name , done = QInputDialog.getText(
-             self, 'Saving with name', 'Enter the name:')
-        self.file.filename = "./static/" + str(name)
-        self.var.json_file()   
 
     def json_file(self):
         idx = ["X ","Y ","Z ","A ","B ","C "]
