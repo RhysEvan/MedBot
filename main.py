@@ -121,9 +121,8 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     ################################################################################
 
     def handle_coordlist(self):
-        if self.coord_list == []:
-            print("no coords")
-            return
+        print("removing last coordinate")
+        if self.coord_list == []:  return
         self.coord_list.pop()
         last = self.coordlist.count()
         self.coordlist.takeItem(last-1)
@@ -168,18 +167,32 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     ########################################
 
     def keyPressEvent(self, e):
-        print(e.key())
+
+        
         #every key has a digit value press any key when screen is open to see value
         #when entered into a label enter needs to be pressed 
         delete = 16777216 #esc to undo
         enter = 16777220 #enter to execute
-        if e.key() == delete:
-            print("removing last coordinate")
+        back = 16777219
+
+        if e.key()==83: #S
+            pass
+
+        elif e.key()==82: #R
+            pass
+
+        elif (e.key() == delete) or (e.key()==back) :
+            
             self.handle_coordlist()
 
-        if e.key() == enter:
-            print("starting execute of absolute coordinates.")
+        elif e.key() == enter:
             self.query()
+
+        else:
+            print(e.key())
+
+
+
 
     ################################################################################
 
@@ -204,6 +217,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     ################################################################################
 
     def query(self):
+        print("starting execute of absolute coordinates.")
         print("query starting")
         print("arduino commands currently turned off, GRBL settings not stable yet. 21/7")
         self.com.send_move("x "+self.absolute_a+" y "+self.absolute_b)

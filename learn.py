@@ -56,7 +56,7 @@ def train_positions(For_model, model):
         if inputs.shape[-1]==3:         orientation=False
         else:                           orientation=True
      
-        pred_xys = with_torch().forward_from_active(For_model, pred, orientation=orientation)
+        pred_xys = inverse.with_torch().forward_from_active(For_model, pred, orientation=orientation)
         pred_xys = pred_xys[:,-1,:]
 
         loss = distance_loss(pred_xys, inputs).mean()
@@ -67,7 +67,7 @@ def train_positions(For_model, model):
 
         print(np.array(loss.item()).round(2))       
 
-        if n%100==0: optimizer.param_groups[0]["lr"] = optimizer.param_groups[0]["lr"]*0.5  
+        if n%10==0: optimizer.param_groups[0]["lr"] = optimizer.param_groups[0]["lr"]*0.5  
         #if n%100==0: optimizer.param_groups[0]["lr"] = 1e-3  
 
 def evaluate_plot(For_model, model):
@@ -81,7 +81,7 @@ def evaluate_plot(For_model, model):
     if inputs.shape[-1]==3:         orientation=False
     else:                           orientation=True
      
-    pred_xys = with_torch().forward_from_active(For_model, pred, orientation=orientation)
+    pred_xys = inverse.with_torch().forward_from_active(For_model, pred, orientation=orientation)
 
     loss = distance_loss(pred_xys, inputs)
     print(loss)
