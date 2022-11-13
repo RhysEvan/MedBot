@@ -7,35 +7,37 @@ import numpy as np
 
 #file based imports
 from App_GUI import Ui_MainWindow
-from serial_com import *
+from connections.serial_com import *
 
 from json_compiler import *
 from kinematics import Kinematics
 try:
-    from cameras import *
+    from connections.cameras import *
+    pleora_lib = True
 except:
     print("Pleora Library not Installed")
+    pleora_lib = False
 
 
 class app_stitching(QMainWindow, Ui_MainWindow):
-    def __init__(self, port = None):
+    def __init__(self, port = None, pleora= True):
         super().__init__()
 
         ## Initialisation of GUI ##
 
         self.setupUi(self)
+        if pleora:
+            ## Threaded Camera Left## 
+            self.cam_l = Feed("2BA200004267") ## Number represents the camera adress on the computer ##
+
+            self.cam_l.start()
+            self.cam_l.ImageUpdate.connect(self.image_update_left)
         
-        ## Threaded Camera Left## 
-        #self.cam_l = Feed("2BA200004267") ## Number represents the camera adress on the computer ##
+            ## Threaded Camera Right## 
+            self.cam_r = Feed("2BA200004267") ## Number represents the camera adress on the computer ##
 
-        #self.cam_l.start()
-        #self.cam_l.ImageUpdate.connect(self.image_update_left)
-       
-        ## Threaded Camera Right## 
-        #self.cam_r = Feed(0) ## Number represents the camera adress on the computer ##
-
-        #self.cam_r.start()
-        #self.cam_r.ImageUpdate.connect(self.image_update_right)
+            self.cam_r.start()
+            self.cam_r.ImageUpdate.connect(self.image_update_right)
 
         ## conection to interface to create matplot visual#
         self.graph = self.visual
@@ -295,7 +297,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    main = app_stitching()
+    main = app_stitching(pleora=pleora_lib)
 
     sys.exit(app.exec())
 

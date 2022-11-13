@@ -10,7 +10,7 @@ from functools import partial
 import torch
 from scipy.spatial.transform import Rotation as R
 
-import presets
+import static.presets as presets
 
 class Kinematics():
     

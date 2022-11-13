@@ -10,7 +10,7 @@ from matplotlib import animation
 
 #files
 from kinematics import forward_all, get_DH_params
-import presets
+import static.presets as presets
 
 ################################################
 class interface(QWidget):
