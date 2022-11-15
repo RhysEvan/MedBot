@@ -108,6 +108,8 @@ class interface(QWidget):
     def rerender(self):
 
         ax = self.axes
+
+        ## TODO Clear all object in the axis to rerender?
         self.plot_plane(ax)
         self.plot_axes(ax)
         self.update()
