@@ -6,7 +6,7 @@ from PyQt5.QtGui import *
 import numpy as np 
 
 #file based imports
-from static.App_GUI import Ui_MainWindow
+from static.Robot_Control_Panel import Ui_MainWindow
 from connections.serial_com import *
 
 from static.json_compiler import *
