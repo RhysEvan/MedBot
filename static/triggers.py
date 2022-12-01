@@ -8,7 +8,7 @@ class trigger():
         main.path.clicked.connect(main.back.dynamic.show_path)
         main.coord_query.clicked.connect(main.back.query)
         main.robot_options.clicked.connect(main.back.dynamic.clicked)
-        main.predict.clicked.connect()
+        #main.predict.clicked.connect()
 
         main.aabs.valueChanged.connect(main.back.dynamic.slider_input)
         main.babs.valueChanged.connect(main.back.dynamic.slider_input)
