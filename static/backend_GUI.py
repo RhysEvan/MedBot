@@ -191,6 +191,22 @@ class backend():
         all_positions = self.main.kinematics.forward_list(motorlist, end_only=False)
         return all_positions
 
+    def json_saving(self):
+        name , done = QInputDialog.getText(
+                self.main, 'Saving with name', 'Enter the name:')
+        if done:
+            self.main.file.filename = "./static/" + str(name)
+            self.json_file()
+
+    def json_choosing(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        name, done = QFileDialog.getOpenFileName(
+            self.main, "Choose which path to run","./paths/","All Files (*)", options = options)
+        if done:
+            self.main.file.filename = name
+            self.run_json()
+
 def motor_record(limit,motor):
     item = ""
     idx = ["A","B","C","D","E","F"]
