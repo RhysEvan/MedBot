@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'static\Robot_Control_Panel.ui'
+# Form implementation generated from reading ui file '.\static\Robot_Control_Panel.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -427,7 +427,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

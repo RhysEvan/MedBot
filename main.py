@@ -10,10 +10,8 @@ from static.Robot_Control_Panel import Ui_MainWindow
 from connections.serial_com import *
 
 from static.json_compiler import *
-from kinematics import Kinematics
 from static.backend_GUI import backend
 from static.triggers import trigger
-from static.interface import interface
 try:
     from connections.cameras import *
     pleora_lib = True
@@ -90,6 +88,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 
     def json_choosing(self):
         options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
         name, done = QFileDialog.getOpenFileName(
             self, "Choose which path to run","./paths/","All Files (*)", options = options)
         if done:
