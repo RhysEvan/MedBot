@@ -32,10 +32,10 @@ class backend():
             self.dynamic.visible_path()
 
     def copying(self):
-        self.limits = copy.deepcopy(self.main.graph.limits)
-        self.active = copy.deepcopy(self.main.graph.active)
-        self.radius = copy.deepcopy(self.main.graph.radius)
-        self.theta = copy.deepcopy(self.main.graph.theta)
+        self.limits = copy.deepcopy(self.main.graph.kin.limits)
+        self.active = copy.deepcopy(self.main.graph.kin.active)
+        self.radius = copy.deepcopy(self.main.graph.kin.radius)
+        self.theta = copy.deepcopy(self.main.graph.kin.theta)
     
     def slider_limits(self):
         for i, lim in enumerate(self.limits):
@@ -47,8 +47,8 @@ class backend():
 
     def slider_visual(self):
         self.absolute= []
-        for i in range(len(self.main.graph.active)):
-            try: pop_pos=self.main.graph.active.index("")
+        for i in range(len(self.main.graph.kin.active)):
+            try: pop_pos=self.main.graph.kin.active.index("")
             except: pop_pos=False
             self.absolute.append(val(i, pop_pos, self.limits, self.radius, self.theta, self.active))
         for i in range(len(self.slider_text)):

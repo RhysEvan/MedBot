@@ -26,7 +26,7 @@ class dynamic_gui:
 
     def clicked(self):
         self.robot = self.main.robot_options.currentItem()
-        self.main.graph.model_param(self.robot.text())
+        self.main.graph.kin.model_param(self.robot.text())
         self.backend.motor_list = []
         self.backend.coord_list = []
         self.main.motorlist.clear()
@@ -34,7 +34,7 @@ class dynamic_gui:
         self.slider_change()
         motorlist = self.main.kinematics.motorscan()
         self.backend.model_build()
-        self.main.graph.update_position()
+        self.main.graph.kin.update_position()
         self.main.graph.update()
         if self.main.vis_path == True:
             self.main.graph.draw_path(self.backend.endpositions, self.first)
@@ -48,8 +48,8 @@ class dynamic_gui:
     ################################################################################
 
     def slider_input(self):
-        try:    reference = self.main.graph.limits.index([])
-        except: reference = len(self.main.graph.limits)
+        try:    reference = self.main.graph.kin.limits.index([])
+        except: reference = len(self.main.graph.kin.limits)
         for i in range(len(self.backend.limits)):
             if i < reference:
                 self.backend.absolute[i] = str(self.backend.joint[i].value())

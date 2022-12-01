@@ -12,7 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_MainWindow(object):
-    def setupUi(self, MainWindow, choice = "Prismatic3"):
+    def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(3812, 2100)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -281,7 +281,7 @@ class Ui_MainWindow(object):
         self.homing.setObjectName("homing")
         self.gridLayout_6.addWidget(self.homing, 1, 0, 1, 1)
         self.gridLayout_2.addWidget(self.groupBox_4, 3, 0, 1, 1)
-        self.visual = interface(self.centralwidget, robot=choice)
+        self.visual = interface(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)

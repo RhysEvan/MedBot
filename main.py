@@ -13,6 +13,7 @@ from static.json_compiler import *
 from kinematics import Kinematics
 from static.backend_GUI import backend
 from static.triggers import trigger
+from static.interface import interface
 try:
     from connections.cameras import *
     pleora_lib = True
@@ -23,12 +24,14 @@ except:
 class app_stitching(QMainWindow, Ui_MainWindow):
     def __init__(self, port = None, pleora= True):
         super().__init__()
-        robot = "HangingArm"
         self.vis_path = True
         self.animate = False
         ## Initialisation of GUI ##
         ## if changes are made to App_GUI.ui PLEASE add chosen_bot callable to the setupUi function and to self.visual = interface(self.centralwidget, robot=chosen_bot)
-        self.setupUi(self,choice=robot)
+        self.setupUi(self)
+        self.visual.kin.model_param("HangingArm")
+        self.compiling.clicked.connect(self.json_saving)
+        self.executing.clicked.connect(self.json_choosing)
         if pleora:
             ## Threaded Camera Left## 
             self.cam_l = Feed("2BA200004267") ## Number represents the camera adress on the computer ##
@@ -76,6 +79,23 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     
     def image_update_right(self, Image):
         self.camera_right.setPixmap(QPixmap.fromImage(Image))
+
+    ####################### template ###############################################
+    def json_saving(self):
+        name , done = QInputDialog.getText(
+                self, 'Saving with name', 'Enter the name:')
+        if done:
+            self.file.filename = "./static/" + str(name)
+            self.back.json_file()
+
+    def json_choosing(self):
+        options = QFileDialog.Options()
+        name, done = QFileDialog.getOpenFileName(
+            self, "Choose which path to run","./paths/","All Files (*)", options = options)
+        if done:
+            self.file.filename = name
+            self.back.run_json()
+        
 
 
 if __name__ == "__main__":

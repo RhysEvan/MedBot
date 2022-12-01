@@ -9,16 +9,23 @@ from matplotlib.widgets import Slider, Button
 from functools import partial
 import torch
 from scipy.spatial.transform import Rotation as R
+import copy
 
 import static.presets_robot_models as presets_robot_models
 
+
 class Kinematics():
     
-    def __init__(self, interface):
+    def __init__(self, robot):
 
-        self.interface = interface
         self.orientation = False
+        self.model_param(robot)
         self.update_position()    
+
+    def model_param(self,robot):
+        atrdal = get_DH_params(presets_robot_models.preset_models[robot])
+        parameters = copy.deepcopy(atrdal)
+        self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = parameters
 
     def update_position(self, DH = None):
         
@@ -72,8 +79,8 @@ class Kinematics():
     def random_positions(self,):
         
         mot_pos = self.get_motor_positions()
-        active = self.interface.active
-        limits = self.interface.limits
+        active = self.active
+        limits = self.limits
         
         for n,limit in enumerate(limits):
             if active[n]=="": continue
@@ -107,7 +114,7 @@ class Kinematics():
     ########
     def motorscan(self):
 
-        limits = self.interface.limits
+        limits = self.limits
 
         mot_pos = self.centermotor()
         self.set_motor_positions(mot_pos)
@@ -144,8 +151,8 @@ class Kinematics():
     def centermotor(self):
 
         mot_pos = self.get_motor_positions()
-        active = self.interface.active
-        limits = self.interface.limits
+        active = self.active
+        limits = self.limits
         
         for n,limit in enumerate(limits):
             if active[n]=="": continue
@@ -161,12 +168,12 @@ class Kinematics():
     ########
     def get_motor_positions(self):
         
-        alpha = self.interface.alpha
-        theta = self.interface.theta
-        radius = self.interface.radius
-        dists = self.interface.dists
-        active = self.interface.active
-        limits = self.interface.limits
+        alpha = self.alpha
+        theta = self.theta
+        radius = self.radius
+        dists = self.dists
+        active = self.active
+        limits = self.limits
 
         mot_pos = np.array([alpha,theta,radius,dists])
         return mot_pos
@@ -174,7 +181,7 @@ class Kinematics():
     def get_active(self):
         
         mot_pos = self.get_motor_positions()
-        active = self.interface.active
+        active = self.active
 
         out_pos = []
         for n,a in enumerate(active):
@@ -190,7 +197,7 @@ class Kinematics():
     def set_active(self, new_active):
         
         mot_pos = self.get_motor_positions()
-        active = self.interface.active
+        active = self.active
         i = 0
         for n in range(mot_pos.shape[1]):
             if active[n]=="": continue
@@ -209,12 +216,41 @@ class Kinematics():
         
         a,t,r,d = mot_pos
             
-        self.interface.alpha = a
-        self.interface.theta = t
-        self.interface.radius = r 
-        self.interface.dists = d
+        self.alpha = a
+        self.theta = t
+        self.radius = r 
+        self.dists = d
             
+        ######################################
+    #  will remove references to kinematics 
+    def set_active(self, new_active):
+        
+        mot_pos = self.get_motor_positions()
+        active = self.active
 
+        i = 0
+        for n in range(mot_pos.shape[1]):
+            if active[n]=="": continue
+            v = new_active[i]
+
+            if active[n]=="r":            mot_pos[2,n] = v
+            elif active[n]=="t":          mot_pos[1,n] = v
+            else: continue
+            i += 1
+            
+        self.set_motor_positions(mot_pos) 
+
+        return mot_pos
+    
+    def set_active_motor(self, idx, value):
+        t,r = self.theta, self.radius
+
+        if self.active[idx]=="r":            r[idx] = int(value)
+        elif self.active[idx]=="t":          t[idx] = int(value)
+        
+        self.theta,self.radius  = t,r
+
+ 
 # Base functions, should merge into object and remove references elsewhere
 
 ##############################################

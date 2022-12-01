@@ -26,10 +26,12 @@ class Feed(QThread):
         while self.ThreadActive:
             Image = self.cam.GetFrame()
             Image = cv2.cvtColor(Image.astype(np.uint16), cv2.COLOR_BayerRGGB2RGB)
+            Image[...,1] = (Image[...,1]*0.5)#.astype(np.uint8)
+            Image[...,0] = (Image[...,0]*1)#.astype(np.uint8)
+            Image[...,2] = (Image[...,2]*1)#.astype(np.uint8)
             Image = cv2.resize(Image, [640,480])
             Image = Image.astype(np.uint8)
             if Image is not None:
-                Image = Image.astype(np.uint8)
                 ConvertToQtFormat = QImage(Image.data, Image.shape[1], Image.shape[0], QImage.Format_RGB888)
                 Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
                 self.ImageUpdate.emit(Pic)

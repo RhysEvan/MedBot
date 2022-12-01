@@ -17,19 +17,11 @@ class interface(QWidget):
     
     def __init__(self, parent, robot="Prismatic3"):
         super(QWidget, self).__init__(parent)
-
-        self.model_param(robot)
-        self.kin = Kinematics(self)
-        self.update_position()
+        self.kin = Kinematics(robot)
         self.setup_fig()
-    
-    def model_param(self,robot):
-        atrdal = get_DH_params(presets_robot_models.preset_models[robot])
-        parameters = copy.deepcopy(atrdal)
-        self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = parameters
 
     def setup_fig(self):
-        x,y,z = self.positions
+        x,y,z = self.kin.position
         n = range(len(x))
         self.fig = Figure()
         self.widget = FigureCanvasQTAgg(self.fig)
@@ -53,62 +45,18 @@ class interface(QWidget):
         self.ax = ax
         self.widget.show()
 
-    ######################################
-    #  will remove references to kinematics 
-    def set_active(self, new_active):
-        
-        mot_pos = self.get_motor_positions()
-        active = self.active
-
-        i = 0
-        for n in range(mot_pos.shape[1]):
-            if active[n]=="": continue
-            v = new_active[i]
-
-            if active[n]=="r":            mot_pos[2,n] = v
-            elif active[n]=="t":          mot_pos[1,n] = v
-            else: continue
-            i += 1
-            
-        self.set_motor_positions(mot_pos) 
-
-        return mot_pos
-
-    def set_motor_positions(self, mot_pos):
-        
-        a,t,r,d = mot_pos   
-        self.alpha = a
-        self.theta = t
-        self.radius = r 
-        self.dists = d  
-
     def set_active_motor(self,idx,value):
-        
-        t,r = self.theta, self.radius
-
-        if self.active[idx]=="r":            r[idx] = int(value)
-        elif self.active[idx]=="t":          t[idx] = int(value)
-        
-        self.theta,self.radius  = t,r
-
+        self.kin.set_active_motor(idx, value)
         self.update()
-        
-    def update_position(self):
-        a, t = self.alpha, self.theta
-        r, d = self.radius, self.dists
-        self.positions = forward_all(a,t,r,d)
-    #################################
-    
+   
     def update(self):
-        self.update_position()
-        x,y,z = self.positions
+        self.kin.update_position()
+        x,y,z = self.kin.position
         self.line.set_data_3d(x,y,z)
         self.fig.canvas.draw_idle()
 
     def rerender(self):
-
         ax = self.axes
-
         ## TODO Clear all object in the axis to rerender?
         self.plot_plane(ax)
         self.plot_axes(ax)
@@ -148,7 +96,6 @@ class interface(QWidget):
         self.path.set_data_3d([],[],[])
         self.update()
         self.fig.canvas.draw()
-        
 
     def animate(self, position_list):
         frms = len(position_list)
