@@ -63,7 +63,6 @@ class backend():
 
     def query(self):
         print("query starting")
-        print("arduino commands currently turned off, GRBL settings not stable yet. 21/7")
         motor_pos = copy.deepcopy(self.absolute)
         try: motor_pos.remove(None)
         except: motor_pos = motor_pos
@@ -72,7 +71,6 @@ class backend():
             if i%2 == 0:
                 try: self.main.com.send_move(idx[i]+self.absolute[i]+" "+idx[i+1]+self.absolute[i+1])
                 except: self.main.com.send_move(idx[i]+self.absolute[i])
-                print(self.absolute[i])
         
     ################################################################################
     ####################### coordinate list ########################################

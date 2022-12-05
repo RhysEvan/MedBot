@@ -8,10 +8,8 @@ class serial_bridge:
     def __init__(self, port = None):
     
         if port is None:
-            #self.device = self.bridge("")
-            #print(self.device)
-            print("no current arduino present")
-            self.device = None
+            self.device = self.bridge()
+            print(self.device)
         else:
             self.device = serial.Serial(port, 155200, timeout=0.1)
         
@@ -30,12 +28,12 @@ class serial_bridge:
             
         elif platform == "win32":
             ports = self.check_ports()
-            s = self.connect_to_ports_win(ports)
+            s = self.connect_to_ports_win(ports, "Device Info: [MSG:'$H'|'$X' to unlock]")
             return s
 
     def check_ports(self):
         all_ports = list(port_list.comports())
-        pos_ports = [p.device for p in all_ports  if "Arduino" in p.description]
+        pos_ports = [p.device for p in all_ports  if "COM3" in p.description]
         [print(p.description) for p in all_ports]
         return pos_ports
     
@@ -56,7 +54,7 @@ class serial_bridge:
             print("trying", port, "...", end="")
             response = self.read_info(ard)
             print(response, "...", end="")
-            if response == find_name: 
+            if response.find(find_name): 
                 print("Port Found: ", port)
                 break
             else:  
@@ -101,10 +99,10 @@ class serial_bridge:
            print("no device")
            return   
         print(input)
-        self.device.write(bytearray("$G1 "+str(input)+"\r\n","utf-8"))
+        self.device.write(bytearray("G1 "+str(input)+"\r\n","utf-8"))
     
     def home(self):
         print("homing")
         self.send_com("$X")
-        self.send_com("$F 100")
+        self.send_com("F 150")
         self.send_com("$H")
