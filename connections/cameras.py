@@ -24,15 +24,15 @@ class Feed(QThread):
         self.cam.SetParameterDouble("Gain", 24)
 
         while self.ThreadActive:
-            Image = self.cam.GetFrame()
-            Image = cv2.cvtColor(Image.astype(np.uint16), cv2.COLOR_BayerRGGB2RGB)
-            Image[...,1] = (Image[...,1]*0.5)#.astype(np.uint8)
-            Image[...,0] = (Image[...,0]*1)#.astype(np.uint8)
-            Image[...,2] = (Image[...,2]*1)#.astype(np.uint8)
-            Image = cv2.resize(Image, [640,480])
-            Image = Image.astype(np.uint8)
-            if Image is not None:
-                ConvertToQtFormat = QImage(Image.data, Image.shape[1], Image.shape[0], QImage.Format_RGB888)
+            self.Image = self.cam.GetFrame()
+            self.Image = cv2.cvtColor(self.Image.astype(np.uint16), cv2.COLOR_BayerRGGB2RGB)
+            self.Image[...,1] = (self.Image[...,1]*0.5)#.astype(np.uint8)
+            self.Image[...,0] = (self.Image[...,0]*1)#.astype(np.uint8)
+            self.Image[...,2] = (self.Image[...,2]*1)#.astype(np.uint8)
+            self.Image = cv2.resize(self.Image, [640,480])
+            self.Image = self.Image.astype(np.uint8)
+            if self.Image is not None:
+                ConvertToQtFormat = QImage(self.Image.data, self.Image.shape[1], self.Image.shape[0], QImage.Format_RGB888)
                 Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
                 self.ImageUpdate.emit(Pic)
             else:

@@ -77,6 +77,7 @@ class Colour_detect():
                                         (self.x_green + self.w_green, self.y_green + self.h_green),
                                         (0, 255, 0), 2)                
         return imageFrame
+    
     def calc(self):
         mid_red_x = self.x_red+self.w_red/2
         mid_red_y = self.y_red+self.h_red/2
@@ -88,6 +89,24 @@ class Colour_detect():
         A_red = self.w_red*self.h_red
         k = A_green/A_red
         return [x_fact, y_fact, k]
+
+
+
+    def wound_encase(self, imageFrame):
+        print("colour values still need to be changed!")
+        hsvFrame = cv2.cvtColor(imageFrame, cv2.COLOR_BGR2HSV)
+        red_lower = np.array([150, 120, 160], np.uint8)
+        red_upper = np.array([180, 255, 255], np.uint8)
+        red_mask = cv2.inRange(hsvFrame, red_lower, red_upper)
+        kernal = np.ones((5, 5), "uint8")
+        red_mask = cv2.dilate(red_mask, kernal)
+        res_red = cv2.bitwise_and(imageFrame, imageFrame, 
+                                mask = red_mask)
+        contours, hierarchy = cv2.findContours(red_mask,
+                                            cv2.RETR_TREE,
+                                            cv2.CHAIN_APPROX_SIMPLE)
+        return contours          
+
 
 class Feed(QThread):
     def __init__(self , location = None, parent=None):

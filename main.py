@@ -12,6 +12,7 @@ from connections.serial_com import *
 from static.json_compiler import *
 from static.backend_GUI import backend
 from static.triggers import trigger
+from static.prediction import prediction
 try:
     from connections.cameras import *
     pleora_lib = True
@@ -24,6 +25,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.vis_path = True
         self.animate = False
+        self.path = os.getcwd()
         ## Initialisation of GUI ##
         ## if changes are made to App_GUI.ui PLEASE add chosen_bot callable to the setupUi function and to self.visual = interface(self.centralwidget, robot=chosen_bot)
         self.setupUi(self)
@@ -49,6 +51,8 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.file = json_handler()
         ## all background related functions ##
         self.back = backend(self)
+        ##link to Retna through prediction calling ##
+        self.predict = prediction(self)
         ## build the model in the interface and create the motor list and coordinate list ##
         self.back.model_build()
         ## all GUI variable function connections ##
