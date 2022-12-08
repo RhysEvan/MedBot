@@ -26,10 +26,11 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.vis_path = True
         self.animate = False
         self.path = os.getcwd()
+        print(self.path)
+        self.setupUi(self)
         ## Initialisation of GUI ##
         ## if changes are made to App_GUI.ui PLEASE add chosen_bot callable to the setupUi function and to self.visual = interface(self.centralwidget, robot=chosen_bot)
-        self.setupUi(self)
-        self.visual.kin.model_param("Prismatic3")
+        self.visual.kin.model_param("HangingArm")
         if pleora:
             ## Threaded Camera Left## 
             self.cam_l = Feed("2BA200004267") ## Number represents the camera adress on the computer ##
@@ -52,7 +53,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         ## all background related functions ##
         self.back = backend(self)
         ##link to Retna through prediction calling ##
-        self.predict = prediction(self)
+        self.prediction = prediction(self)
         ## build the model in the interface and create the motor list and coordinate list ##
         self.back.model_build()
         ## all GUI variable function connections ##

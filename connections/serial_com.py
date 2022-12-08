@@ -46,20 +46,23 @@ class serial_bridge:
     def connect_to_ports_win(self, pos_ports, find_name):
         ## Search for Suitable Port
         print(pos_ports)
-        for port in pos_ports: 
-            print(".")
-            try:      ard = serial.Serial(port, 115200, timeout=0.1, write_timeout=0.1, inter_byte_timeout=0.1)
-            except:   continue
-            #ard = serial.Serial(port, 115200, timeout=0.1, write_timeout=0.1, inter_byte_timeout=0.1)
-            print("trying", port, "...", end="")
-            response = self.read_info(ard)
-            print(response, "...", end="")
-            if response.find(find_name): 
-                print("Port Found: ", port)
-                break
-            else:  
-                ard.close()
-                ard = None
+        if pos_ports != []:
+            for port in pos_ports: 
+                print(".")
+                try:      ard = serial.Serial(port, 115200, timeout=0.1, write_timeout=0.1, inter_byte_timeout=0.1)
+                except:   continue
+                #ard = serial.Serial(port, 115200, timeout=0.1, write_timeout=0.1, inter_byte_timeout=0.1)
+                print("trying", port, "...", end="")
+                response = self.read_info(ard)
+                print(response, "...", end="")
+                if response.find(find_name): 
+                    print("Port Found: ", port)
+                    break
+                else:  
+                    ard.close()
+                    ard = None
+        else:
+            ard = None
         print("")
 
         return ard
