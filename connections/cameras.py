@@ -21,15 +21,16 @@ class Feed(QThread):
             print("no camera")
             return
         self.cam.SetParameterDouble("ExposureTime", 3000)
-        self.cam.SetParameterDouble("Gain", 24)
+        self.cam.SetParameterDouble("Gain", 12)
 
         while self.ThreadActive:
             self.Image = self.cam.GetFrame()
             self.Image = cv2.cvtColor(self.Image.astype(np.uint16), cv2.COLOR_BayerRGGB2RGB)
-            self.Image[...,1] = (self.Image[...,1]*0.5)#.astype(np.uint8)
-            self.Image[...,0] = (self.Image[...,0]*1)#.astype(np.uint8)
-            self.Image[...,2] = (self.Image[...,2]*1)#.astype(np.uint8)
+            self.Image[...,0] = (self.Image[...,0]*255/108)#.astype(np.uint8)
+            self.Image[...,1] = (self.Image[...,1]*255/128)#.astype(np.uint8)
+            self.Image[...,2] = (self.Image[...,2]*255/60)#.astype(np.uint8)
             self.Image = cv2.resize(self.Image, [640,480])
+            self.Image = self.Image.clip(0,255)
             self.Image = self.Image.astype(np.uint8)
             if self.Image is not None:
                 ConvertToQtFormat = QImage(self.Image.data, self.Image.shape[1], self.Image.shape[0], QImage.Format_RGB888)
