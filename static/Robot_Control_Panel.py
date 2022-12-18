@@ -483,4 +483,4 @@ class Ui_MainWindow(object):
         self.groupBox_5.setTitle(_translate("MainWindow", "GroupBox"))
         self.predict.setText(_translate("MainWindow", "Make Prediction"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "Prediction"))
-from static.interface import interface
+from interface import interface
