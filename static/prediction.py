@@ -1,4 +1,4 @@
-from Retna.main import Main
+from retna.main import Main
 from static.Colour_detection import Colour_detect
 
 import cv2

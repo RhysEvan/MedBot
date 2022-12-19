@@ -55,10 +55,18 @@ class serial_bridge:
                 print("trying", port, "...", end="")
                 response = self.read_info(ard)
                 print(response, "...", end="")
+
+                if response == "":
+                    print(" No response")
+                    ard.close()
+                    ard = None
+                    continue
+
                 if response.find(find_name): 
                     print("Port Found: ", port)
                     break
                 else:  
+                    print("Invalid response")
                     ard.close()
                     ard = None
         else:
