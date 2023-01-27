@@ -67,6 +67,15 @@ void runSteppers(void) {
 void loop() {
   SCmd.readSerial(); 
   limitswitch();
+  if (millis() - delaytime > 10) {
+    for (int i=0; i<6; i++) {
+      double sensorPosition = convert(sensors.getAngle(i));
+      double motorPosition = steppers[i].currentPosition();
+      steppers[i].setCurrentPosition((0.9*motorPosition + 0.1*sensorPosition));
+      msteppers.moveTo(stepperPos);
+      // updateSpeeds();
+    }
+  }
   
 }
 
@@ -164,9 +173,8 @@ void stop_all() {
   }
 }
 void homing(){
-  for (int i = 0; i < 6; i++) {                    //set the maximum speed and acceleration for the stepper motors
-    steppers[i].move(-100000);
-  }
+  Serial.println("Home, x and y use -100000, other joints need angle turned to original reference (to be determined)")
+  //for (int i = 0; i < 6; i++) {steppers[i].move(-100000);}
   }
 
 void stop_spec(int value) {steppers[value].move(0);}
@@ -175,42 +183,43 @@ void move_stepper() {
 
   char *arg;
   int step_idx;
-  float distance;
+  double angle;
+  double steps;
 
   arg = SCmd.next();
-  if (arg == NULL)  {
-    Serial.println("Not recognized: Stepper Number" );
-    return;
-  }
+
+  if (arg == NULL)  {Serial.println("Not recognized: Stepper Number" );
+                      return;}
 
   step_idx = atoi(arg);
+
   if (step_idx < 0) {
     Serial.print("Not recognized:");   Serial.println(step_idx);  return;
-
     Serial.print("ID ");
-    Serial.print(step_idx );
-  }
+    Serial.print(step_idx);}
 
   arg = SCmd.next();
-  if (arg == NULL)   {
-    Serial.println("Not recognized: No hieght parameter given");
-    return;
-  }
 
-  distance = atof(arg);
-  if (distance == 0) {
-    Serial.println("Not recognized: Height parameter not parsed");
-    return;
-  }
+  if (arg == NULL)   {Serial.println("Not recognized: No hieght parameter given");
+                      return;}
+
+  angle = atof(arg);
+
+  if (angle == 0) {Serial.println("Not recognized: Height parameter not parsed");
+                      return;}
 
   Serial.print("moving ");
-  Serial.print(distance);
-  double sensorPosition = sensors.getAngle(step_idx)*stepsPerFullTurn[step_idx]/360.0;
-  double motorPosition = steppers[i].currentPosition();
-  //TODO FIX distance parameter and set up a limiter factor
-  steppers[step_idx].moveTo(distance);
+  Serial.print(angle);
+  steps = convert(angle)
+  stepperPos[step_idx] = steps;
+  //TODO FIX angle parameter and set up a limiter factor
   b_move_complete = false;
 }
+
+void convert(double angle) {double steps;
+                            steps = angle*stepsPerFullTurn[i]/360.0
+                            return steps;}
+
 void is_complete() {
   for (int i = 0; i < 6; i++){
     if (steppers[i].distanceToGo() == 0)  {continue;}
