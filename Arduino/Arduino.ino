@@ -1,18 +1,10 @@
-/*
-  Op3Mech controller
-
-  Designed to be used with the CNC shield V3.
-
-  Created 26/07/2020
-
-  By Jona Gladines
-  For Op3Mech
-*/
 
 #include <SoftwareSerial.h>                         //libraries for the processing of the serial command and to controll the stepper motors
 #include <SerialCommand.h>
 #include <AccelStepper.h>
+#include <MultiStepper.h>
 #include <TimerThree.h>
+#include "Sensors.h"
 
 SerialCommand SCmd;                                 // The SerialCommand object
 
@@ -27,7 +19,6 @@ AccelStepper newStepper(int stepPin, int dirPin, int enablePin) {
 }
 AccelStepper steppers[6];
 
-int stepperEnablePin = 8;                           //pin to enable stepper drivers on the CNC shield,must be tied low to enable drivers
 int uddir = 1;
 unsigned long lastMillis;
 bool b_move_complete = true;
@@ -40,6 +31,7 @@ bool previousFlip = true; //stores the previous state for flipping - needed for 
 int lockx = 0;
 int locky = 0;
 long stepperPos[6] = {0, 0, 0, 0, 0, 0};
+long stepsPerFullTurn[6] = {16000, 16000, 16000, 1350, 1350, 1350};
 
 void setup() {
   steppers[0] = newStepper(26,28,24);
@@ -48,7 +40,7 @@ void setup() {
   steppers[3] = newStepper(54, 55, 38);
   steppers[4] = newStepper(60,61,56);
   steppers[5] = newStepper(46,48,62);
-  //for (int i = 0; i < 6; i++){msteppers.addStepper(steppers[i])}
+  for (int i = 0; i < 6; i++){msteppers.addStepper(steppers[i])}
 
   SCmd.addCommand("M", move_stepper);
   SCmd.addCommand("V", change_velocity);
@@ -69,13 +61,13 @@ void setup() {
 
 }
 void runSteppers(void) {
-  for (int i=O; i<6; i++) steppers[i].run()///msteppers.run();
-    
+  msteppers.run();  
 }
 
 void loop() {
   SCmd.readSerial(); 
   limitswitch();
+  
 }
 
 // This gets set as the default handler, and gets called when no other command matches.
@@ -213,6 +205,8 @@ void move_stepper() {
 
   Serial.print("moving ");
   Serial.print(distance);
+  double sensorPosition = sensors.getAngle(step_idx)*stepsPerFullTurn[step_idx]/360.0;
+  double motorPosition = steppers[i].currentPosition();
   //TODO FIX distance parameter and set up a limiter factor
   steppers[step_idx].moveTo(distance);
   b_move_complete = false;
