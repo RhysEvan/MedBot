@@ -4,6 +4,7 @@ from PyQt5.QtGui import *
 import time
 import numpy as np
 import cv2
+from skimage import img_as_ubyte
 from CameraModel.Pleora.RGB.GenericRGBCamera import GenericRGBCamera
 
 class Feed(QThread):
@@ -20,17 +21,16 @@ class Feed(QThread):
         except ValueError:
             print("no camera")
             return
-        self.cam.SetParameterDouble("ExposureTime", 3000)
+        self.cam.SetParameterDouble("ExposureTime", 2000)
         self.cam.SetParameterDouble("Gain", 12)
-
+        self.Image = self.cam.GetFrame()
+        self.Image = cv2.cvtColor(self.Image.astype(np.uint16), cv2.COLOR_BayerRGGB2RGB)
+        self.Calib = calib_percentile_whitebalance(self.Image, 99)
         while self.ThreadActive:
             self.Image = self.cam.GetFrame()
             self.Image = cv2.cvtColor(self.Image.astype(np.uint16), cv2.COLOR_BayerRGGB2RGB)
-            self.Image[...,0] = (self.Image[...,0]*255/108)#.astype(np.uint8)
-            self.Image[...,1] = (self.Image[...,1]*255/128)#.astype(np.uint8)
-            self.Image[...,2] = (self.Image[...,2]*255/60)#.astype(np.uint8)
+            self.Image = white_balance_image(self.Image,self.Calib)
             self.Image = cv2.resize(self.Image, [640,480])
-            self.Image = self.Image.clip(0,255)
             self.Image = self.Image.astype(np.uint8)
             if self.Image is not None:
                 ConvertToQtFormat = QImage(self.Image.data, self.Image.shape[1], self.Image.shape[0], QImage.Format_RGB888)
@@ -45,3 +45,11 @@ class Feed(QThread):
         self.ThreadActive = False
         self.cam.Close()
         self.quit()
+
+
+def white_balance_image(image,Calib):
+    return img_as_ubyte((image * 1.0 / Calib).clip(0, 1))
+
+def calib_percentile_whitebalance(image, percentile_value):
+    Calib =  np.percentile(image, percentile_value, axis=(0, 1))
+    return Calib
