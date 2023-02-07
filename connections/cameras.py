@@ -23,18 +23,15 @@ class Feed(QThread):
             return
         self.cam.SetParameterDouble("ExposureTime", 2000)
         self.cam.SetParameterDouble("Gain", 12)
-        self.Image = self.cam.GetFrame()
-        self.Image = cv2.cvtColor(self.Image.astype(np.uint16), cv2.COLOR_BayerRGGB2RGB)
-        self.Calib = calib_percentile_whitebalance(self.Image, 99)
+        self.calib_percentile_whitebalance(99)
         while self.ThreadActive:
             self.Image = self.cam.GetFrame()
             self.Image = cv2.cvtColor(self.Image.astype(np.uint16), cv2.COLOR_BayerRGGB2RGB)
-            self.Image = white_balance_image(self.Image,self.Calib)
-            self.Image = cv2.resize(self.Image, [640,480])
+            self.Image = self.white_balance_image(self.Image,self.Calib)
             self.Image = self.Image.astype(np.uint8)
             if self.Image is not None:
                 ConvertToQtFormat = QImage(self.Image.data, self.Image.shape[1], self.Image.shape[0], QImage.Format_RGB888)
-                Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
+                Pic = ConvertToQtFormat.scaled(1536, 2048, Qt.KeepAspectRatio)
                 self.ImageUpdate.emit(Pic)
             else:
                 self.cam.Close()
@@ -47,9 +44,10 @@ class Feed(QThread):
         self.quit()
 
 
-def white_balance_image(image,Calib):
-    return img_as_ubyte((image * 1.0 / Calib).clip(0, 1))
+    def white_balance_image(self, image, Calib):
+        return img_as_ubyte((image * 1.0 / Calib).clip(0, 1))
 
-def calib_percentile_whitebalance(image, percentile_value):
-    Calib =  np.percentile(image, percentile_value, axis=(0, 1))
-    return Calib
+    def calib_percentile_whitebalance(self, percentile_value):
+        image = self.cam.GetFrame()
+        image = cv2.cvtColor(image.astype(np.uint16), cv2.COLOR_BayerRGGB2RGB)
+        self.Calib =  np.percentile(image, percentile_value, axis=(0, 1))
