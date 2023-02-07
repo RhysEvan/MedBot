@@ -5,9 +5,11 @@
 #include <MultiStepper.h>
 #include <TimerThree.h>
 #include "Sensors.h"
+//#include "Controller.h"
 
 SerialCommand SCmd;                                 // The SerialCommand object
-
+Sensors sensors;
+//Controller controller;
 AccelStepper newStepper(int stepPin, int dirPin, int enablePin) {
   AccelStepper stepper = AccelStepper(stepper.DRIVER, stepPin,dirPin);
   stepper.setEnablePin(enablePin);
@@ -37,7 +39,7 @@ void setup() {
   steppers[0] = newStepper(26,28,24);
   steppers[1] = newStepper(32,47,45);
   steppers[2] = newStepper(36,34,30);
-  steppers[3] = newStepper(54, 55, 38);
+  steppers[3] = newStepper(54,55,38);
   steppers[4] = newStepper(60,61,56);
   steppers[5] = newStepper(46,48,62);
   for (int i = 0; i < 6; i++){msteppers.addStepper(steppers[i])}

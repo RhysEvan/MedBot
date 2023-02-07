@@ -126,3 +126,13 @@ def make_path():
             PositionList.append(Positions)
 
 
+def get_DH_params(model):
+    
+    alpha = model["alpha"]
+    theta =  model["theta"]
+    radius = model["radius"]
+    dists = model["dists"]
+    active = model["active"]
+    limits = model["limits"]
+    
+    return alpha, theta, radius, dists, active, limits
