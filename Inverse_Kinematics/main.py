@@ -1,17 +1,17 @@
 import sys
-sys.path.insert(1,r"..\static/")
-sys.path.insert(2,r"../")
+import os
+sys.path.insert(1,r'./')
 import numpy as np
 import matplotlib.pyplot as plt
 import torch
 from forward import *
-from presets_robot_models import preset_models
+from static.presets_robot_models import preset_models
 import kinematics
 from inverse import with_torch
 
 alpha, theta, radius, dists, active, limits = get_DH_params(preset_models["HangingArm"])
 For_model = kinematics.Kinematics("HangingArm")
-model = torch.load(r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\kine_models\HangingArm.pt")
+model = torch.load(r".\kine_models\HangingArm.pt")
 
 inputs, target = For_model.generate_maps(n=1)
 #mot_pos = np.array([alpha,theta,radius,dists])
