@@ -20,8 +20,8 @@ class Feed(QThread):
         if ret == None:
             return
         self.cam.Start()
-        self.cam.SetParameterDouble("ExposureTime", 2000)
-        self.cam.SetParameterDouble("Gain", 12)
+        self.cam.SetParameterDouble("ExposureTime", 1000)
+        self.cam.SetParameterDouble("Gain", 10)
         self.calib_percentile_whitebalance(99)
         while self.ThreadActive:
             if ret is not None:

@@ -21,7 +21,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle("My App")
         self.path = r"C:\Users\mheva\OneDrive\Bureaublad\temp/"
-        self.index = 1
+        self.index = 109
         if pleora:
             ## Threaded Camera Left## 
             self.cam = Feed("2BA200004267") ## Number represents the camera adress on the computer ##
