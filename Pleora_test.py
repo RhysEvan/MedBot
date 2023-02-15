@@ -7,7 +7,7 @@ import numpy as np
 import cv2
 
 from static.colour_GUI import Ui_MainWindow
-from connections.serial_com import serial_bridge
+from connections.serial_com_GRBL import serial_bridge
 from CameraModel.Pleora.RGB.GenericRGBCamera import GenericRGBCamera
 from CameraModel.Pleora.PleoraCamera import *
 

@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 import time
 
-from connections.serial_com import serial_bridge
+from connections.serial_com_GRBL import serial_bridge
 from static.colour_GUI import Ui_MainWindow
 
 class Colour_detect():

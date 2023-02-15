@@ -7,7 +7,7 @@ import numpy as np
 
 #file based imports
 from static.Robot_Control_Panel import Ui_MainWindow
-from connections.serial_com import *
+from connections.serial_com_GRBL import *
 
 from static.json_compiler import *
 from static.backend_GUI import backend
