@@ -12,7 +12,7 @@ class motor_inverter():
     def __init__(self, coordinates = None):
         self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = get_DH_params(preset_models["HangingArm"])
         self.For_model = kinematics.Kinematics("HangingArm")
-        self.model = torch.load(r".\kine_models\HangingArm.pt")
+        self.model = torch.load(r"Inverse_Kinematics\kine_models\HangingArm.pt")
         if coordinates == None:
             self.gen_test()
         else:
