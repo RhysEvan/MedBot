@@ -8,6 +8,7 @@ import numpy as np
 #file based imports
 from static.Robot_Control_Panel import Ui_MainWindow
 from connections.serial_com_GRBL import *
+from connections.serial_com_CUSTOM import *
 
 from static.json_compiler import *
 from static.backend_GUI import backend
@@ -47,11 +48,15 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.graph = self.visual
         self.kinematics = self.graph.kin
         ## connection to arduino GRBL ##
-        self.com = serial_bridge()
+        self.com = serial_bridge_GRBL()
+        custom = False
+        if self.com.device == None:
+            self.com = serial_bridge_CUSTOM()
+            custom = True
         ## json compiler initiation ##
         self.file = json_handler()
         ## all background related functions ##
-        self.back = backend(self)
+        self.back = backend(self,custom_check = custom)
         ##link to Retna through prediction calling ##
         self.prediction = prediction(self)
         ## build the model in the interface and create the motor list and coordinate list ##

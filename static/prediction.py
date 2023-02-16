@@ -1,6 +1,6 @@
-from retna.main import Main
-from static.Colour_detection import Colour_detect
+from Retna.main import Main
 
+import numpy as np
 import cv2
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -10,12 +10,11 @@ class prediction():
     def __init__(self, main):
         self.retna = Main
         self.gui = main
-        self.col_detect = Colour_detect
     
     def show_predict(self):
         
         R_im = self.gui.cam_r.Image
-        contours = self.col_detect.wound_encase(R_im)
+        contours = self.wound_encase(R_im)
         R_crop = self.cropper(R_im, contours)
         R_pred = self.retna.cam_predict(R_crop, (self.main.path+r"\Retna\models\checkpoint.pt"))
         ConvertToQtFormat = QImage(R_pred.data, R_pred.shape[1], R_pred.shape[0], QImage.Format_RGB888)
@@ -23,7 +22,7 @@ class prediction():
         self.gui.predict_right.setPixmap(QPixmap.fromImage(R_Pic))
         
         L_im = self.gui.cam_l.Image
-        contours = self.col_detect.wound_encase(L_im)
+        contours = self.wound_encase(L_im)
         L_crop = self.cropper(L_im, contours)
         L_pred = self.retna.cam_predict(L_crop, (self.main.path+r"\Retna\models\checkpoint.pt"))
         ConvertToQtFormat = QImage(L_pred.data, L_pred.shape[1], L_pred.shape[0], QImage.Format_RGB888)
@@ -37,3 +36,18 @@ class prediction():
                 x_skin, y_skin, w_skin, h_skin = cv2.boundingRect(contour)
                 in_crop = im[:,x_skin:(x_skin+w_skin), y_skin:(y_skin+h_skin)]
         return in_crop
+
+    def wound_encase(self, imageFrame):
+        print("colour values still need to be changed!")
+        hsvFrame = cv2.cvtColor(imageFrame, cv2.COLOR_BGR2HSV)
+        red_lower = np.array([150, 120, 160], np.uint8)
+        red_upper = np.array([180, 255, 255], np.uint8)
+        red_mask = cv2.inRange(hsvFrame, red_lower, red_upper)
+        kernal = np.ones((5, 5), "uint8")
+        red_mask = cv2.dilate(red_mask, kernal)
+        res_red = cv2.bitwise_and(imageFrame, imageFrame, 
+                                mask = red_mask)
+        contours, hierarchy = cv2.findContours(red_mask,
+                                            cv2.RETR_TREE,
+                                            cv2.CHAIN_APPROX_SIMPLE)
+        return contours         

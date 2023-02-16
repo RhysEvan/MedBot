@@ -107,7 +107,6 @@ class Colour_detect():
                                             cv2.CHAIN_APPROX_SIMPLE)
         return contours          
 
-
 class Feed(QThread):
     def __init__(self , location = None, parent=None):
         super(Feed,self).__init__(parent)
@@ -172,9 +171,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.com.send_move("x "+str(self.dfactor*Depth_distance))
         self.com.send_move("y "+str(theta_1*180/np.pi))
         self.com.send_move("z "+str(theta_2*180/np.pi))
-        
-
-        
 
 #app = QApplication(sys.argv)
 #window = MainWindow()

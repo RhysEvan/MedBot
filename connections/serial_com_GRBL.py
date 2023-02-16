@@ -4,7 +4,7 @@ import time
 import serial
 import serial.tools.list_ports as port_list
 
-class serial_bridge:
+class serial_bridge_GRBL:
     def __init__(self, port = None):
     
         if port is None:

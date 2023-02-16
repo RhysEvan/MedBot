@@ -5,7 +5,7 @@ from .robot_interface import dynamic_gui, val
 from PyQt5.QtWidgets import *
 
 class backend():
-    def __init__(self, main):
+    def __init__(self, main, custom_check = False):
         self.main = main
         self.dynamic = dynamic_gui(self)
         ## initial values for the recording list of xyz values ##
@@ -30,6 +30,7 @@ class backend():
             self.animation_seq()
         if self.main.vis_path:
             self.dynamic.visible_path()
+        self.port_type = custom_check
 
     def copying(self):
         self.limits = copy.deepcopy(self.main.graph.kin.limits)
@@ -66,7 +67,10 @@ class backend():
         motor_pos = copy.deepcopy(self.absolute)
         try: motor_pos.remove(None)
         except: motor_pos = motor_pos
-        idx = ["x ","y ","z ","a ","b ","c "]
+        if self.port_type == True:
+            idx = ["0 ","1 ","2 ","3 ","4 ","5 "]
+        elif self.port_type == False:
+            idx = ["X ","Y ","Z ","A ","B ","C "]
         for i in range(len(motor_pos)):
             if i%2 == 0:
                 try: self.main.com.send_move(idx[i]+self.absolute[i]+" "+idx[i+1]+self.absolute[i+1])
@@ -118,7 +122,7 @@ class backend():
     def append_motor(self):
         self.motor_list.append(self.joint)
         self.calculated_coord()
-        item = partial(motor_record,self.limits,self.joint)
+        item = partial(motor_record,self.limits,self.joint,self.port_type)
         self.main.motorlist.addItem(item())
     
     def load_motor_table(self, motor_list):
@@ -147,7 +151,7 @@ class backend():
     ################################################################################
 
     def json_file(self):
-        idx = ["X ","Y ","Z ","A ","B ","C "]
+        idx = ["0 ","1 ","2 ","3 ","4 ","5 "]
         dict_data = {}
         json_list = []
         k = 0
@@ -205,9 +209,12 @@ class backend():
             self.main.file.filename = name
             self.run_json()
 
-def motor_record(limit,motor):
+def motor_record(limit,motor,port_type):
     item = ""
-    idx = ["A","B","C","D","E","F"]
+    if port_type == True:
+        idx = ["0 ","1 ","2 ","3 ","4 ","5 "]
+    elif port_type == False:
+        idx = ["X ","Y ","Z ","A ","B ","C "]
     for i in range(len(limit)):
         item += idx[i]+": "+str(motor[i].value())
     return item

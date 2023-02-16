@@ -56,7 +56,7 @@ void setup() {
   SCmd.addDefaultHandler(unrecognized);
 
   Serial.begin(115200);
-  Serial.println("Hanging Arm");
+  Serial.println("HangingArm");
   //
   Timer3.initialize(500);
   Timer3.attachInterrupt(runSteppers)
