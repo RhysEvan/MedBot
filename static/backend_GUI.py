@@ -77,7 +77,7 @@ class backend():
                 except: self.main.com.send_move(idx[i]+self.absolute[i])
         
     ################################################################################
-    ####################### coordinate list ########################################
+    ####################### coordinqueryate list ########################################
     ################################################################################
     
     def handle_lists(self):
@@ -122,7 +122,7 @@ class backend():
     def append_motor(self):
         self.motor_list.append(self.joint)
         self.calculated_coord()
-        item = partial(motor_record,self.limits,self.joint,self.port_type)
+        item = partial(motor_record,self.limits,self.joint)
         self.main.motorlist.addItem(item())
     
     def load_motor_table(self, motor_list):
@@ -209,12 +209,8 @@ class backend():
             self.main.file.filename = name
             self.run_json()
 
-def motor_record(limit,motor,port_type):
-    item = ""
-    if port_type == True:
-        idx = ["0 ","1 ","2 ","3 ","4 ","5 "]
-    elif port_type == False:
-        idx = ["X ","Y ","Z ","A ","B ","C "]
+def motor_record(limit,motor):
+    idx = ["A","B","C","D","E","F"]
     for i in range(len(limit)):
-        item += idx[i]+": "+str(motor[i].value())
+        item += idx[i]+": "+str(motor[i].value())+" "
     return item

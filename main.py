@@ -76,7 +76,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         enter = 16777220 #enter to execute
         if e.key() == enter:
             print("starting execute of absolute coordinates.")
-            self.var.query()
+            self.back.query()
 
     ####################### threading method  ######################################
 
@@ -90,5 +90,4 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     main = app_stitching(pleora=pleora_lib)
-
     sys.exit(app.exec())
