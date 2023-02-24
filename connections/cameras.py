@@ -27,7 +27,7 @@ class Feed(QThread):
             if ret is not None:
                 Pic = self.GetFrame()
                 if Pic:
-                    self.ImageUpdate.emit(Pic)
+                    self.ImageUpdate.emit(self.Image, Pic)
                 else:
                     self.cam.Close()
                     while True:

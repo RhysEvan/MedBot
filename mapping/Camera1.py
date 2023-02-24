@@ -6,7 +6,8 @@ import InputParameters
 
 class Webcam:
     def __init__(self):
-        pass
+        self.emit_camL = []
+        self.emit_camR = []
 
     def OpenCAML (self,nr):
         vid = cv2.VideoCapture(nr)      # (nr,cv2.CAP_DSHOW) to get rid off error, but then camera caputers to soon
@@ -76,8 +77,8 @@ class Webcam:
         #Projector.DestroyWindow()
 
     def GetThreshold (self):
-        #Webcam.OpenCAML(self, InputParameters.LeftCamera)
-        #Webcam.OpenCAMR(self, InputParameters.RightCamera)
+        Webcam.OpenCAML(self, InputParameters.LeftCamera)
+        Webcam.OpenCAMR(self, InputParameters.RightCamera)
         cam1 = self.vid
         cam2 = self.vid2
 
@@ -100,6 +101,25 @@ class Webcam:
         cam2.release()
         cv2.destroyAllWindows()
         Projector.DestroyWindow()
+
+    def ContinThreshold(self):
+        image_counter = 0
+        while True:
+            if image_counter < 2:
+                Projector.imgToScrn(0, 'Thresholdimage{}.png'.format(image_counter))
+                time.sleep(0.19)
+                frame = self.emit_camL
+                frame2 = self.emit_camR
+                os.chdir(InputParameters.ImageDirectory)  # Temporary way of saving images in certain file (still needs to be changed)
+                cv2.imwrite("ThresholdCAML{}.png".format(image_counter), frame)
+                cv2.imwrite("ThresholdCAMR{}.png".format(image_counter), frame2)
+                os.chdir(InputParameters.WorkingDirectory)  # Temporary way of saving images in certain file (still needs to be changed)
+                image_counter += 1
+            else:
+                break
+        cv2.destroyAllWindows()
+        Projector.DestroyWindow()
+
 
 
 

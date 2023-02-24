@@ -13,16 +13,12 @@ def PrintParameters():
     os.chdir(InputParameters.WorkingDirectory)
     with open('RotationMatrix.pkl', 'rb') as file3:
         rot = pickle.load(file3)
-        print('Rotation Matrix : ',rot)
     with open('TranslationMatrix.pkl', 'rb') as file4:
         trans = pickle.load(file4)
-        print('Translation Matrix : ', trans)
     with open('ProjectionMatrixLeftCam.pkl', 'rb') as file1:
         p1 = pickle.load(file1)
-        print('Projection Matrix for Left Cam: ',p1)
     with open('ProjectionMatrixRightCam.pkl', 'rb') as file2:
         p2 = pickle.load(file2)
-        print('Projection Matrix for Right Cam: ',p2)
 
     with open('RotatieMatrixRechterCamera.csv', 'w+', newline='') as csvfile:
         my_writer = csv.writer(csvfile, delimiter=' ')
@@ -222,8 +218,6 @@ def Triangulate():
 
 
     ## Writing PLY file trhough open3D
-    print("Number of points : ",np.shape(testarray))
-    print("Number of colors :",np.shape(colors))
     xyz = np.array(testarray)
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(xyz)                ## Put Nx3 array in o3d format
@@ -232,7 +226,6 @@ def Triangulate():
 
 
     ######################################VISUALIZATION#################################################################
-    print(testarray)
     Visualization.visualisePointCloud(testarray,colors)
 
 

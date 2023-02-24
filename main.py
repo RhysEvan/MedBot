@@ -9,6 +9,7 @@ import numpy as np
 from static.Robot_Control_Panel import Ui_MainWindow
 from connections.serial_com_GRBL import *
 from connections.serial_com_CUSTOM import *
+from mapping.main import *
 
 from static.json_compiler import *
 from static.backend_GUI import backend
@@ -59,6 +60,8 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.back = backend(self,custom_check = custom)
         ##link to Retna through prediction calling ##
         self.prediction = prediction(self)
+        ##link to 3D mapping code ##
+        self.mapping = Mapping()
         ## build the model in the interface and create the motor list and coordinate list ##
         self.back.model_build()
         ## all GUI variable function connections ##
@@ -80,10 +83,12 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 
     ####################### threading method  ######################################
 
-    def image_update_left(self, Image):
+    def image_update_left(self, raw_img, Image):
+        self.mapping.cam.emit_camL = raw_img
         self.camera_left.setPixmap(QPixmap.fromImage(Image))
     
-    def image_update_right(self, Image):
+    def image_update_right(self, raw_img, Image):
+        self.mapping.cam.emit_camR = raw_img
         self.camera_right.setPixmap(QPixmap.fromImage(Image))        
 
 
