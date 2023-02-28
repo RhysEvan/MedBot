@@ -17,11 +17,11 @@ numberOfImages = 1                  ## number of higher frequency patterns that 
 methodOfTriangulation = 2
 
 ## Directories
-ImageDirectory = r"/home/yuno/anaconda3/envs/camera/Masterproef_JaccoFrée_2022/pythonProject/Images"
-WorkingDirectory = r"/home/yuno/anaconda3/envs/camera/Masterproef_JaccoFrée_2022/pythonProject"
-CalibratedImageDirectory = r"/home/yuno/anaconda3/envs/camera/Masterproef_JaccoFrée_2022/pythonProject/CalibratedImages"
-ChessboardImagesDirectory = r"/home/yuno/anaconda3/envs/camera/Masterproef_JaccoFrée_2022/pythonProject/ChessboardImages"
-StereovisionDirectory = r"/home/yuno/anaconda3/envs/camera/Masterproef_JaccoFrée_2022/pythonProject/Stereovision"
-imagesLeft = r"/home/yuno/anaconda3/envs/camera/Masterproef_JaccoFrée_2022/pythonProject/imagesLeft"
-imagesRight = r"/home/yuno/anaconda3/envs/camera/Masterproef_JaccoFrée_2022/pythonProject/imagesRight"
+ImageDirectory = r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\mapping\Images"
+WorkingDirectory = r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\mapping"
+CalibratedImageDirectory = r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\mapping\CalibratedImages"
+ChessboardImagesDirectory = r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\mapping\ChessboardImages"
+StereovisionDirectory = r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\mapping\Stereovision"
+imagesLeft = r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\mapping\imagesLeft"
+imagesRight = r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\mapping\imagesRight"
 

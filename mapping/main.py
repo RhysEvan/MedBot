@@ -1,10 +1,10 @@
-import Camera1
-import Graycode
-import Triangulation
+from .Camera1 import *
+from .Graycode import *
+from .Triangulation import *
 import cv2
-import InputParameters
+from .InputParameters import *
 import time
-import Detection
+from .Detection import *
 
 ## Gray code Pattern Generation (gets saved)
 #pattern = Graycode.GrayCode()
@@ -14,7 +14,7 @@ import Detection
 #pattern.RepmatHorizontal()
 class Mapping():
     def __init__(self):
-        self.cam = Camera1.Webcam()
+        self.cam = Webcam()
 
     def intrinsic_calibration(self):
         ## Calibration

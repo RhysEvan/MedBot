@@ -1,8 +1,8 @@
 import cv2
 import time
 import os
-import Projector
-import InputParameters
+from .Projector import *
+from .InputParameters import *
 
 class Webcam:
     def __init__(self):
@@ -18,16 +18,16 @@ class Webcam:
         self.vid2 = vid2
 
     def GetFrame (self,numberOfImages):
-        Webcam.OpenCAML(self,InputParameters.LeftCamera)
-        Webcam.OpenCAMR(self,InputParameters.RightCamera)
+        Webcam.OpenCAML(self,LeftCamera)
+        Webcam.OpenCAMR(self,RightCamera)
         cam1 = self.vid
         cam2 = self.vid2
         image_counter = 0
 
-        os.chdir(InputParameters.ImageDirectory)
+        os.chdir(ImageDirectory)
         while True :            ## First loop for Vertical patterns
             if image_counter < numberOfImages:
-                Projector.imgToScrn(0, 'graycodeVert{}.png'.format(image_counter))
+                imgToScrn(0, 'graycodeVert{}.png'.format(image_counter))
                 if image_counter == 0:
                     time.sleep(0.3)                                       # Longer waiting time with first picture for better light adjustment
                 else:
@@ -38,7 +38,7 @@ class Webcam:
                 cv2.imwrite("imgVertCAMR{}.png".format(image_counter), frame2)
 
                 ## Patterns for invers Gray code
-                Projector.imgToScrn(0, 'graycodeVertInv{}.png'.format(image_counter))
+                imgToScrn(0, 'graycodeVertInv{}.png'.format(image_counter))
                 time.sleep(0.3)
                 ret, frame1 = cam1.read()
                 ret, frame2 = cam2.read()
@@ -52,7 +52,7 @@ class Webcam:
         image_counter = 0
         while True :            ## Second loop for Horizontal patterns
             if image_counter < numberOfImages:
-                Projector.imgToScrn(0, 'graycodeHor{}.png'.format(image_counter))
+                imgToScrn(0, 'graycodeHor{}.png'.format(image_counter))
                 time.sleep(0.3)
                 ret, frame = cam1.read()
                 ret, frame2 = cam2.read()
@@ -60,7 +60,7 @@ class Webcam:
                 cv2.imwrite("imgHorCAMR{}.png".format(image_counter), frame2)
 
                 ## Patterns for invers Gray code
-                Projector.imgToScrn(0, 'graycodeHorInv{}.png'.format(image_counter))
+                imgToScrn(0, 'graycodeHorInv{}.png'.format(image_counter))
                 time.sleep(0.3)
                 ret, frame1 = cam1.read()
                 ret, frame2 = cam2.read()
@@ -106,19 +106,19 @@ class Webcam:
         image_counter = 0
         while True:
             if image_counter < 2:
-                Projector.imgToScrn(0, 'Thresholdimage{}.png'.format(image_counter))
+                imgToScrn(0, 'Thresholdimage{}.png'.format(image_counter))
                 time.sleep(0.19)
                 frame = self.emit_camL
                 frame2 = self.emit_camR
-                os.chdir(InputParameters.ImageDirectory)  # Temporary way of saving images in certain file (still needs to be changed)
+                os.chdir(ImageDirectory)  # Temporary way of saving images in certain file (still needs to be changed)
                 cv2.imwrite("ThresholdCAML{}.png".format(image_counter), frame)
                 cv2.imwrite("ThresholdCAMR{}.png".format(image_counter), frame2)
-                os.chdir(InputParameters.WorkingDirectory)  # Temporary way of saving images in certain file (still needs to be changed)
+                os.chdir(WorkingDirectory)  # Temporary way of saving images in certain file (still needs to be changed)
                 image_counter += 1
             else:
                 break
         cv2.destroyAllWindows()
-        Projector.DestroyWindow()
+        DestroyWindow()
 
 
 

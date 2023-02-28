@@ -10,8 +10,8 @@ class trigger():
         main.robot_options.clicked.connect(main.back.dynamic.clicked)
         main.compiling.clicked.connect(main.back.json_saving)
         main.executing.clicked.connect(main.back.json_choosing)
-        main.predict.clicked.connect(main.prediction.show_predict)
-
+        main.predict.clicked.connect(main.predict_left.show_predict)
+        
         main.aabs.valueChanged.connect(main.back.dynamic.slider_input)
         main.babs.valueChanged.connect(main.back.dynamic.slider_input)
         main.cabs.valueChanged.connect(main.back.dynamic.slider_input)

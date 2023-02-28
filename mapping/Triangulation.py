@@ -3,14 +3,14 @@ import cv2
 import numpy as np
 import cv2 as cv
 import open3d as o3d
-import InputParameters
+from .InputParameters import *
 import csv
-import Visualization
+from .Visualization import *
 
 ## Function to print the used parameters for calibration
 def PrintParameters():
     import pickle
-    os.chdir(InputParameters.WorkingDirectory)
+    os.chdir(WorkingDirectory)
     with open('RotationMatrix.pkl', 'rb') as file3:
         rot = pickle.load(file3)
     with open('TranslationMatrix.pkl', 'rb') as file4:

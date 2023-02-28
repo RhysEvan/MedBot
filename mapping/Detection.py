@@ -1,6 +1,6 @@
 import os
-import Graycode
-import InputParameters
+from .Graycode import *
+from .InputParameters import *
 import cv2 as cv
 import numpy as np
 import numpy.ma as ma
@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from operator import and_
 
 ## Getting dimensions of CALIBRATED images
-os.chdir(InputParameters.CalibratedImageDirectory)
+os.chdir(CalibratedImageDirectory)
 imgL = cv.imread('imgVertCAML0.png', cv.IMREAD_UNCHANGED)
 imgR = cv.imread('imgVertCAMR0.png', cv.IMREAD_UNCHANGED)
 widthL = imgL.shape[1]
@@ -19,7 +19,7 @@ heightR = imgR.shape[0]
 
 ## Finding mask array to delete shadow pixels. This mask array is chosen by visualizing binary images where threshold can be adjusted to find optimal threshold value.
 def ShadowMask():
-    os.chdir(InputParameters.CalibratedImageDirectory)
+    os.chdir(CalibratedImageDirectory)
 
     ## Function to show binary images to set Threshold value. Gets called with cv.CreateTrackbar
     def on_change(value):
@@ -101,7 +101,7 @@ def DecodeGrayCode(binaryMaxValue,methodParameter):
     global arrayHorLMasked
     global arrayVertRMasked
     global arrayHorRMasked
-    numberOfImages = InputParameters.numberOfImages      ## number of higher frequency patterns that are not used. Limited resolution can mean less patterns results in higher resolution
+    numberOfImages = numberOfImages      ## number of higher frequency patterns that are not used. Limited resolution can mean less patterns results in higher resolution
 
     ## Getting shadowmask images
     maskX, maskY, threshold = ShadowMask()
@@ -121,8 +121,8 @@ def DecodeGrayCode(binaryMaxValue,methodParameter):
         ArrayVertRWithoutMask = np.full((imgR.shape[0], imgR.shape[1]), "", dtype=object)
         ArrayHorRWithoutMask = np.full((imgR.shape[0], imgR.shape[1]), "", dtype=object)
 
-        for i in range(Graycode.length-numberOfImages):          ## -1 because resolution of projector is higher than camera's
-            os.chdir(InputParameters.CalibratedImageDirectory)
+        for i in range(length-numberOfImages):          ## -1 because resolution of projector is higher than camera's
+            os.chdir(CalibratedImageDirectory)
 
             ## array for Vertical Patterns
             imageVert = cv.imread('imgVertCAML{}.png'.format(i), cv.IMREAD_UNCHANGED)
@@ -190,8 +190,8 @@ def DecodeGrayCode(binaryMaxValue,methodParameter):
         threshold = on_changeThresh.outputThreshold
         print('Threshold = ', threshold)
 
-        for i in range(Graycode.length-numberOfImages):          ## -1 because resolution of projector is higher than camera's
-            os.chdir(InputParameters.CalibratedImageDirectory)
+        for i in range(length-numberOfImages):          ## -1 because resolution of projector is higher than camera's
+            os.chdir(CalibratedImageDirectory)
 
             ## array for Vertical Patterns
             imageVert = cv.imread('imgVertCAML{}.png'.format(i), cv.IMREAD_UNCHANGED)
@@ -235,8 +235,8 @@ def DecodeGrayCode(binaryMaxValue,methodParameter):
 
         threshold = input('Threshold ? : ')
         threshold = int(threshold)
-        for i in range(Graycode.length-numberOfImages):
-            os.chdir(InputParameters.CalibratedImageDirectory)
+        for i in range(length-numberOfImages):
+            os.chdir(CalibratedImageDirectory)
 
             ## array for Vertical Patterns
             imageVert = cv.imread('imgVertCAML{}.png'.format(i), cv.IMREAD_UNCHANGED)
@@ -291,8 +291,8 @@ def DecodeGrayCode(binaryMaxValue,methodParameter):
         ArrayHorLWithoutMask = np.full((imgL.shape[0], imgL.shape[1]), "", dtype=object)
         ArrayVertRWithoutMask = np.full((imgR.shape[0], imgR.shape[1]), "", dtype=object)
         ArrayHorRWithoutMask = np.full((imgR.shape[0], imgR.shape[1]), "", dtype=object)
-        for i in range(Graycode.length-numberOfImages):
-            os.chdir(InputParameters.CalibratedImageDirectory)
+        for i in range(length-numberOfImages):
+            os.chdir(CalibratedImageDirectory)
 
             ## array for Vertical Patterns
             imageVert = cv.imread('imgVertCAML{}.png'.format(i), cv.IMREAD_UNCHANGED)
@@ -336,8 +336,8 @@ def DecodeGrayCode(binaryMaxValue,methodParameter):
         ArrayHorLWithoutMask = np.full((imgL.shape[0], imgL.shape[1]), "", dtype=object)
         ArrayVertRWithoutMask = np.full((imgR.shape[0], imgR.shape[1]), "", dtype=object)
         ArrayHorRWithoutMask = np.full((imgR.shape[0], imgR.shape[1]), "", dtype=object)
-        for i in range(Graycode.length-numberOfImages):
-                os.chdir(InputParameters.CalibratedImageDirectory)
+        for i in range(length-numberOfImages):
+                os.chdir(CalibratedImageDirectory)
 
                 ## array for Vertical Patterns
                 imageVert = cv.imread('imgVertCAML{}.png'.format(i), cv.IMREAD_UNCHANGED)
@@ -389,8 +389,8 @@ def DecodeGrayCode(binaryMaxValue,methodParameter):
         ArrayHorLWithoutMask = np.full((imgL.shape[0], imgL.shape[1]), "", dtype=object)
         ArrayVertRWithoutMask = np.full((imgR.shape[0], imgR.shape[1]), "", dtype=object)
         ArrayHorRWithoutMask = np.full((imgR.shape[0], imgR.shape[1]), "", dtype=object)
-        for i in range(Graycode.length - numberOfImages):  ## -1 because resolution of projector is higher than camera's
-            os.chdir(InputParameters.CalibratedImageDirectory)
+        for i in range(length - numberOfImages):  ## -1 because resolution of projector is higher than camera's
+            os.chdir(CalibratedImageDirectory)
 
             ## array for Vertical Patterns
             imageVert = cv.imread('imgVertCAML{}.png'.format(i), cv.IMREAD_UNCHANGED)
@@ -512,26 +512,26 @@ def DecodeGrayCode(binaryMaxValue,methodParameter):
             shutil.copyfile(original2, newLocation2)
 
         try :
-                os.remove(InputParameters.imagesLeft + '\global.png')
-                os.remove(InputParameters.imagesLeft + '\direct.png')
-                os.remove(InputParameters.imagesRight + '\global.png')
-                os.remove(InputParameters.imagesRight + '\direct.png')
+                os.remove(imagesLeft + '\global.png')
+                os.remove(imagesLeft + '\direct.png')
+                os.remove(imagesRight + '\global.png')
+                os.remove(imagesRight + '\direct.png')
         except:
             pass
 
-        GlobalDirect.separateGlobalDirect(InputParameters.imagesLeft)
-        GlobalDirect.separateGlobalDirect(InputParameters.imagesRight)
+        GlobalDirect.separateGlobalDirect(imagesLeft)
+        GlobalDirect.separateGlobalDirect(imagesRight)
 
 
-        for i in range(Graycode.length - numberOfImages):
+        for i in range(length - numberOfImages):
 
-            os.chdir(InputParameters.imagesLeft)
+            os.chdir(imagesLeft)
             imgGlobal = cv.imread('global.png')
             imgGlobalGray = cv.cvtColor(imgGlobal, cv.COLOR_BGR2GRAY)
             imgDirect = cv.imread('direct.png')
             imgDirectGray = cv.cvtColor(imgDirect, cv.COLOR_BGR2GRAY)
 
-            os.chdir(InputParameters.CalibratedImageDirectory)
+            os.chdir(CalibratedImageDirectory)
             imageVert = cv.imread('imgVertCAML{}.png'.format(i), cv.IMREAD_UNCHANGED)
             image_greyscaleVert = cv.cvtColor(imageVert, cv.COLOR_BGR2GRAY)
             ret, image_binaryVert = cv.threshold(image_greyscaleVert, threshold, binaryMaxValue, cv.THRESH_BINARY)
@@ -584,13 +584,13 @@ def DecodeGrayCode(binaryMaxValue,methodParameter):
             ArrayHorLWithoutMask = np.add(ArrayHorLWithoutMask, image_binaryHor)
 
 
-            os.chdir(InputParameters.imagesRight)
+            os.chdir(imagesRight)
             imgGlobal = cv.imread('global.png')
             imgGlobalGray = cv.cvtColor(imgGlobal, cv.COLOR_BGR2GRAY)
             imgDirect = cv.imread('direct.png')
             imgDirectGray = cv.cvtColor(imgDirect, cv.COLOR_BGR2GRAY)
 
-            os.chdir(InputParameters.CalibratedImageDirectory)
+            os.chdir(CalibratedImageDirectory)
             imageVert = cv.imread('imgVertCAMR{}.png'.format(i), cv.IMREAD_UNCHANGED)
             image_greyscaleVert = cv.cvtColor(imageVert, cv.COLOR_BGR2GRAY)
             ret, image_binaryVert = cv.threshold(image_greyscaleVert, threshold, binaryMaxValue, cv.THRESH_BINARY)
@@ -664,7 +664,7 @@ def DecodeGrayCode(binaryMaxValue,methodParameter):
 
     end = time.time()
     totaltime = end - start
-    print('Total computing time of method ', InputParameters.methodOfTriangulation, ": ", str(totaltime))
+    print('Total computing time of method ', methodOfTriangulation, ": ", str(totaltime))
 
 
 ## Function to get corresponding decimal values for a binary gray code

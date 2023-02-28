@@ -27,8 +27,6 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.vis_path = True
         self.animate = False
-        self.path = os.getcwd()
-        print(self.path)
         self.setupUi(self)
         ## Initialisation of GUI ##
         ## if changes are made to App_GUI.ui PLEASE add chosen_bot callable to the setupUi function and to self.visual = interface(self.centralwidget, robot=chosen_bot)
@@ -59,9 +57,13 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         ## all background related functions ##
         self.back = backend(self,custom_check = custom)
         ##link to Retna through prediction calling ##
-        self.prediction = prediction(self)
+        self.predict_left = prediction(self)
+        self.predict_right = prediction(self)
         ##link to 3D mapping code ##
         self.mapping = Mapping()
+
+        #TODO IMPLEMENT THREAD WITH CORRECT TIME LOOP THAT INNITATES 3D-mapping
+
         ## build the model in the interface and create the motor list and coordinate list ##
         self.back.model_build()
         ## all GUI variable function connections ##
@@ -85,10 +87,12 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 
     def image_update_left(self, raw_img, Image):
         self.mapping.cam.emit_camL = raw_img
+        #Image = self.predict_left.paste_predict(Image)
         self.camera_left.setPixmap(QPixmap.fromImage(Image))
     
     def image_update_right(self, raw_img, Image):
         self.mapping.cam.emit_camR = raw_img
+        #Image = self.predict_right.paste_predict(Image)
         self.camera_right.setPixmap(QPixmap.fromImage(Image))        
 
 
