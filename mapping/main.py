@@ -51,3 +51,11 @@ class Mapping():
         ## Triangulation
         Triangulation.PrintParameters()
         Triangulation.Triangulate()
+
+
+if __name__ == "__main__":
+    map = Mapping()
+    map.intrinsic_calibration
+    test_run = False
+    if test_run:
+        map.original_code
