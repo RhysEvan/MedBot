@@ -26,31 +26,31 @@ class Mapping():
 
             elif calibrate == 'no' or calibrate == 'No':
                 print('Calibration parameters of last calibration used :')
-                Triangulation.PrintParameters()
+                PrintParameters()
 
         except:
             print('Please type yes/no for calibration')
 
     def original_code(self):
         ## Cameracapture with Pattern Projection from projector
-        self.cam.GetFrame(Graycode.length)              # Input : number of images taken (dependant on resolution so "Graycode.length" is used)
+        self.cam.GetFrame(length)              # Input : number of images taken (dependant on resolution so "Graycode.length" is used)
         self.cam.GetThreshold()
-        Detection.DecodeGrayCode(InputParameters.binaryMaxValue,InputParameters.methodOfThreshold)
-        Detection.Gray2Dec()
+        DecodeGrayCode(binaryMaxValue,methodOfThreshold)
+        Gray2Dec()
 
         ## Triangulation
-        Triangulation.PrintParameters()
-        Triangulation.Triangulate()
+        PrintParameters()
+        Triangulate()
 
 
     def continuous_mapping(self):
         self.cam.ContinThreshold()
-        Detection.DecodeGrayCode(InputParameters.binaryMaxValue,InputParameters.methodOfThreshold)
-        Detection.Gray2Dec()
+        DecodeGrayCode(binaryMaxValue,methodOfThreshold)
+        Gray2Dec()
 
         ## Triangulation
-        Triangulation.PrintParameters()
-        Triangulation.Triangulate()
+        PrintParameters()
+        Triangulate()
 
 
 if __name__ == "__main__":

@@ -63,6 +63,11 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.mapping = Mapping()
 
         #TODO IMPLEMENT THREAD WITH CORRECT TIME LOOP THAT INNITATES 3D-mapping
+        ## QTimer methode ##
+
+        #self.sequence = QTimer(self)
+        #self.sequence.timeout.connect(self.process)
+        #self.sequence.start(100)
 
         ## build the model in the interface and create the motor list and coordinate list ##
         self.back.model_build()
@@ -93,7 +98,18 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     def image_update_right(self, raw_img, Image):
         self.mapping.cam.emit_camR = raw_img
         #Image = self.predict_right.paste_predict(Image)
-        self.camera_right.setPixmap(QPixmap.fromImage(Image))        
+        self.camera_right.setPixmap(QPixmap.fromImage(Image))     
+
+    ##################### Movement Sequencing ##########################
+
+    def process(self):
+        self.mapping.continuous_mapping()
+        # still needs a visualizer and other things like the projection of live images onto the map or the raw image onto the map
+        # implement a check system that looks for the points to stitch
+        # if there is a stitch initiate request for coordinates and run through inverse AI
+        # send commands through serial command
+        # wait till movements are ready/done
+        # run predefined path for end effector
 
 
 if __name__ == "__main__":

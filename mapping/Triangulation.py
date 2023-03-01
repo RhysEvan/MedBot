@@ -61,9 +61,9 @@ def Triangulate():
 
 
     ## Reading image for colors of point cloud
-    os.chdir(InputParameters.CalibratedImageDirectory)
+    os.chdir(CalibratedImageDirectory)
     img = cv.imread('imgHorCAML9.png', cv.IMREAD_UNCHANGED)
-    os.chdir(InputParameters.WorkingDirectory)
+    os.chdir(WorkingDirectory)
 
 
     inversLeftCam,inversRightCam = Detection.FindCorrespondence()
@@ -71,7 +71,7 @@ def Triangulate():
     shapeInversLeft = np.shape(inversLeftCam)
     shapeInversRight = np.shape(inversRightCam)
 
-    methodOfTriangulation = InputParameters.methodOfTriangulation
+    methodOfTriangulation = methodOfTriangulation
 
     if methodOfTriangulation == 1:
         for ii in range(0, min(shapeInversLeft[0], shapeInversRight[0]) - 1):
