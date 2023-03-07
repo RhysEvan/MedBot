@@ -27,7 +27,7 @@ class Feed(QThread):
             if ret is not None:
                 Pic = self.GetFrame()
                 if Pic:
-                    self.ImageUpdate.emit(self.Image, Pic)
+                    self.ImageUpdate.emit(Pic)
                 else:
                     self.cam.Close()
                     while True:
@@ -47,6 +47,7 @@ class Feed(QThread):
         if not (self.Image == 0).all() or self.first == True:
             self.Image = cv2.cvtColor(self.Image.astype(np.uint16), cv2.COLOR_BayerRGGB2RGB)
             self.Image = self.white_balance_image(self.Image,self.Calib)
+            self.Raw_Image = self.Image
             self.Image = self.Image.astype(np.uint8)
             ConvertToQtFormat = QImage(self.Image.data, self.Image.shape[1], self.Image.shape[0], QImage.Format_RGB888)
             Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
