@@ -202,7 +202,7 @@ void move_stepper() {
 
   arg = SCmd.next();
 
-  if (arg == NULL)   {Serial.println("Not recognized: No hieght parameter given");
+  if (arg == NULL)   {Serial.println("Not recognized: No height parameter given");
                       return;}
 
   angle = atof(arg);
