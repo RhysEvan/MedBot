@@ -1,4 +1,4 @@
-from Retna import main
+from Retna.main import Main
 from PIL import Image
 import numpy as np
 from skimage.morphology import skeletonize
@@ -9,7 +9,7 @@ from PyQt5.QtGui import *
 
 class prediction():
     def __init__(self, main):
-        self.retna = main.Main
+        self.retna = Main
         self.gui = main
     
     def show_predict(self):

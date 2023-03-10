@@ -3,22 +3,26 @@ import cv2
 import numpy as np
 import cv2 as cv
 import open3d as o3d
-from .InputParameters import *
+import InputParameters
 import csv
-from .Visualization import *
+import Visualization
 
 ## Function to print the used parameters for calibration
 def PrintParameters():
     import pickle
-    os.chdir(WorkingDirectory)
+    os.chdir(InputParameters.WorkingDirectory)
     with open('RotationMatrix.pkl', 'rb') as file3:
         rot = pickle.load(file3)
+        print('Rotation Matrix : ',rot)
     with open('TranslationMatrix.pkl', 'rb') as file4:
         trans = pickle.load(file4)
+        print('Translation Matrix : ', trans)
     with open('ProjectionMatrixLeftCam.pkl', 'rb') as file1:
         p1 = pickle.load(file1)
+        print('Projection Matrix for Left Cam: ',p1)
     with open('ProjectionMatrixRightCam.pkl', 'rb') as file2:
         p2 = pickle.load(file2)
+        print('Projection Matrix for Right Cam: ',p2)
 
     with open('RotatieMatrixRechterCamera.csv', 'w+', newline='') as csvfile:
         my_writer = csv.writer(csvfile, delimiter=' ')
@@ -61,9 +65,9 @@ def Triangulate():
 
 
     ## Reading image for colors of point cloud
-    os.chdir(CalibratedImageDirectory)
+    os.chdir(InputParameters.CalibratedImageDirectory)
     img = cv.imread('imgHorCAML9.png', cv.IMREAD_UNCHANGED)
-    os.chdir(WorkingDirectory)
+    os.chdir(InputParameters.WorkingDirectory)
 
 
     inversLeftCam,inversRightCam = Detection.FindCorrespondence()
@@ -71,7 +75,7 @@ def Triangulate():
     shapeInversLeft = np.shape(inversLeftCam)
     shapeInversRight = np.shape(inversRightCam)
 
-    methodOfTriangulation = methodOfTriangulation
+    methodOfTriangulation = InputParameters.methodOfTriangulation
 
     if methodOfTriangulation == 1:
         for ii in range(0, min(shapeInversLeft[0], shapeInversRight[0]) - 1):
@@ -218,6 +222,8 @@ def Triangulate():
 
 
     ## Writing PLY file trhough open3D
+    print("Number of points : ",np.shape(testarray))
+    print("Number of colors :",np.shape(colors))
     xyz = np.array(testarray)
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(xyz)                ## Put Nx3 array in o3d format
@@ -226,6 +232,7 @@ def Triangulate():
 
 
     ######################################VISUALIZATION#################################################################
+    print(testarray)
     Visualization.visualisePointCloud(testarray,colors)
 
 

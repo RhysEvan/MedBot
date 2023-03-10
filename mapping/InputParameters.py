@@ -2,8 +2,8 @@
 
 
 ## Input settings used in Camera1()
-LeftCamera = 0                      ## Dependant on which usb portal is used
-RightCamera = 4                     ## Dependant on which usb portal is used
+LeftCamera = "2BA200004266"                      ## Dependant on which usb portal is used
+RightCamera = "2BA200004267"                     ## Dependant on which usb portal is used
 
 ## Parameters for generation of graycode patterns
 width = 640
@@ -23,5 +23,5 @@ CalibratedImageDirectory = r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_
 ChessboardImagesDirectory = r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\mapping\ChessboardImages"
 StereovisionDirectory = r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\mapping\Stereovision"
 imagesLeft = r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\mapping\imagesLeft"
-imagesRight = r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\mapping\imagesRight"
+imagesRight = r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\mapping\timagesRight"
 

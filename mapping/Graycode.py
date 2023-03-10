@@ -5,9 +5,16 @@ import math
 import sys
 import numpy.matlib
 from PIL import Image
-from .Camera1 import *
-from .InputParameters import *
+import Camera1
+import InputParameters
 np.set_printoptions(threshold=sys.maxsize)
+
+
+
+width = InputParameters.width
+height = InputParameters.height
+image_resolution = InputParameters.image_resolution
+
 
 N = math.ceil(math.log2(width))
 offset = math.floor((2 ^ N - 1) / 2)

@@ -9,12 +9,12 @@ import numpy as np
 from static.Robot_Control_Panel import Ui_MainWindow
 from connections.serial_com_GRBL import *
 from connections.serial_com_CUSTOM import *
-from mapping.main import *
 
 from static.json_compiler import *
 from static.backend_GUI import backend
 from static.triggers import trigger
 from static.prediction import prediction
+#from static.map_sequencing import Map
 try:
     from connections.cameras import *
     pleora_lib = True
@@ -60,7 +60,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.predict_left = prediction(self)
         self.predict_right = prediction(self)
         ##link to 3D mapping code ##
-        self.mapping = Mapping()
+        #self.mapping = Map(self)
 
         #TODO IMPLEMENT THREAD WITH CORRECT TIME LOOP THAT INNITATES 3D-mapping
         ## QTimer methode ##
@@ -91,12 +91,12 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     ####################### threading method  ######################################
 
     def image_update_left(self, Image):
-        self.mapping.cam.emit_camL = self.cam_l.Raw_Image
+        #self.mapping.cam.emit_camL = self.cam_l.Raw_Image
         #Image = self.predict_left.paste_predict(Image)
         self.camera_left.setPixmap(QPixmap.fromImage(Image))
     
     def image_update_right(self, Image):
-        self.mapping.cam.emit_camR = self.cam_r.Raw_Image
+        #self.mapping.cam.emit_camR = self.cam_r.Raw_Image
         #Image = self.predict_right.paste_predict(Image)
         self.camera_right.setPixmap(QPixmap.fromImage(Image))     
 
