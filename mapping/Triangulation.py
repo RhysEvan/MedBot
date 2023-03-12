@@ -228,12 +228,8 @@ def Triangulate():
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(xyz)                ## Put Nx3 array in o3d format
     pcd.colors = o3d.utility.Vector3dVector(colors)
-    o3d.io.write_point_cloud("./Point Cloud.ply", pcd, write_ascii=True)
-
-
     ######################################VISUALIZATION#################################################################
-    print(testarray)
-    Visualization.visualisePointCloud(testarray,colors)
+    Visualization.visualisePointCloud(pcd)
 
 
 ## Currently Threshold picture is being used instead of taking a separate picture for colors
