@@ -91,12 +91,12 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     ####################### threading method  ######################################
 
     def image_update_left(self, Image):
-        #self.mapping.cam.emit_camL = self.cam_l.Raw_Image
+        self.mapping.handler.emit_camL = self.cam_l.Raw_Image
         #Image = self.predict_left.paste_predict(Image)
         self.camera_left.setPixmap(QPixmap.fromImage(Image))
     
     def image_update_right(self, Image):
-        #self.mapping.cam.emit_camR = self.cam_r.Raw_Image
+        self.mapping.handler.emit_camR = self.cam_r.Raw_Image
         #Image = self.predict_right.paste_predict(Image)
         self.camera_right.setPixmap(QPixmap.fromImage(Image))     
 

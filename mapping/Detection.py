@@ -74,8 +74,6 @@ def ShadowMask():
 
     return ShadowmaskL,ShadowmaskR,threshold
 
-
-
 ## Function used in method 5 of DecodeGrayCode for using mean value per pixel thresholding
 def findingThresholdShadowMask():
     imageAllWhite = cv.imread('ThresholdCAML0.png', cv.IMREAD_UNCHANGED)
@@ -93,7 +91,6 @@ def findingThresholdShadowMask():
     ThresholdArrayR = ThresholdArray / 2
 
     return ThresholdArrayL,ThresholdArrayR
-
 
 ## Different algorithms for decoding structured light. Choosing between methods is possible with input methodParameter.
 def DecodeGrayCode(binaryMaxValue,methodParameter):
@@ -128,8 +125,6 @@ def DecodeGrayCode(binaryMaxValue,methodParameter):
             imageVert = cv.imread('imgVertCAML{}.png'.format(i), cv.IMREAD_UNCHANGED)
             image_greyscaleVert = cv.cvtColor(imageVert, cv.COLOR_BGR2GRAY)
             ret, image_binaryVert = cv.threshold(image_greyscaleVert, threshold, binaryMaxValue, cv.THRESH_BINARY)
-            imagebinarytest = image_binaryVert.copy()  ## (Tijdelijk om te zien of zwart wit afbeelding in orde is)
-            imagebinarytest[imagebinarytest > 0] = 255
             if i == 6 or 7 or 8 or 5:
                 cv.imwrite("testSimpleCAML{}.png".format(i), imagebinarytest)
             image_binaryVert = image_binaryVert.astype('str')
@@ -636,46 +631,38 @@ def DecodeGrayCode(binaryMaxValue,methodParameter):
             ArrayHorRWithoutMask = np.add(ArrayHorRWithoutMask, image_binaryHor)
             print(i+1,' done')
 
-
-
     ## If no mask is needed. or masking cannot be done correctly because of reflective surface set nomask to True. This way no mask will be added
     nomask = False
     if nomask == True:
         maskX = np.zeros_like(ArrayVertLWithoutMask)
         maskY= np.zeros_like(ArrayVertRWithoutMask)
 
-
     ################################################# APPLYING MASKS TO DIFFERENT MATRICES FOR LATER USE #########################################################
     arrayVertLMasked = ma.masked_array(ArrayVertLWithoutMask,mask= maskX)
     arrayVertLMasked = ma.filled(arrayVertLMasked, '0')
-    # image_binaryVertLMasked = image_binaryVertMasked.astype('str')
 
     arrayHorLMasked = ma.masked_array(ArrayHorLWithoutMask, mask=maskX)
     arrayHorLMasked = ma.filled(arrayHorLMasked, '0')
-    #image_binaryHorMasked = image_binaryHorMasked.astype('str')
 
     arrayVertRMasked = ma.masked_array(ArrayVertRWithoutMask, mask=maskY)
     arrayVertRMasked = ma.filled(arrayVertRMasked, '0')
-    # image_binaryVertLMasked = image_binaryVertMasked.astype('str')
 
     arrayHorRMasked = ma.masked_array(ArrayHorRWithoutMask, mask=maskY)
     arrayHorRMasked = ma.filled(arrayHorRMasked, '0')
-    # image_binaryVertLMasked = image_binaryVertMasked.astype('str')
 
     end = time.time()
     totaltime = end - start
     print('Total computing time of method ', InputParameters.methodOfTriangulation, ": ", str(totaltime))
 
-
 ## Function to get corresponding decimal values for a binary gray code
 def inversegrayCode(n):
-    inv = 0;
+    inv = 0
     # Taking xor until
     # n becomes zero
     while (n):
-        inv = inv ^ n;
-        n = n >> 1;
-    return inv;
+        inv = inv ^ n
+        n = n >> 1
+    return inv
 
 ## Function to get decimal value of gray code
 def Gray2Dec():
@@ -683,39 +670,22 @@ def Gray2Dec():
     global arrayHorLMasked
     global arrayVertRMasked
     global arrayHorRMasked
-
     print('Converting Gray to dec code')
     for i in range(heightL):
         for j in range(widthL):
-            arrayVertLMasked[i][j] = int(arrayVertLMasked[i][j], 2)
-            arrayHorLMasked[i][j] = int(arrayHorLMasked[i][j], 2)
-    for i in range(heightR):
-        for j in range(widthR):
-            arrayVertRMasked[i][j] = int(arrayVertRMasked[i][j], 2)
-            arrayHorRMasked[i][j] = int(arrayHorRMasked[i][j], 2)
-
-    for i in range(heightL):
-        for j in range(widthL):
-            x = inversegrayCode(arrayVertLMasked[i][j])
-            y = inversegrayCode(arrayHorLMasked[i][j])
-            arrayVertLMasked[i][j] = x
-            arrayHorLMasked[i][j] = y
+            arrayVertLMasked[i][j] = inversegrayCode(int(arrayVertLMasked[i][j], 2))
+            arrayHorLMasked[i][j] = inversegrayCode(int(arrayHorLMasked[i][j], 2))
 
     for i in range(heightR):
         for j in range(widthR):
-            x = inversegrayCode(arrayVertRMasked[i][j])
-            y = inversegrayCode(arrayHorRMasked[i][j])
-            arrayVertRMasked[i][j] = x
-            arrayHorRMasked[i][j] = y
-
+            arrayVertRMasked[i][j] = inversegrayCode(int(arrayVertRMasked[i][j], 2))
+            arrayHorRMasked[i][j] = inversegrayCode(int(arrayHorRMasked[i][j], 2))
 
 ## Extra function for plotting a gradient picture of the scene.
 def gradientImage():
     x = np.array(arrayVertLMasked, dtype=float)
     plt.imshow(x, cmap='jet')
     plt.show()
-
-
 
 ##Function to create inverse matrices used for easier correspondence matching. Gets used in Triangulaton()
 def FindCorrespondence():

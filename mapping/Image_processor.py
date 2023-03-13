@@ -8,11 +8,12 @@ from CameraModel.Pleora.RGB.GenericRGBCamera import GenericRGBCamera
 from skimage import img_as_ubyte
 
 
-class Webcam:
+class Image():
     def __init__(self, location = None):
         self.cam = GenericRGBCamera()
         self.loc = location
-        pass
+        self.emit_camL = []
+        self.emit_camR = []
 
     def OpenCAM (self):
         ret = self.cam.Open(self.loc)
@@ -113,6 +114,61 @@ class Webcam:
         cam2.release()
         cv2.destroyAllWindows()
         Projector.DestroyWindow()
+    
+    def ContinThreshold(self):
+        image_counter = 0
+        while True:
+            if image_counter < 2:
+                Projector.imgToScrn(0, 'Thresholdimage{}.png'.format(image_counter))
+                time.sleep(0.19)
+                os.chdir(InputParameters.ImageDirectory)  # Temporary way of saving images in certain file (still needs to be changed)
+                cv2.imwrite("ThresholdCAML{}.png".format(image_counter), self.emit_camL)
+                cv2.imwrite("ThresholdCAMR{}.png".format(image_counter), self.emit_camR)
+                os.chdir(InputParameters.WorkingDirectory)  # Temporary way of saving images in certain file (still needs to be changed)
+                image_counter += 1
+            else:
+                break
+
+    def ContinFrame(self,numberOfImages):
+        image_counter = 0
+        os.chdir(InputParameters.ImageDirectory)
+        while True :            ## First loop for Vertical patterns
+            if image_counter < numberOfImages:
+                Projector.imgToScrn(0, 'graycodeVert{}.png'.format(image_counter))
+                if image_counter == 0:
+                    time.sleep(0.3)                                       # Longer waiting time with first picture for better light adjustment
+                else:
+                    time.sleep(0.3)
+                cv2.imwrite("imgVertCAML{}.png".format(image_counter), self.emit_camL)
+                cv2.imwrite("imgVertCAMR{}.png".format(image_counter), self.emit_camR)
+
+                ## Patterns for invers Gray code
+                Projector.imgToScrn(0, 'graycodeVertInv{}.png'.format(image_counter))
+                time.sleep(0.3)
+                cv2.imwrite("imgVertINVCAML{}.png".format(image_counter), self.emit_camL)
+                cv2.imwrite("imgVertINVCAMR{}.png".format(image_counter), self.emit_camR)
+                image_counter += 1
+            else :
+                break
+
+        image_counter = 0
+        while True :            ## Second loop for Horizontal patterns
+            if image_counter < numberOfImages:
+                Projector.imgToScrn(0, 'graycodeHor{}.png'.format(image_counter))
+                time.sleep(0.3)
+                cv2.imwrite("imgHorCAML{}.png".format(image_counter) , self.emit_camL)
+                cv2.imwrite("imgHorCAMR{}.png".format(image_counter), self.emit_camR)
+
+                ## Patterns for invers Gray code
+                Projector.imgToScrn(0, 'graycodeHorInv{}.png'.format(image_counter))
+                time.sleep(0.3)
+                cv2.imwrite("imgHorINVCAML{}.png".format(image_counter), self.emit_camL)
+                cv2.imwrite("imgHorINVCAMR{}.png".format(image_counter), self.emit_camR)
+
+                image_counter += 1
+            else :
+                break
+
 
     def white_balance_image(self, image, Calib):
         return img_as_ubyte((image * 1.0 / Calib).clip(0, 1))

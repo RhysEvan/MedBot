@@ -1,4 +1,4 @@
-from Camera1 import *
+from Image_processor import *
 from Graycode import *
 from Triangulation import *
 import cv2
@@ -14,7 +14,7 @@ from Detection import *
 #pattern.RepmatHorizontal()
 class Mapping():
     def __init__(self):
-        self.cam = Webcam()
+        self.handler = Image()
 
     def intrinsic_calibration(self):
         ## Calibration
@@ -28,8 +28,8 @@ class Mapping():
 
     def original_code(self):
         ## Cameracapture with Pattern Projection from projector
-        self.cam.GetFrame(length)              # Input : number of images taken (dependant on resolution so "Graycode.length" is used)
-        self.cam.GetThreshold()
+        self.handler.Frame(length)              # Input : number of images taken (dependant on resolution so "Graycode.length" is used)
+        self.handler.GetThreshold()
         DecodeGrayCode(binaryMaxValue,methodOfThreshold)
         Gray2Dec()
 
@@ -38,7 +38,8 @@ class Mapping():
         Triangulate()
 
     def continuous_mapping(self):
-        self.cam.ContinThreshold()
+        self.handler.ContinFrame()
+        self.handler.ContinThreshold()
         DecodeGrayCode(binaryMaxValue,methodOfThreshold)
         Gray2Dec()
 
