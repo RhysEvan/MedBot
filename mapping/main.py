@@ -1,4 +1,4 @@
-from Image_processor import *
+from Image_processor import Image_Handle
 from Graycode import *
 from Triangulation import *
 import cv2
@@ -12,9 +12,14 @@ from Detection import *
 #pattern.GrayCode()
 #pattern.RepmatVertical()
 #pattern.RepmatHorizontal()
+
 class Mapping():
     def __init__(self):
-        self.handler = Image()
+        self.cont_handler = Image_Handle()
+
+        if __name__ == "__main__":
+                self.handler = Image_Handle(test = True, location_L= InputParameters.LeftCamera, location_R= InputParameters.RightCamera)
+                self.handler.OpenCAM()
 
     def intrinsic_calibration(self):
         ## Calibration
@@ -25,22 +30,25 @@ class Mapping():
         elif calibrate == 'no' or calibrate == 'No':
             print('Calibration parameters of last calibration used :')
             PrintParameters()
-
-    def original_code(self):
-        ## Cameracapture with Pattern Projection from projector
-        self.handler.Frame(length)              # Input : number of images taken (dependant on resolution so "Graycode.length" is used)
-        self.handler.GetThreshold()
-        DecodeGrayCode(binaryMaxValue,methodOfThreshold)
+    
+    def map_test_code(self):
+        start = time.time()
+        Vert_list, INV_Vert_list, Horz_list, INV_Horz_list = self.handler.single_run_frame(length)
+        Threshold_list = self.handler.single_run_Threshold()
+        end = time.time()
+        print(end-start)
+        DecodeGrayCode(binaryMaxValue,Threshold_list,Vert_list, INV_Vert_list, Horz_list, INV_Horz_list)
         Gray2Dec()
 
         ## Triangulation
         PrintParameters()
         Triangulate()
+        
 
     def continuous_mapping(self):
-        self.handler.ContinFrame()
-        self.handler.ContinThreshold()
-        DecodeGrayCode(binaryMaxValue,methodOfThreshold)
+        self.cont_handler.ContinFrame()
+        self.cont_handler.ContinThreshold()
+        DecodeGrayCode(binaryMaxValue)
         Gray2Dec()
 
         ## Triangulation
@@ -53,4 +61,4 @@ if __name__ == "__main__":
     #map.intrinsic_calibration()
     test_run = True
     if test_run:
-        map.original_code
+        map.map_test_code()

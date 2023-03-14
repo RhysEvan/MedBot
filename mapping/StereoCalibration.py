@@ -3,7 +3,7 @@ import cv2 as cv
 import numpy as np
 import Graycode
 import os
-import Camera1
+import Image_processor
 import pickle
 import InputParameters
 import csv
@@ -16,8 +16,8 @@ frameSize = (640,480)
 LeftCamera = InputParameters.LeftCamera
 RightCamera = InputParameters.RightCamera
 
-camL = Camera1.Webcam(LeftCamera)
-camR = Camera1.Webcam(RightCamera)
+camL = Image_processor.Image_Handle(LeftCamera)
+camR = Image_processor.Image_Handle(RightCamera)
 camL.OpenCAM()
 camR.OpenCAM()
 ## Termination Criteria for iterative subpixel loop

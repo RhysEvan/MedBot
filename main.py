@@ -14,7 +14,7 @@ from static.json_compiler import *
 from static.backend_GUI import backend
 from static.triggers import trigger
 from static.prediction import prediction
-#from static.map_sequencing import Map
+from static.map_sequencing import Map
 try:
     from connections.cameras import *
     pleora_lib = True
@@ -27,6 +27,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.vis_path = True
         self.animate = False
+        self.map_run = False
         self.setupUi(self)
         ## Initialisation of GUI ##
         ## if changes are made to App_GUI.ui PLEASE add chosen_bot callable to the setupUi function and to self.visual = interface(self.centralwidget, robot=chosen_bot)
@@ -73,6 +74,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.back.model_build()
         ## all GUI variable function connections ##
         trigger(self)
+        print("add functionality to switch between active RGB and active Mapping")
         ## call to button functions and their forward to internal functions ##       
         self.show()
 
@@ -91,14 +93,18 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     ####################### threading method  ######################################
 
     def image_update_left(self, Image):
-        self.mapping.handler.emit_camL = self.cam_l.Raw_Image
-        #Image = self.predict_left.paste_predict(Image)
-        self.camera_left.setPixmap(QPixmap.fromImage(Image))
+        if not self.map_run:
+            #Image = self.predict_left.paste_predict(Image)
+            self.camera_left.setPixmap(QPixmap.fromImage(Image))
+        else:
+            self.mapping.handler.emit_camL = Image
     
     def image_update_right(self, Image):
-        self.mapping.handler.emit_camR = self.cam_r.Raw_Image
-        #Image = self.predict_right.paste_predict(Image)
-        self.camera_right.setPixmap(QPixmap.fromImage(Image))     
+        if not self.map_run:
+            #Image = self.predict_left.paste_predict(Image)
+            self.camera_right.setPixmap(QPixmap.fromImage(Image))
+        else:
+            self.mapping.handler.emit_camR = Image
 
     ##################### Movement Sequencing ##########################
 

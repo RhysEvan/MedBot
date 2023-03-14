@@ -18,9 +18,7 @@ widthR = imgR.shape[1]
 heightR = imgR.shape[0]
 
 ## Finding mask array to delete shadow pixels. This mask array is chosen by visualizing binary images where threshold can be adjusted to find optimal threshold value.
-def ShadowMask():
-    os.chdir(InputParameters.CalibratedImageDirectory)
-
+def ShadowMask(Threshold_list):
     ## Function to show binary images to set Threshold value. Gets called with cv.CreateTrackbar
     def on_change(value):
         global getThresh
@@ -93,7 +91,7 @@ def findingThresholdShadowMask():
     return ThresholdArrayL,ThresholdArrayR
 
 ## Different algorithms for decoding structured light. Choosing between methods is possible with input methodParameter.
-def DecodeGrayCode(binaryMaxValue,methodParameter):
+def DecodeGrayCode(binaryMaxValue,Threshold_list,Vert_list, INV_Vert_list, Horz_list, INV_Horz_list):
     global arrayVertLMasked
     global arrayHorLMasked
     global arrayVertRMasked
@@ -101,93 +99,86 @@ def DecodeGrayCode(binaryMaxValue,methodParameter):
     numberOfImages = InputParameters.numberOfImages      ## number of higher frequency patterns that are not used. Limited resolution can mean less patterns results in higher resolution
 
     ## Getting shadowmask images
-    maskX, maskY, threshold = ShadowMask()
+    maskX, maskY, threshold = ShadowMask(Threshold_list)
 
     ## Finding threshold through mean. Gets used in method 5 for per-pixel mean value thresholding
     ThresholdL, ThresholdR = findingThresholdShadowMask()
 
     ################################################# DIFFERENT DECODING METHODS ###############################################################
-    print('Processing Taken Images...')
     start = time.time()
 
     #OLD METHOD.PY has all the methods that were not used for this thesis
+    ArrayVertLWithoutMask = np.full((imgL.shape[0], imgL.shape[1]), "", dtype=object)
+    ArrayHorLWithoutMask = np.full((imgL.shape[0], imgL.shape[1]), "", dtype=object)
+    ArrayVertRWithoutMask = np.full((imgR.shape[0], imgR.shape[1]), "", dtype=object)
+    ArrayHorRWithoutMask = np.full((imgR.shape[0], imgR.shape[1]), "", dtype=object)
+    for i in range(Graycode.length - numberOfImages):  ## -1 because resolution of projector is higher than camera's
+        os.chdir(InputParameters.CalibratedImageDirectory)
 
-    ## 5) Using invers patterns
-    if methodParameter == 5:
-        ArrayVertLWithoutMask = np.full((imgL.shape[0], imgL.shape[1]), "", dtype=object)
-        ArrayHorLWithoutMask = np.full((imgL.shape[0], imgL.shape[1]), "", dtype=object)
-        ArrayVertRWithoutMask = np.full((imgR.shape[0], imgR.shape[1]), "", dtype=object)
-        ArrayHorRWithoutMask = np.full((imgR.shape[0], imgR.shape[1]), "", dtype=object)
-        for i in range(Graycode.length - numberOfImages):  ## -1 because resolution of projector is higher than camera's
-            os.chdir(InputParameters.CalibratedImageDirectory)
+        ## array for Vertical Patterns
+        imageVert = cv.imread('imgVertCAML{}.png'.format(i), cv.IMREAD_UNCHANGED)
+        image_greyscaleVert = cv.cvtColor(imageVert, cv.COLOR_BGR2GRAY)
+        #ret, image_binaryVert = cv.threshold(image_greyscaleVert, threshold, binaryMaxValue, cv.THRESH_BINARY)
+        imageVertINV = cv.imread('imgVertINVCAML{}.png'.format(i),cv.IMREAD_UNCHANGED)
+        image_greyscaleVertINV = cv.cvtColor(imageVertINV, cv.COLOR_BGR2GRAY)
+        #ret, image_binaryVertINV = cv.threshold(image_greyscaleVertINV, threshold, binaryMaxValue, cv.THRESH_BINARY)
+        image_greyscaleVert[image_greyscaleVert >= image_greyscaleVertINV] = 1
+        image_greyscaleVert[image_greyscaleVert > 1] = 0
+        image_binaryVert = image_greyscaleVert
+        imagebinarytest = image_binaryVert.copy()  ## (Tijdelijk om te zien of zwart wit afbeelding in orde is)
+        imagebinarytest[imagebinarytest > 0] = 255
 
-            ## array for Vertical Patterns
-            imageVert = cv.imread('imgVertCAML{}.png'.format(i), cv.IMREAD_UNCHANGED)
-            image_greyscaleVert = cv.cvtColor(imageVert, cv.COLOR_BGR2GRAY)
-            #ret, image_binaryVert = cv.threshold(image_greyscaleVert, threshold, binaryMaxValue, cv.THRESH_BINARY)
-            imageVertINV = cv.imread('imgVertINVCAML{}.png'.format(i),cv.IMREAD_UNCHANGED)
-            image_greyscaleVertINV = cv.cvtColor(imageVertINV, cv.COLOR_BGR2GRAY)
-            #ret, image_binaryVertINV = cv.threshold(image_greyscaleVertINV, threshold, binaryMaxValue, cv.THRESH_BINARY)
-            image_greyscaleVert[image_greyscaleVert >= image_greyscaleVertINV] = 1
-            image_greyscaleVert[image_greyscaleVert > 1] = 0
-            image_binaryVert = image_greyscaleVert
-            imagebinarytest = image_binaryVert.copy()  ## (Tijdelijk om te zien of zwart wit afbeelding in orde is)
-            imagebinarytest[imagebinarytest > 0] = 255
+        if i == 6 or 7 or 8 or 5 or 9:
+            cv.imwrite("testInversCAML{}.png".format(i), imagebinarytest)
+        image_binaryVert = image_binaryVert.astype('str')
+        ArrayVertLWithoutMask = np.add(ArrayVertLWithoutMask, image_binaryVert)
 
-            if i == 6 or 7 or 8 or 5 or 9:
-                cv.imwrite("testInversCAML{}.png".format(i), imagebinarytest)
-            image_binaryVert = image_binaryVert.astype('str')
-            ArrayVertLWithoutMask = np.add(ArrayVertLWithoutMask, image_binaryVert)
+        ## Array for Horizontal patterns
+        imageHor = cv.imread('imgHorCAML{}.png'.format(i), cv.IMREAD_UNCHANGED)
+        image_greyscaleHor = cv.cvtColor(imageHor, cv.COLOR_BGR2GRAY)
+        #ret, image_binaryHor = cv.threshold(image_greyscaleHor, threshold, binaryMaxValue, cv.THRESH_BINARY)
+        imageHorINV = cv.imread('imgHorINVCAML{}.png'.format(i), cv.IMREAD_UNCHANGED)
+        image_greyscaleHorINV = cv.cvtColor(imageHorINV, cv.COLOR_BGR2GRAY)
+        #ret, image_binaryHorINV = cv.threshold(image_greyscaleHorINV, threshold, binaryMaxValue, cv.THRESH_BINARY)
+        image_greyscaleHor[image_greyscaleHor >= image_greyscaleHorINV] = 1
+        image_greyscaleHor[image_greyscaleHor > 1] = 0
+        image_binaryHor = image_greyscaleHor
 
-            ## Array for Horizontal patterns
-            imageHor = cv.imread('imgHorCAML{}.png'.format(i), cv.IMREAD_UNCHANGED)
-            image_greyscaleHor = cv.cvtColor(imageHor, cv.COLOR_BGR2GRAY)
-            #ret, image_binaryHor = cv.threshold(image_greyscaleHor, threshold, binaryMaxValue, cv.THRESH_BINARY)
-            imageHorINV = cv.imread('imgHorINVCAML{}.png'.format(i), cv.IMREAD_UNCHANGED)
-            image_greyscaleHorINV = cv.cvtColor(imageHorINV, cv.COLOR_BGR2GRAY)
-            #ret, image_binaryHorINV = cv.threshold(image_greyscaleHorINV, threshold, binaryMaxValue, cv.THRESH_BINARY)
-            image_greyscaleHor[image_greyscaleHor >= image_greyscaleHorINV] = 1
-            image_greyscaleHor[image_greyscaleHor > 1] = 0
-            image_binaryHor = image_greyscaleHor
+        imagebinarytest = image_binaryHor.copy()  ## (Tijdelijk om te zien of zwart wit afbeelding in orde is)
+        imagebinarytest[imagebinarytest > 0] = 255
+        if i == 6 or 7 or 8 or 5 or 9:
+            cv.imwrite("testInversHORICAML{}.png".format(i), imagebinarytest)
 
-            imagebinarytest = image_binaryHor.copy()  ## (Tijdelijk om te zien of zwart wit afbeelding in orde is)
-            imagebinarytest[imagebinarytest > 0] = 255
-            if i == 6 or 7 or 8 or 5 or 9:
-                cv.imwrite("testInversHORICAML{}.png".format(i), imagebinarytest)
+        image_binaryHor = image_binaryHor.astype('str')
+        ArrayHorLWithoutMask = np.add(ArrayHorLWithoutMask, image_binaryHor)
 
-            image_binaryHor = image_binaryHor.astype('str')
-            ArrayHorLWithoutMask = np.add(ArrayHorLWithoutMask, image_binaryHor)
+        ## Array for Vertical patterns
+        imageVert = cv.imread('imgVertCAMR{}.png'.format(i), cv.IMREAD_UNCHANGED)
+        image_greyscaleVert = cv.cvtColor(imageVert, cv.COLOR_BGR2GRAY)
+        #ret, image_binaryVert = cv.threshold(image_greyscaleVert, threshold, binaryMaxValue, cv.THRESH_BINARY)
+        imageVertINV = cv.imread('imgVertINVCAMR{}.png'.format(i), cv.IMREAD_UNCHANGED)
+        image_greyscaleVertINV = cv.cvtColor(imageVertINV, cv.COLOR_BGR2GRAY)
+        #ret, image_binaryVertINV = cv.threshold(image_greyscaleVertINV, threshold, binaryMaxValue, cv.THRESH_BINARY)
+        image_greyscaleVert[image_greyscaleVert >= image_greyscaleVertINV] = 1
+        image_greyscaleVert[image_greyscaleVert > 1] = 0
+        image_binaryVert = image_greyscaleVert
+        image_binaryVert = image_binaryVert.astype('str')
+        ArrayVertRWithoutMask = np.add(ArrayVertRWithoutMask, image_binaryVert)
 
+        ## Array for horizontal patterns
+        imageHor = cv.imread('imgHorCAMR{}.png'.format(i), cv.IMREAD_UNCHANGED)
+        image_greyscaleHor = cv.cvtColor(imageHor, cv.COLOR_BGR2GRAY)
+        #ret, image_binaryHor = cv.threshold(image_greyscaleHor, threshold, binaryMaxValue, cv.THRESH_BINARY)
+        imageHorINV = cv.imread('imgHorINVCAMR{}.png'.format(i), cv.IMREAD_UNCHANGED)
+        image_greyscaleHorINV = cv.cvtColor(imageHorINV, cv.COLOR_BGR2GRAY)
+        #ret, image_binaryHorINV = cv.threshold(image_greyscaleHorINV, threshold, binaryMaxValue, cv.THRESH_BINARY)
+        image_greyscaleHor[image_greyscaleHor >= image_greyscaleHorINV] = 1
+        image_greyscaleHor[image_greyscaleHor > 1] = 0
+        image_binaryHor = image_greyscaleHor
+        image_binaryHor = image_binaryHor.astype('str')
+        ArrayHorRWithoutMask = np.add(ArrayHorRWithoutMask, image_binaryHor)
 
-
-
-            ## Array for Vertical patterns
-            imageVert = cv.imread('imgVertCAMR{}.png'.format(i), cv.IMREAD_UNCHANGED)
-            image_greyscaleVert = cv.cvtColor(imageVert, cv.COLOR_BGR2GRAY)
-            #ret, image_binaryVert = cv.threshold(image_greyscaleVert, threshold, binaryMaxValue, cv.THRESH_BINARY)
-            imageVertINV = cv.imread('imgVertINVCAMR{}.png'.format(i), cv.IMREAD_UNCHANGED)
-            image_greyscaleVertINV = cv.cvtColor(imageVertINV, cv.COLOR_BGR2GRAY)
-            #ret, image_binaryVertINV = cv.threshold(image_greyscaleVertINV, threshold, binaryMaxValue, cv.THRESH_BINARY)
-            image_greyscaleVert[image_greyscaleVert >= image_greyscaleVertINV] = 1
-            image_greyscaleVert[image_greyscaleVert > 1] = 0
-            image_binaryVert = image_greyscaleVert
-            image_binaryVert = image_binaryVert.astype('str')
-            ArrayVertRWithoutMask = np.add(ArrayVertRWithoutMask, image_binaryVert)
-
-            ## Array for horizontal patterns
-            imageHor = cv.imread('imgHorCAMR{}.png'.format(i), cv.IMREAD_UNCHANGED)
-            image_greyscaleHor = cv.cvtColor(imageHor, cv.COLOR_BGR2GRAY)
-            #ret, image_binaryHor = cv.threshold(image_greyscaleHor, threshold, binaryMaxValue, cv.THRESH_BINARY)
-            imageHorINV = cv.imread('imgHorINVCAMR{}.png'.format(i), cv.IMREAD_UNCHANGED)
-            image_greyscaleHorINV = cv.cvtColor(imageHorINV, cv.COLOR_BGR2GRAY)
-            #ret, image_binaryHorINV = cv.threshold(image_greyscaleHorINV, threshold, binaryMaxValue, cv.THRESH_BINARY)
-            image_greyscaleHor[image_greyscaleHor >= image_greyscaleHorINV] = 1
-            image_greyscaleHor[image_greyscaleHor > 1] = 0
-            image_binaryHor = image_greyscaleHor
-            image_binaryHor = image_binaryHor.astype('str')
-            ArrayHorRWithoutMask = np.add(ArrayHorRWithoutMask, image_binaryHor)
-
-            print(i,'done')
+        print(i,'done')
 
     ## If no mask is needed. or masking cannot be done correctly because of reflective surface set nomask to True. This way no mask will be added
     nomask = False

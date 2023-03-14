@@ -5,7 +5,7 @@ import math
 import sys
 import numpy.matlib
 from PIL import Image
-import Camera1
+import Image_processor
 import InputParameters
 np.set_printoptions(threshold=sys.maxsize)
 
@@ -48,7 +48,6 @@ class GrayCode():
         c = arr[:, 0]
 
     def GrayCode(self):
-        ## Eerste kolom kopieren
         global matrix
         global pyint
         for i in range(2 ** N):
@@ -56,20 +55,14 @@ class GrayCode():
             matrix.append(bit)
 
         for i in range(1, length):
-            a = arr[:, i - 1]  # eerste kolom
-            b = arr[:, i]  # tweede kolom
-            # print(a)
-            # print(b)
+            a = arr[:, i - 1]
+            b = arr[:, i]
             for i in range(2 ** N):
                 temp = np.bitwise_xor(bool(a[i].all()), bool(b[i].all()))
                 matrix.append(temp)
-        # print(arr)
         matrix = np.reshape(matrix, (length, 2 ** N))
 
-        pyint = getattr(matrix, "tolist", lambda: matrix)()  ## Van numpy.int32 omvormen naar python int
-
-        # print('array pyint, graycode array van alle kolommen  = ', pyint)
-        # print(type(pyint[1]))
+        pyint = getattr(matrix, "tolist", lambda: matrix)()
 
     def RepmatVertical(self):
         for i in range(length):
