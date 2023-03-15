@@ -9,19 +9,23 @@ from matplotlib.widgets import Slider, Button
 from functools import partial
 import torch
 from scipy.spatial.transform import Rotation as R
+import copy
 
-import static.presets as presets
+import static.presets_robot_models as presets_robot_models
+
 
 class Kinematics():
     
-    def __init__(self, model="HangingArm"):
-
-        atrdal = get_DH_params(presets.preset_models[model])
-
-        self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = atrdal
+    def __init__(self, robot):
 
         self.orientation = False
+        self.model_param(robot)
         self.update_position()    
+
+    def model_param(self,robot):
+        atrdal = get_DH_params(presets_robot_models.preset_models[robot])
+        parameters = copy.deepcopy(atrdal)
+        self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = parameters
 
     def update_position(self, DH = None):
         
@@ -194,7 +198,6 @@ class Kinematics():
         
         mot_pos = self.get_motor_positions()
         active = self.active
-
         i = 0
         for n in range(mot_pos.shape[1]):
             if active[n]=="": continue
@@ -218,7 +221,36 @@ class Kinematics():
         self.radius = r 
         self.dists = d
             
+        ######################################
+    #  will remove references to kinematics 
+    def set_active(self, new_active):
+        
+        mot_pos = self.get_motor_positions()
+        active = self.active
 
+        i = 0
+        for n in range(mot_pos.shape[1]):
+            if active[n]=="": continue
+            v = new_active[i]
+
+            if active[n]=="r":            mot_pos[2,n] = v
+            elif active[n]=="t":          mot_pos[1,n] = v
+            else: continue
+            i += 1
+            
+        self.set_motor_positions(mot_pos) 
+
+        return mot_pos
+    
+    def set_active_motor(self, idx, value):
+        t,r = self.theta, self.radius
+
+        if self.active[idx]=="r":            r[idx] = int(value)
+        elif self.active[idx]=="t":          t[idx] = int(value)
+        
+        self.theta,self.radius  = t,r
+
+ 
 # Base functions, should merge into object and remove references elsewhere
 
 ##############################################

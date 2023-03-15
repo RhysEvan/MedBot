@@ -12,10 +12,8 @@ def train_motors(For_model, model):
 
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
     for n in range(100):
-        print("-------------")
         inputs, target = For_model.generate_maps(5000)
-        for _ in range(5):
-            train_loop(model, inputs, target, distance_loss, optimizer)
+        train_loop(model, inputs, target, distance_loss, optimizer)
         #if n%10==0: optimizer.param_groups[0]["lr"] = optimizer.param_groups[0]["lr"]*0.8    
 
 def train_loop(model, inputs, target, loss_fn, n_reps = 10, optimizer=None):
@@ -23,7 +21,7 @@ def train_loop(model, inputs, target, loss_fn, n_reps = 10, optimizer=None):
     if optimizer is None:  optimizer = optim.Adam(model.parameters(), lr=1e-3)
     sumloss = 0 
     model.train()
-    n_reps = 5
+    n_reps = 10
     for n in range(n_reps):
         n = np.random.randint(len(inputs),size=5000)
         X = inputs[n]
@@ -41,14 +39,14 @@ def train_loop(model, inputs, target, loss_fn, n_reps = 10, optimizer=None):
 
     print(sumloss/n_reps)
     
-def train_positions(For_model, model):
+def train_positions(For_model, model, n_cycles = 500):
 
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
 
     For_model
-    n_reps = 5000
-    for n in range(n_reps):
-        inputs, target = For_model.generate_maps(500)
+    
+    for n in range(n_cycles):
+        inputs, target = For_model.generate_maps(1000)
         inputs = torch.Tensor(inputs)
 
         pred = model(inputs)
@@ -102,7 +100,7 @@ def evaluate_plot(For_model, model):
 def distance_loss(pred, targ):
     
     x = ((pred - targ)**2).sum(dim=-1)
-    return x.mean()**0.5
+    return x.mean()
 
 #########################################
 
