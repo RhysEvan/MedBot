@@ -8,288 +8,221 @@ import time
 import matplotlib.pyplot as plt
 from operator import and_
 
-## Getting dimensions of CALIBRATED images
-os.chdir(InputParameters.CalibratedImageDirectory)
-imgL = cv.imread('imgVertCAML0.png', cv.IMREAD_UNCHANGED)
-imgR = cv.imread('imgVertCAMR0.png', cv.IMREAD_UNCHANGED)
-widthL = imgL.shape[1]
-heightL = imgL.shape[0]
-widthR = imgR.shape[1]
-heightR = imgR.shape[0]
+class Detecting():
+    def __init__(self, maps):
+        self.parent = maps
+        self.outputThreshold = 0
+        self.greyscaleAllWhite = []
+        self.greyscaleAllBlack = []
+        self.BinaryAllWhite = []
+        self.BinaryAllBlack = []
 
-## Finding mask array to delete shadow pixels. This mask array is chosen by visualizing binary images where threshold can be adjusted to find optimal threshold value.
-def ShadowMask(Threshold_list):
     ## Function to show binary images to set Threshold value. Gets called with cv.CreateTrackbar
-    def on_change(value):
-        global getThresh
+    def on_change(self, value):
         ##Read white image Left camera
-        imageAllWhite = cv.imread('ThresholdCAML0.png', cv.IMREAD_UNCHANGED)
-        greyscaleAllWhite = cv.cvtColor(imageAllWhite, cv.COLOR_BGR2GRAY)
-        imgWhiteL = cv.threshold(greyscaleAllWhite, value, 255, cv.THRESH_BINARY)
+
+        imageAllWhite = self.parent.Threshold_list[0][0]
+        imageAllWhite = cv.resize(imageAllWhite, (480,640))
+        imgWhiteL = cv.threshold(imageAllWhite, value, 255, cv.THRESH_BINARY)
         imgWhiteL = np.asarray(imgWhiteL[1])
         ##Read black image Left camera
-        imageAllBlack = cv.imread('ThresholdCAML1.png', cv.IMREAD_UNCHANGED)
-        greyscaleAllBlack = cv.cvtColor(imageAllBlack, cv.COLOR_BGR2GRAY)
-        imgBlackL = cv.threshold(greyscaleAllBlack, value, 255, cv.THRESH_BINARY)
+        imageAllBlack = self.parent.Threshold_list[1][0]
+        imageAllBlack = cv.resize(imageAllBlack, (480,640))
+        imgBlackL = cv.threshold(imageAllBlack, value, 255, cv.THRESH_BINARY)
         imgBlackL = np.asarray(imgBlackL[1])
 
         ##stacking to show all binary images in one window simultaneously
         img = np.hstack((imgWhiteL, imgBlackL))
         cv.imshow('Shadow Mask', img)
         ## Making threshold a function variable to acces later
-        on_change.outputThreshold = int(cv.getTrackbarPos('Threshold', 'Shadow Mask'))
+        self.outputThreshold = int(cv.getTrackbarPos('Threshold', 'Shadow Mask'))
 
-    print('Please adjust threshold parameter for shadowmask. Make sure only the areas that are illuminated are seen. When ready press any key to quit.')
-    cv.namedWindow('Shadow Mask')
-    cv.createTrackbar('Threshold', 'Shadow Mask', 0, 255,on_change)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
-    threshold = on_change.outputThreshold
-    print('Shadow mask Threshold = ', threshold)
+    ## Finding mask array to delete shadow pixels. This mask array is chosen by visualizing binary images where threshold can be adjusted to find optimal threshold value.
+    def ShadowMask(self):
+        if self.parent.test == True:
+            print('Please adjust threshold parameter for shadowmask. Make sure only the areas that are illuminated are seen. When ready press any key to quit.')
+            cv.namedWindow('Shadow Mask')
+            cv.createTrackbar('Threshold', 'Shadow Mask', 0, 255,self.on_change)
+            cv.waitKey(0)
+            cv.destroyAllWindows()
+            threshold = self.outputThreshold
+            print('Shadow mask Threshold = ', threshold)
+        for i in range(len(self.parent.Threshold_list)):
+            self.greyscaleAllWhite.append(self.parent.Threshold_list[0][i])
+            self.greyscaleAllBlack.append(self.parent.Threshold_list[1][i])
+            ret, image_binaryAllWhite = cv.threshold(self.greyscaleAllWhite[i], threshold, 255, cv.THRESH_BINARY)
+            ret, image_binaryAllBlack = cv.threshold(self.greyscaleAllBlack[i], threshold, 255, cv.THRESH_BINARY)
+            self.BinaryAllWhite.append(image_binaryAllWhite)
+            self.BinaryAllBlack.append(image_binaryAllBlack)
+        ShadowmaskL = np.empty(self.parent.Vert_list[0][0].shape, dtype=object)
+        ShadowmaskL = image_binaryAllWhite[0][0] == image_binaryAllBlack[1][0]  ## All pixels where binaryWhite = binaryBlack are not used.
+        ShadowmaskR = np.empty(self.parent.Vert_list[0][0].shape, dtype=object)
+        ShadowmaskR = image_binaryAllWhite[0][1] == image_binaryAllBlack[1][1]  ## All pixels where binaryWhite = binaryBlack are not used.
 
-    imageAllWhite = cv.imread('ThresholdCAML0.png', cv.IMREAD_UNCHANGED)
-    imageAllBlack = cv.imread('ThresholdCAML1.png', cv.IMREAD_UNCHANGED)
-    greyscaleAllWhite = cv.cvtColor(imageAllWhite, cv.COLOR_BGR2GRAY)
-    greyscaleAllBlack = cv.cvtColor(imageAllBlack, cv.COLOR_BGR2GRAY)
-    ret, image_binaryAllWhite = cv.threshold(greyscaleAllWhite, threshold, 255, cv.THRESH_BINARY)
-    ret, image_binaryAllBlack = cv.threshold(greyscaleAllBlack, threshold, 255, cv.THRESH_BINARY)
-    cv.imwrite("BinaryAllWhiteL.png", image_binaryAllWhite)
-    cv.imwrite("BinaryAllBlackL.png", image_binaryAllBlack)
-    ShadowmaskL = np.empty((imgL.shape[0], imgL.shape[1]), dtype=object)
-    ShadowmaskL = image_binaryAllWhite == image_binaryAllBlack              ## All pixels where binaryWhite = binaryBlack are not used.
+        return ShadowmaskL,ShadowmaskR,threshold
 
-    imageAllWhite = cv.imread('ThresholdCAMR0.png', cv.IMREAD_UNCHANGED)
-    imageAllBlack = cv.imread('ThresholdCAMR1.png', cv.IMREAD_UNCHANGED)
-    greyscaleAllWhite = cv.cvtColor(imageAllWhite, cv.COLOR_BGR2GRAY)
-    greyscaleAllBlack = cv.cvtColor(imageAllBlack, cv.COLOR_BGR2GRAY)
-    ret, image_binaryAllWhite = cv.threshold(greyscaleAllWhite, threshold, 255, cv.THRESH_BINARY)
-    ret, image_binaryAllBlack = cv.threshold(greyscaleAllBlack, threshold, 255, cv.THRESH_BINARY)
-    cv.imwrite("BinaryAllWhiteR.png", image_binaryAllWhite)
-    cv.imwrite("BinaryAllBlackR.png", image_binaryAllBlack)
-    ShadowmaskR = np.empty((imgL.shape[0], imgL.shape[1]), dtype=object)
-    ShadowmaskR = image_binaryAllWhite == image_binaryAllBlack              ## All pixels where binaryWhite = binaryBlack are not used.
+    ## Function used in method 5 of DecodeGrayCode for using mean value per pixel thresholding
+    def findingThresholdShadowMask(self):
+        ThresholdArray = np.add(self.greyscaleAllWhite[0][0], self.greyscaleAllBlack[0][1])
+        ThresholdArrayL = ThresholdArray / 2
 
+        ThresholdArray = np.add(self.greyscaleAllWhite[1][0], self.greyscaleAllBlack[1][1])
+        ThresholdArrayR = ThresholdArray / 2
 
-    return ShadowmaskL,ShadowmaskR,threshold
+        return ThresholdArrayL,ThresholdArrayR
 
-## Function used in method 5 of DecodeGrayCode for using mean value per pixel thresholding
-def findingThresholdShadowMask():
-    imageAllWhite = cv.imread('ThresholdCAML0.png', cv.IMREAD_UNCHANGED)
-    imageAllBlack = cv.imread('ThresholdCAML1.png', cv.IMREAD_UNCHANGED)
-    greyscaleAllWhite = cv.cvtColor(imageAllWhite, cv.COLOR_BGR2GRAY)
-    greyscaleAllBlack = cv.cvtColor(imageAllBlack, cv.COLOR_BGR2GRAY)
-    ThresholdArray = np.add(greyscaleAllWhite, greyscaleAllBlack)
-    ThresholdArrayL = ThresholdArray / 2
+    ## Different algorithms for decoding structured light. Choosing between methods is possible with input methodParameter.
+    def DecodeGrayCode(self, binaryMaxValue):
+        numberOfImages = InputParameters.numberOfImages      ## number of higher frequency patterns that are not used. Limited resolution can mean less patterns results in higher resolution
 
-    imageAllWhite = cv.imread('ThresholdCAMR0.png', cv.IMREAD_UNCHANGED)
-    imageAllBlack = cv.imread('ThresholdCAMR1.png', cv.IMREAD_UNCHANGED)
-    greyscaleAllWhite = cv.cvtColor(imageAllWhite, cv.COLOR_BGR2GRAY)
-    greyscaleAllBlack = cv.cvtColor(imageAllBlack, cv.COLOR_BGR2GRAY)
-    ThresholdArray = np.add(greyscaleAllWhite, greyscaleAllBlack)
-    ThresholdArrayR = ThresholdArray / 2
+        ## Getting shadowmask images
+        self.maskX, self.maskY, self.threshold = self.ShadowMask()
 
-    return ThresholdArrayL,ThresholdArrayR
+        ## Finding threshold through mean. Gets used in method 5 for per-pixel mean value thresholding
+        self.ThresholdL, self.ThresholdR = self.findingThresholdShadowMask()
 
-## Different algorithms for decoding structured light. Choosing between methods is possible with input methodParameter.
-def DecodeGrayCode(binaryMaxValue,Threshold_list,Vert_list, INV_Vert_list, Horz_list, INV_Horz_list):
-    global arrayVertLMasked
-    global arrayHorLMasked
-    global arrayVertRMasked
-    global arrayHorRMasked
-    numberOfImages = InputParameters.numberOfImages      ## number of higher frequency patterns that are not used. Limited resolution can mean less patterns results in higher resolution
+        ################################################# DIFFERENT DECODING METHODS ###############################################################
+        start = time.time()
 
-    ## Getting shadowmask images
-    maskX, maskY, threshold = ShadowMask(Threshold_list)
+        #OLD METHOD.PY has all the methods that were not used for this thesis
+        ArrayVertLWithoutMask = np.full(self.parent.Vert_list[0][0].shape, "", dtype=object)
+        ArrayHorLWithoutMask = np.full(self.parent.Horz_list[0][0].shape, "", dtype=object)
+        ArrayVertRWithoutMask = np.full(self.parent.Vert_list[0][1].shape, "", dtype=object)
+        ArrayHorRWithoutMask = np.full(self.parent.Horz_list[0][1].shape, "", dtype=object)
 
-    ## Finding threshold through mean. Gets used in method 5 for per-pixel mean value thresholding
-    ThresholdL, ThresholdR = findingThresholdShadowMask()
+        for i in range(Graycode.length - numberOfImages):  ## -1 because resolution of projector is higher than camera's
+            start2 = time.time()
+            for j in range(2):
+                ## array for Vertical Patterns
+                image_greyscaleVert = self.parent.Vert_list[i][j]
+                image_greyscaleVertINV = self.parent.INV_Vert_list[i][j]
+                image_greyscaleVert[image_greyscaleVert >= image_greyscaleVertINV] = 1
+                image_greyscaleVert[image_greyscaleVert > 1] = 0
+                image_binaryVert = image_greyscaleVert.astype('str')
+                if j == 0:
+                    ArrayVertLWithoutMask = np.add(ArrayVertLWithoutMask, image_binaryVert)
+                elif j == 1:
+                    ArrayVertRWithoutMask = np.add(ArrayVertRWithoutMask, image_binaryVert)
+                ## Array for Horizontal patterns
+                image_greyscaleHor = self.parent.Horz_list[i][j]
+                image_greyscaleHorINV = self.parent.INV_Horz_list[i][j]
+                image_greyscaleHor[image_greyscaleHor >= image_greyscaleHorINV] = 1
+                image_greyscaleHor[image_greyscaleHor > 1] = 0
+                image_binaryHor = image_greyscaleHor.astype('str')
+                if j == 0:
+                    ArrayHorLWithoutMask = np.add(ArrayHorLWithoutMask, image_binaryHor)
+                elif j == 1:
+                    ArrayHorRWithoutMask = np.add(ArrayHorRWithoutMask, image_binaryHor)
+                
+            end2 = time.time()
+            print("time for a picture: "+str(end2-start2))
+            print(i,'done')
 
-    ################################################# DIFFERENT DECODING METHODS ###############################################################
-    start = time.time()
+        ## If no mask is needed. or masking cannot be done correctly because of reflective surface set nomask to True. This way no mask will be added
+        nomask = False
+        if nomask == True:
+            self.maskX = np.zeros_like(ArrayVertLWithoutMask)
+            self.maskY= np.zeros_like(ArrayVertRWithoutMask)
+        start1 = time.time()
+        ################################################# APPLYING MASKS TO DIFFERENT MATRICES FOR LATER USE #########################################################
+        arrayVertLMasked = ma.masked_array(ArrayVertLWithoutMask,mask= self.maskX)
+        self.arrayVertLMasked = ma.filled(arrayVertLMasked, '0')
 
-    #OLD METHOD.PY has all the methods that were not used for this thesis
-    ArrayVertLWithoutMask = np.full((imgL.shape[0], imgL.shape[1]), "", dtype=object)
-    ArrayHorLWithoutMask = np.full((imgL.shape[0], imgL.shape[1]), "", dtype=object)
-    ArrayVertRWithoutMask = np.full((imgR.shape[0], imgR.shape[1]), "", dtype=object)
-    ArrayHorRWithoutMask = np.full((imgR.shape[0], imgR.shape[1]), "", dtype=object)
-    for i in range(Graycode.length - numberOfImages):  ## -1 because resolution of projector is higher than camera's
-        os.chdir(InputParameters.CalibratedImageDirectory)
+        arrayHorLMasked = ma.masked_array(ArrayHorLWithoutMask, mask= self.maskX)
+        self.arrayHorLMasked = ma.filled(arrayHorLMasked, '0')
 
-        ## array for Vertical Patterns
-        imageVert = cv.imread('imgVertCAML{}.png'.format(i), cv.IMREAD_UNCHANGED)
-        image_greyscaleVert = cv.cvtColor(imageVert, cv.COLOR_BGR2GRAY)
-        #ret, image_binaryVert = cv.threshold(image_greyscaleVert, threshold, binaryMaxValue, cv.THRESH_BINARY)
-        imageVertINV = cv.imread('imgVertINVCAML{}.png'.format(i),cv.IMREAD_UNCHANGED)
-        image_greyscaleVertINV = cv.cvtColor(imageVertINV, cv.COLOR_BGR2GRAY)
-        #ret, image_binaryVertINV = cv.threshold(image_greyscaleVertINV, threshold, binaryMaxValue, cv.THRESH_BINARY)
-        image_greyscaleVert[image_greyscaleVert >= image_greyscaleVertINV] = 1
-        image_greyscaleVert[image_greyscaleVert > 1] = 0
-        image_binaryVert = image_greyscaleVert
-        imagebinarytest = image_binaryVert.copy()  ## (Tijdelijk om te zien of zwart wit afbeelding in orde is)
-        imagebinarytest[imagebinarytest > 0] = 255
+        arrayVertRMasked = ma.masked_array(ArrayVertRWithoutMask, mask= self.maskY)
+        self.arrayVertRMasked = ma.filled(arrayVertRMasked, '0')
 
-        if i == 6 or 7 or 8 or 5 or 9:
-            cv.imwrite("testInversCAML{}.png".format(i), imagebinarytest)
-        image_binaryVert = image_binaryVert.astype('str')
-        ArrayVertLWithoutMask = np.add(ArrayVertLWithoutMask, image_binaryVert)
+        arrayHorRMasked = ma.masked_array(ArrayHorRWithoutMask, mask= self.maskY)
+        self.arrayHorRMasked = ma.filled(arrayHorRMasked, '0')
+        end1 = time.time()
+        print("intermideary timer final part: "+str(end1-start1))
+        end = time.time()
+        totaltime = end - start
+        print('Total computing time of method', InputParameters.methodOfTriangulation, ": ", str(totaltime))
 
-        ## Array for Horizontal patterns
-        imageHor = cv.imread('imgHorCAML{}.png'.format(i), cv.IMREAD_UNCHANGED)
-        image_greyscaleHor = cv.cvtColor(imageHor, cv.COLOR_BGR2GRAY)
-        #ret, image_binaryHor = cv.threshold(image_greyscaleHor, threshold, binaryMaxValue, cv.THRESH_BINARY)
-        imageHorINV = cv.imread('imgHorINVCAML{}.png'.format(i), cv.IMREAD_UNCHANGED)
-        image_greyscaleHorINV = cv.cvtColor(imageHorINV, cv.COLOR_BGR2GRAY)
-        #ret, image_binaryHorINV = cv.threshold(image_greyscaleHorINV, threshold, binaryMaxValue, cv.THRESH_BINARY)
-        image_greyscaleHor[image_greyscaleHor >= image_greyscaleHorINV] = 1
-        image_greyscaleHor[image_greyscaleHor > 1] = 0
-        image_binaryHor = image_greyscaleHor
+    ## Function to get corresponding decimal values for a binary gray code
+    def inversegrayCode(self, n):
+        inv = 0
+        # Taking xor until
+        # n becomes zero
+        while (n):
+            inv = inv ^ n
+            n = n >> 1
+        return inv
 
-        imagebinarytest = image_binaryHor.copy()  ## (Tijdelijk om te zien of zwart wit afbeelding in orde is)
-        imagebinarytest[imagebinarytest > 0] = 255
-        if i == 6 or 7 or 8 or 5 or 9:
-            cv.imwrite("testInversHORICAML{}.png".format(i), imagebinarytest)
+    ## Function to get decimal value of gray code
+    def Gray2Dec(self):
+        print('Converting Gray to dec code')
+        for i in range(self.parent.Vert_list[0][0].shape[0]):
+            for j in range(self.parent.Vert_list[0][0].shape[1]):
+                self.arrayVertLMasked[i][j] = self.inversegrayCode(int(self.arrayVertLMasked[i][j], 2))
+                self.arrayHorLMasked[i][j] = self.inversegrayCode(int(self.arrayHorLMasked[i][j], 2))
 
-        image_binaryHor = image_binaryHor.astype('str')
-        ArrayHorLWithoutMask = np.add(ArrayHorLWithoutMask, image_binaryHor)
+        for i in range(self.parent.Horz_list[0][0].shape[0]):
+            for j in range(self.parent.Horz_list[0][0].shape[1]):
+                self.arrayVertRMasked[i][j] = self.inversegrayCode(int(self.arrayVertRMasked[i][j], 2))
+                self.arrayHorRMasked[i][j] = self.inversegrayCode(int(self.arrayHorRMasked[i][j], 2))
 
-        ## Array for Vertical patterns
-        imageVert = cv.imread('imgVertCAMR{}.png'.format(i), cv.IMREAD_UNCHANGED)
-        image_greyscaleVert = cv.cvtColor(imageVert, cv.COLOR_BGR2GRAY)
-        #ret, image_binaryVert = cv.threshold(image_greyscaleVert, threshold, binaryMaxValue, cv.THRESH_BINARY)
-        imageVertINV = cv.imread('imgVertINVCAMR{}.png'.format(i), cv.IMREAD_UNCHANGED)
-        image_greyscaleVertINV = cv.cvtColor(imageVertINV, cv.COLOR_BGR2GRAY)
-        #ret, image_binaryVertINV = cv.threshold(image_greyscaleVertINV, threshold, binaryMaxValue, cv.THRESH_BINARY)
-        image_greyscaleVert[image_greyscaleVert >= image_greyscaleVertINV] = 1
-        image_greyscaleVert[image_greyscaleVert > 1] = 0
-        image_binaryVert = image_greyscaleVert
-        image_binaryVert = image_binaryVert.astype('str')
-        ArrayVertRWithoutMask = np.add(ArrayVertRWithoutMask, image_binaryVert)
+    ## Extra function for plotting a gradient picture of the scene.
+    def gradientImage(self):
+        x = np.array(self.arrayVertLMasked, dtype=float)
+        plt.imshow(x, cmap='jet')
+        plt.show()
 
-        ## Array for horizontal patterns
-        imageHor = cv.imread('imgHorCAMR{}.png'.format(i), cv.IMREAD_UNCHANGED)
-        image_greyscaleHor = cv.cvtColor(imageHor, cv.COLOR_BGR2GRAY)
-        #ret, image_binaryHor = cv.threshold(image_greyscaleHor, threshold, binaryMaxValue, cv.THRESH_BINARY)
-        imageHorINV = cv.imread('imgHorINVCAMR{}.png'.format(i), cv.IMREAD_UNCHANGED)
-        image_greyscaleHorINV = cv.cvtColor(imageHorINV, cv.COLOR_BGR2GRAY)
-        #ret, image_binaryHorINV = cv.threshold(image_greyscaleHorINV, threshold, binaryMaxValue, cv.THRESH_BINARY)
-        image_greyscaleHor[image_greyscaleHor >= image_greyscaleHorINV] = 1
-        image_greyscaleHor[image_greyscaleHor > 1] = 0
-        image_binaryHor = image_greyscaleHor
-        image_binaryHor = image_binaryHor.astype('str')
-        ArrayHorRWithoutMask = np.add(ArrayHorRWithoutMask, image_binaryHor)
+    ##Function to create inverse matrices used for easier correspondence matching. Gets used in Triangulaton()
+    def FindCorrespondence(self):
 
-        print(i,'done')
+        ## Creating 3D arrays to represent horizontal AND vertical binary codes for each pixel.
+        LeftCamera = np.stack((self.arrayVertLMasked, self.arrayHorLMasked), axis=2)
+        RightCamera = np.stack((self.arrayVertRMasked, self.arrayHorRMasked), axis=2)
 
-    ## If no mask is needed. or masking cannot be done correctly because of reflective surface set nomask to True. This way no mask will be added
-    nomask = False
-    if nomask == True:
-        maskX = np.zeros_like(ArrayVertLWithoutMask)
-        maskY= np.zeros_like(ArrayVertRWithoutMask)
+        ## Adjusting view for 3D arrays for easier matrix usage. Both arrays LeftCamera and LeftCameraPleaseWork are identical just differently shown.
+        #LeftCameraPleaseWork = LeftCamera.view([(f'f{i}', LeftCamera.dtype) for i in range(LeftCamera.shape[-1])])[
+        #   ..., 0].astype('O')
+        #RightCameraPleaseWork = RightCamera.view([(f'f{i}', RightCamera.dtype) for i in range(RightCamera.shape[-1])])[
+        #   ..., 0].astype('O')
+        start = time.time()
 
-    ################################################# APPLYING MASKS TO DIFFERENT MATRICES FOR LATER USE #########################################################
-    arrayVertLMasked = ma.masked_array(ArrayVertLWithoutMask,mask= maskX)
-    arrayVertLMasked = ma.filled(arrayVertLMasked, '0')
-
-    arrayHorLMasked = ma.masked_array(ArrayHorLWithoutMask, mask=maskX)
-    arrayHorLMasked = ma.filled(arrayHorLMasked, '0')
-
-    arrayVertRMasked = ma.masked_array(ArrayVertRWithoutMask, mask=maskY)
-    arrayVertRMasked = ma.filled(arrayVertRMasked, '0')
-
-    arrayHorRMasked = ma.masked_array(ArrayHorRWithoutMask, mask=maskY)
-    arrayHorRMasked = ma.filled(arrayHorRMasked, '0')
-
-    end = time.time()
-    totaltime = end - start
-    print('Total computing time of method ', InputParameters.methodOfTriangulation, ": ", str(totaltime))
-
-## Function to get corresponding decimal values for a binary gray code
-def inversegrayCode(n):
-    inv = 0
-    # Taking xor until
-    # n becomes zero
-    while (n):
-        inv = inv ^ n
-        n = n >> 1
-    return inv
-
-## Function to get decimal value of gray code
-def Gray2Dec():
-    global arrayVertLMasked
-    global arrayHorLMasked
-    global arrayVertRMasked
-    global arrayHorRMasked
-    print('Converting Gray to dec code')
-    for i in range(heightL):
-        for j in range(widthL):
-            arrayVertLMasked[i][j] = inversegrayCode(int(arrayVertLMasked[i][j], 2))
-            arrayHorLMasked[i][j] = inversegrayCode(int(arrayHorLMasked[i][j], 2))
-
-    for i in range(heightR):
-        for j in range(widthR):
-            arrayVertRMasked[i][j] = inversegrayCode(int(arrayVertRMasked[i][j], 2))
-            arrayHorRMasked[i][j] = inversegrayCode(int(arrayHorRMasked[i][j], 2))
-
-## Extra function for plotting a gradient picture of the scene.
-def gradientImage():
-    x = np.array(arrayVertLMasked, dtype=float)
-    plt.imshow(x, cmap='jet')
-    plt.show()
-
-##Function to create inverse matrices used for easier correspondence matching. Gets used in Triangulaton()
-def FindCorrespondence():
-
-    ## Creating 3D arrays to represent horizontal AND vertical binary codes for each pixel.
-    LeftCamera = np.stack((arrayVertLMasked, arrayHorLMasked), axis=2)
-    RightCamera = np.stack((arrayVertRMasked, arrayHorRMasked), axis=2)
-
-    ## Adjusting view for 3D arrays for easier matrix usage. Both arrays LeftCamera and LeftCameraPleaseWork are identical just differently shown.
-    #LeftCameraPleaseWork = LeftCamera.view([(f'f{i}', LeftCamera.dtype) for i in range(LeftCamera.shape[-1])])[
-     #   ..., 0].astype('O')
-    #RightCameraPleaseWork = RightCamera.view([(f'f{i}', RightCamera.dtype) for i in range(RightCamera.shape[-1])])[
-     #   ..., 0].astype('O')
-
-    import time
-    start = time.time()
-
-    ## Find max values to create empty (0) matrices to use
-    MaxValue1 = np.amax(arrayVertLMasked)
-    MaxValue2 = np.amax(arrayHorLMasked)
-    MaxValue3 = np.amax(arrayVertRMasked)
-    MaxValue4 = np.amax(arrayHorRMasked)
+        ## Find max values to create empty (0) matrices to use
+        MaxValue1 = np.amax(self.arrayVertLMasked)
+        MaxValue2 = np.amax(self.arrayHorLMasked)
+        MaxValue3 = np.amax(self.arrayVertRMasked)
+        MaxValue4 = np.amax(self.arrayHorRMasked)
 
 
-    InversArrayRowLeft = np.zeros((MaxValue1 + 1,MaxValue2 + 1))
-    InversArrayColumnLeft = np.zeros((MaxValue1 + 1,MaxValue2 + 1))
-    InversArrayRowRight = np.zeros((MaxValue3 + 1, MaxValue4 + 1))
-    InversArrayColumnRight = np.zeros((MaxValue3 + 1, MaxValue4 + 1))
+        InversArrayRowLeft = np.zeros((MaxValue1 + 1,MaxValue2 + 1))
+        InversArrayColumnLeft = np.zeros((MaxValue1 + 1,MaxValue2 + 1))
+        InversArrayRowRight = np.zeros((MaxValue3 + 1, MaxValue4 + 1))
+        InversArrayColumnRight = np.zeros((MaxValue3 + 1, MaxValue4 + 1))
 
-    ##Loop to generate invers matrix of Left Camera matrix for pixel correspondence
-    for i in range (heightL):
-        for j in range (widthL):
-            indexRowLeft = arrayVertLMasked[i][j]
-            indexColumnLeft = arrayHorLMasked[i][j]
-            InversArrayRowLeft[indexRowLeft][indexColumnLeft] = i
-            InversArrayColumnLeft[indexRowLeft][indexColumnLeft] = j
+        ##Loop to generate invers matrix of Left Camera matrix for pixel correspondence
+        for i in range (self.parent.Vert_list[0][0].shape[0]):
+            for j in range (self.parent.Vert_list[0][0].shape[1]):
+                indexRowLeft = self.arrayVertLMasked[i][j]
+                indexColumnLeft = self.arrayHorLMasked[i][j]
+                InversArrayRowLeft[indexRowLeft][indexColumnLeft] = i
+                InversArrayColumnLeft[indexRowLeft][indexColumnLeft] = j
 
-    TempMatrixLeft = np.stack((InversArrayColumnLeft, InversArrayRowLeft), axis=2)
-    InversMatrixLeftCam = TempMatrixLeft.view([(f'f{i}', TempMatrixLeft.dtype) for i in range(TempMatrixLeft.shape[-1])])[
-        ..., 0].astype('O')
+        TempMatrixLeft = np.stack((InversArrayColumnLeft, InversArrayRowLeft), axis=2)
+        InversMatrixLeftCam = TempMatrixLeft.view([(f'f{i}', TempMatrixLeft.dtype) for i in range(TempMatrixLeft.shape[-1])])[
+            ..., 0].astype('O')
 
-    ##Loop to generate invers matrix of Right Camera matrix for pixel correspondence
-    for i in range (heightR):
-        for j in range(widthR):
-            indexRowRight = arrayVertRMasked[i][j]
-            indexColumnRight = arrayHorRMasked[i][j]
-            InversArrayRowRight[indexRowRight][indexColumnRight] = i
-            InversArrayColumnRight[indexRowRight][indexColumnRight] = j
+        ##Loop to generate invers matrix of Right Camera matrix for pixel correspondence
+        for i in range (self.parent.Vert_list[0][1].shape[0]):
+            for j in range(self.parent.Vert_list[0][1].shape[1]):
+                indexRowRight = self.arrayVertRMasked[i][j]
+                indexColumnRight = self.arrayHorRMasked[i][j]
+                InversArrayRowRight[indexRowRight][indexColumnRight] = i
+                InversArrayColumnRight[indexRowRight][indexColumnRight] = j
 
-    TempMatrixRight = np.stack((InversArrayColumnRight, InversArrayRowRight),axis =2)
-    InversMatrixRightCam = TempMatrixRight.view([(f'f{i}', TempMatrixRight.dtype) for i in range(TempMatrixRight.shape[-1])])[
-        ..., 0].astype('O')
+        TempMatrixRight = np.stack((InversArrayColumnRight, InversArrayRowRight),axis =2)
+        InversMatrixRightCam = TempMatrixRight.view([(f'f{i}', TempMatrixRight.dtype) for i in range(TempMatrixRight.shape[-1])])[
+            ..., 0].astype('O')
 
-    end = time.time()
-    totaltime = end - start
-    print('tijd omzetten inverse matrix = ', totaltime)
-    return InversMatrixLeftCam,InversMatrixRightCam
+        end = time.time()
+        totaltime = end - start
+        print('time transform inverse matrix = ', totaltime)
+        return InversMatrixLeftCam,InversMatrixRightCam
 

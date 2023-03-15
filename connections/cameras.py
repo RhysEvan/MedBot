@@ -63,14 +63,13 @@ class Feed(QThread):
         self.quit()
     
     def GREYFrame(self):
-        Pic = self.cam.GetFrame().clip(0,255).astype(np.uint8)
+        Pic = cv2.cvtColor(self.cam.GetFrame().clip(0,255).astype(np.uint8), cv2.COLOR_BayerRGGB2GRAY)
         return Pic
     
     def RGBFrame(self):
         self.Image = self.cam.GetFrame()
         if not (self.Image == 0).all() or self.first == True:
-            self.Image = cv2.cvtColor(self.Image.astype(np.uint16), cv2.COLOR_BayerRGGB2RGB)
-            self.Image = self.Image.astype(np.uint8)
+            self.Image = cv2.cvtColor(self.Image.astype(np.uint8), cv2.COLOR_BayerRGGB2RGB)
             self.Image = self.white_balance_image(self.Image,self.Calib)
             ConvertToQtFormat = QImage(self.Image.data, self.Image.shape[1], self.Image.shape[0], QImage.Format_RGB888)
             Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)

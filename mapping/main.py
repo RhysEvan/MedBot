@@ -1,10 +1,10 @@
 from Image_processor import Image_Handle
 from Graycode import *
-from Triangulation import *
+from Triangulation import triangulator
 import cv2
 from InputParameters import *
 import time
-from Detection import *
+from Detection import Detecting
 
 ## Gray code Pattern Generation (gets saved)
 #pattern = Graycode.GrayCode()
@@ -16,6 +16,9 @@ from Detection import *
 class Mapping():
     def __init__(self):
         self.cont_handler = Image_Handle()
+        self.detect = Detecting(self)
+        self.triang = triangulator(self)
+        self.test = False
 
         if __name__ == "__main__":
                 self.handler = Image_Handle(test = True, location_L= InputParameters.LeftCamera, location_R= InputParameters.RightCamera)
@@ -33,18 +36,17 @@ class Mapping():
     
     def map_test_code(self):
         start = time.time()
-        Vert_list, INV_Vert_list, Horz_list, INV_Horz_list = self.handler.single_run_frame(length)
-        Threshold_list = self.handler.single_run_Threshold()
+        self.Vert_list, self.INV_Vert_list, self.Horz_list, self.INV_Horz_list = self.handler.single_run_frame(length)
+        self.Threshold_list = self.handler.single_run_Threshold()
         end = time.time()
         print(end-start)
-        DecodeGrayCode(binaryMaxValue,Threshold_list,Vert_list, INV_Vert_list, Horz_list, INV_Horz_list)
-        Gray2Dec()
+        self.detect.DecodeGrayCode(binaryMaxValue)
+        self.detect.Gray2Dec()
 
         ## Triangulation
-        PrintParameters()
-        Triangulate()
+        self.triang.PrintParameters()
+        self.triang.Triangulate()
         
-
     def continuous_mapping(self):
         self.cont_handler.ContinFrame()
         self.cont_handler.ContinThreshold()
@@ -55,10 +57,11 @@ class Mapping():
         PrintParameters()
         Triangulate()
 
-
 if __name__ == "__main__":
     map = Mapping()
     #map.intrinsic_calibration()
     test_run = True
     if test_run:
+        map.test = True
         map.map_test_code()
+        

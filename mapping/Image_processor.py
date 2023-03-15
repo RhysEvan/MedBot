@@ -35,8 +35,8 @@ class Image_Handle():
         self.cam_R.SetParameterDouble("Gain", 10)
 
     def GetFrame(self):
-        self.Image_L = self.cam_L.GetFrame().clip(0,255).astype(np.uint8)
-        self.Image_R = self.cam_R.GetFrame().clip(0,255).astype(np.uint8)
+        self.Image_L = cv2.cvtColor(self.cam_L.GetFrame().clip(0,255).astype(np.uint8), cv2.COLOR_BayerRGGB2GRAY)
+        self.Image_R = cv2.cvtColor(self.cam_R.GetFrame().clip(0,255).astype(np.uint8), cv2.COLOR_BayerRGGB2GRAY)
         return [self.Image_L , self.Image_R]
 
     def single_run_Threshold(self):
