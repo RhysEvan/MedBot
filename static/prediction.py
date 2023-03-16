@@ -1,4 +1,4 @@
-from Retna.main import Main
+from retna.main import Main
 from PIL import Image
 import numpy as np
 from skimage.morphology import skeletonize
@@ -9,23 +9,23 @@ from PyQt5.QtGui import *
 
 class prediction():
     def __init__(self, main):
-        self.retna = Main
+        self.retna = Main("","",[])
         self.gui = main
-    
+        self.image_l = []
+        self.image_r = []
+
     def show_predict(self):
         print("currently connected to print predict left call, make sure that trigger is eventually removed since it won't need a button")
-        R_im = self.gui.cam_r.Image
-        contours = self.wound_encase(R_im)
-        R_crop = self.cropper(R_im, contours)
-        R_pred = self.retna.cam_predict(R_crop, (r".\Retna\models\checkpoint.pt"))
+        #contours = self.wound_encase(R_im)
+        #R_crop = self.cropper(R_im, contours)
+        R_pred = self.retna.cam_predict(self.image_r, r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models", "\\pleora_crop_bigger_with_loss_second_save_for_testing.pt")
         ConvertToQtFormat = QImage(R_pred.data, R_pred.shape[1], R_pred.shape[0], QImage.Format_RGB888)
         R_Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
         self.gui.predict_right.setPixmap(QPixmap.fromImage(R_Pic))
-        
-        L_im = self.gui.cam_l.Image
-        contours = self.wound_encase(L_im)
-        L_crop = self.cropper(L_im, contours)
-        L_pred = self.retna.cam_predict(L_crop, (r".\Retna\models\checkpoint.pt"))
+
+        #contours = self.wound_encase(L_im)
+        #L_crop = self.cropper(L_im, contours)
+        L_pred = self.retna.cam_predict(self.image_l, r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models", "\\pleora_crop_bigger_with_loss_second_save_for_testing.pt")
         ConvertToQtFormat = QImage(L_pred.data, L_pred.shape[1], L_pred.shape[0], QImage.Format_RGB888)
         L_Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
         self.gui.predict_right.setPixmap(QPixmap.fromImage(L_Pic))
@@ -34,9 +34,9 @@ class prediction():
         if image == None:
             return
         else:
-            contours = self.wound_encase(image)
-            crop = self.cropper(image, contours)
-            pred = self.retna.cam_predict(crop, (r".\Retna\models\checkpoint.pt"))
+            #contours = self.wound_encase(image)
+            #crop = self.cropper(image, contours)
+            pred = self.retna.cam_predict(image, r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models", r"\\pleora_crop_bigger_with_loss_second_save_for_testing.pt")
             skeleton = skeletonize(pred)
             image.paste(skeleton, (self.x_skin, self.y_skin))
             return image
@@ -44,6 +44,7 @@ class prediction():
     def cropper(self,im,contours):
         for im, contour in enumerate(contours):
             area = cv2.contourArea(contour)
+            print(area)
             if(area > 200):
                 self.x_skin, self.y_skin, w_skin, h_skin = cv2.boundingRect(contour)
                 in_crop = im[:,self.x_skin:(self.x_skin+w_skin), self.y_skin:(self.y_skin+h_skin)]

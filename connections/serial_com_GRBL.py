@@ -89,8 +89,7 @@ class serial_bridge_GRBL:
         Info = ard.readline().decode("utf-8").split("\r")[0]
         print("Device Info: "+ Info)  
         return Info
-
-        
+    
     def open_bridge(self):
         if self.device is None:   return
         # Open g-code file

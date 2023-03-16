@@ -14,7 +14,7 @@ from static.json_compiler import *
 from static.backend_GUI import backend
 from static.triggers import trigger
 from static.prediction import prediction
-from static.map_sequencing import Map
+#from static.map_sequencing import Map
 try:
     from connections.cameras import *
     pleora_lib = True
@@ -96,6 +96,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     def image_update_left(self, Image):
         if not self.map_run:
             #Image = self.predict_left.paste_predict(Image)
+            self.predict_left.image_l = Image
             self.camera_left.setPixmap(QPixmap.fromImage(Image))
         else:
             self.mapping.handler.emit_camL = Image
