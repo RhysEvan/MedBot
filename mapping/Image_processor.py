@@ -25,14 +25,14 @@ class Image_Handle():
         if ret == None:
             return
         self.cam_L.Start()
-        self.cam_L.SetParameterDouble("ExposureTime", 800)
-        self.cam_L.SetParameterDouble("Gain", 10)
+        self.cam_L.SetParameterDouble("ExposureTime", 10000)
+        self.cam_L.SetParameterDouble("Gain", 15.5)
         ret = self.cam_R.Open(self.loc_R)
         if ret == None:
             return
         self.cam_R.Start()
-        self.cam_R.SetParameterDouble("ExposureTime", 800)
-        self.cam_R.SetParameterDouble("Gain", 10)
+        self.cam_R.SetParameterDouble("ExposureTime", 10000)
+        self.cam_R.SetParameterDouble("Gain", 15.5)
 
     def GetFrame(self):
         self.Image_L = cv2.cvtColor(self.cam_L.GetFrame().clip(0,255).astype(np.uint8), cv2.COLOR_BayerRGGB2GRAY)

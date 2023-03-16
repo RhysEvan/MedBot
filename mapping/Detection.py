@@ -154,6 +154,7 @@ class Detecting():
 
     ## Function to get decimal value of gray code
     def Gray2Dec(self):
+        self.gradientImage()
         print('Converting Gray to dec code')
         for i in range(self.parent.Vert_list[0][0].shape[0]):
             for j in range(self.parent.Vert_list[0][0].shape[1]):
