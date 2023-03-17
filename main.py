@@ -3,7 +3,9 @@ import sys
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
-import numpy as np 
+import numpy as np
+from PIL import Image
+from PIL.ImageQt import ImageQt
 
 #file based imports
 from static.Robot_Control_Panel import Ui_MainWindow
@@ -93,20 +95,23 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 
     ####################### threading method  ######################################
 
-    def image_update_left(self, Image):
+    def image_update_left(self, Img):
         if not self.map_run:
-            #Image = self.predict_left.paste_predict(Image)
-            self.prediction_left.image_l = self.cam_l.Image
-            self.camera_left.setPixmap(QPixmap.fromImage(Image))
+            Img = self.predict_left.paste_predict(Img)
+            img = Image.fromarray(Image)
+            img  = ImageQt(img)
+            self.camera_left.setPixmap(QPixmap.fromImage(img))
         else:
-            self.mapping.handler.emit_camL = Image
+            self.mapping.handler.emit_camL = img
     
-    def image_update_right(self, Image):
+    def image_update_right(self, img):
         if not self.map_run:
-            #Image =  self.prediction_left.paste_predict(Image)
-            self.camera_right.setPixmap(QPixmap.fromImage(Image))
+            img =  self.prediction_left.paste_predict(img)
+            img = Image.fromarray(Image)       
+            img  = ImageQt(img)
+            self.camera_right.setPixmap(QPixmap.fromImage(img))
         else:
-            self.mapping.handler.emit_camR = Image
+            self.mapping.handler.emit_camR = img
 
     ##################### Movement Sequencing ##########################
 
