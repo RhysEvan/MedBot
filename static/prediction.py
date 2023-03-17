@@ -2,10 +2,12 @@ from retna.main import Main
 from PIL import Image
 import numpy as np
 from skimage.morphology import skeletonize
+from skimage.transform import resize
 import cv2
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+import matplotlib.pyplot as plt
 
 class prediction():
     def __init__(self, main):
@@ -18,17 +20,19 @@ class prediction():
         print("currently connected to print predict left call, make sure that trigger is eventually removed since it won't need a button")
         #contours = self.wound_encase(R_im)
         #R_crop = self.cropper(R_im, contours)
-        R_pred = self.retna.cam_predict(self.image_r, r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models", "\\pleora_crop_bigger_with_loss_second_save_for_testing.pt")
-        ConvertToQtFormat = QImage(R_pred.data, R_pred.shape[1], R_pred.shape[0], QImage.Format_RGB888)
-        R_Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
-        self.gui.predict_right.setPixmap(QPixmap.fromImage(R_Pic))
+        #R_pred = self.retna.cam_predict(self.image_r, r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models", "\\pleora_state_dict_2.pt")
+        #ConvertToQtFormat = QImage(R_pred.data, R_pred.shape[1], R_pred.shape[0], QImage.Format_RGB888)
+        #R_Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
+        #self.gui.predict_right.setPixmap(QPixmap.fromImage(R_Pic))
 
         #contours = self.wound_encase(L_im)
         #L_crop = self.cropper(L_im, contours)
-        L_pred = self.retna.cam_predict(self.image_l, r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models", "\\pleora_crop_bigger_with_loss_second_save_for_testing.pt")
+        L_pred = self.retna.cam_predict(self.image_l, r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models", "\\pleora_state_dict_2.pt")
+        plt.imshow(L_pred)
+        plt.show()
         ConvertToQtFormat = QImage(L_pred.data, L_pred.shape[1], L_pred.shape[0], QImage.Format_RGB888)
         L_Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
-        self.gui.predict_right.setPixmap(QPixmap.fromImage(L_Pic))
+        self.gui.predict_left.setPixmap(QPixmap(L_Pic))
     
     def paste_predict(self, image):
         if image == None:

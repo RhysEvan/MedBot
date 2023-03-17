@@ -24,8 +24,8 @@ class Feed(QThread):
         self.Color_run()
 
     def Mapping_run(self):
-        self.cam.SetParameterDouble("ExposureTime",800)
-        self.cam.SetParameterDouble("Gain", 10)
+        self.cam.SetParameterDouble("ExposureTime",10000)
+        self.cam.SetParameterDouble("Gain", 15.5)
         while self.MappingActive:
             if self.ret is not None:
                 Grey = self.GREYFrame()
@@ -37,8 +37,8 @@ class Feed(QThread):
 
     def Color_run(self): 
         self.cam.Start()
-        self.cam.SetParameterDouble("ExposureTime", 1000)
-        self.cam.SetParameterDouble("Gain", 10)
+        self.cam.SetParameterDouble("ExposureTime", 10000)
+        self.cam.SetParameterDouble("Gain", 15.5)
         self.calib_percentile_whitebalance(99)
         while self.ColorActive:
             if self.ret is not None:
@@ -83,5 +83,5 @@ class Feed(QThread):
 
     def calib_percentile_whitebalance(self, percentile_value):
         image = self.cam.GetFrame()
-        image = cv2.cvtColor(image.astype(np.uint16), cv2.COLOR_BayerRGGB2RGB)
+        image = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_BayerRGGB2RGB)
         self.Calib =  np.percentile(image, percentile_value, axis=(0, 1))

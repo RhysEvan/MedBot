@@ -58,8 +58,8 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         ## all background related functions ##
         self.back = backend(self,custom_check = custom)
         ##link to Retna through prediction calling ##
-        self.predict_left = prediction(self)
-        self.predict_right = prediction(self)
+        self.prediction_left = prediction(self)
+        self.prediction_right = prediction(self)
         ##link to 3D mapping code ##
         #self.mapping = Map(self)
 
@@ -96,14 +96,14 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     def image_update_left(self, Image):
         if not self.map_run:
             #Image = self.predict_left.paste_predict(Image)
-            self.predict_left.image_l = Image
+            self.prediction_left.image_l = self.cam_l.Image
             self.camera_left.setPixmap(QPixmap.fromImage(Image))
         else:
             self.mapping.handler.emit_camL = Image
     
     def image_update_right(self, Image):
         if not self.map_run:
-            #Image = self.predict_left.paste_predict(Image)
+            #Image =  self.prediction_left.paste_predict(Image)
             self.camera_right.setPixmap(QPixmap.fromImage(Image))
         else:
             self.mapping.handler.emit_camR = Image
