@@ -22,15 +22,16 @@ class prediction():
         #contours = self.wound_encase(R_im)
         #R_crop = self.cropper(R_im, contours)
         #R_pred = self.retna.cam_predict(self.image_r, r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models", "\\pleora_state_dict_2.pt")
-        #ConvertToQtFormat = QImage(R_pred.data, R_pred.shape[1], R_pred.shape[0], QImage.Format_RGB888)
+        #R_im = Image.fromarray(R_pred)
+        #ConvertToQtFormat = ImageQt(R_im)
         #R_Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
         #self.gui.predict_right.setPixmap(QPixmap.fromImage(R_Pic))
 
         #contours = self.wound_encase(L_im)
         #L_crop = self.cropper(L_im, contours)
         L_pred = self.retna.cam_predict(self.image_l, r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models", "\\pleora_state_dict_2.pt")
-        im = Image.fromarray(L_pred)
-        ConvertToQtFormat = ImageQt(im)
+        L_im = Image.fromarray(L_pred)
+        ConvertToQtFormat = ImageQt(L_im)
         #ConvertToQtFormat = QImage(L_pred.data, L_pred.shape[1], L_pred.shape[0], QImage.Format_RGB888)
         L_Pic = ConvertToQtFormat.scaled(500, 500, Qt.KeepAspectRatio)
         self.gui.predict_left.setPixmap(QPixmap(L_Pic))
@@ -43,7 +44,7 @@ class prediction():
             #crop = self.cropper(image, contours)
             pred = self.retna.cam_predict(image, r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models", r"\\pleora_crop_bigger_with_loss_second_save_for_testing.pt")
             skeleton = skeletonize(pred)
-            image.paste(skeleton, (self.x_skin, self.y_skin))
+            image.paste(skeleton)
             return image
 
     def cropper(self,im,contours):
