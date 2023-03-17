@@ -1,5 +1,6 @@
 from retna.main import Main
 from PIL import Image
+from PIL.ImageQt import ImageQt
 import numpy as np
 from skimage.morphology import skeletonize
 from skimage.transform import resize
@@ -28,10 +29,10 @@ class prediction():
         #contours = self.wound_encase(L_im)
         #L_crop = self.cropper(L_im, contours)
         L_pred = self.retna.cam_predict(self.image_l, r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models", "\\pleora_state_dict_2.pt")
-        plt.imshow(L_pred)
-        plt.show()
-        ConvertToQtFormat = QImage(L_pred.data, L_pred.shape[1], L_pred.shape[0], QImage.Format_RGB888)
-        L_Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
+        im = Image.fromarray(L_pred)
+        ConvertToQtFormat = ImageQt(im)
+        #ConvertToQtFormat = QImage(L_pred.data, L_pred.shape[1], L_pred.shape[0], QImage.Format_RGB888)
+        L_Pic = ConvertToQtFormat.scaled(500, 500, Qt.KeepAspectRatio)
         self.gui.predict_left.setPixmap(QPixmap(L_Pic))
     
     def paste_predict(self, image):
