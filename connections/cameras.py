@@ -26,6 +26,7 @@ class Feed(QThread):
     def Mapping_run(self):
         self.cam.SetParameterDouble("ExposureTime",10000)
         self.cam.SetParameterDouble("Gain", 15.5)
+        self.cam.SetParameterDouble("Binning", 2)
         while self.MappingActive:
             if self.ret is not None:
                 Grey = self.GREYFrame()
@@ -39,6 +40,7 @@ class Feed(QThread):
         self.cam.Start()
         self.cam.SetParameterDouble("ExposureTime", 10000)
         self.cam.SetParameterDouble("Gain", 15.5)
+        self.cam.SetParameterDouble("Binning",2)
         self.calib_percentile_whitebalance(99)
         while self.ColorActive:
             if self.ret is not None:

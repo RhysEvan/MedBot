@@ -27,12 +27,14 @@ class Image_Handle():
         self.cam_L.Start()
         self.cam_L.SetParameterDouble("ExposureTime", 10000)
         self.cam_L.SetParameterDouble("Gain", 15.5)
+        self.cam_L.SetParameterDouble("Binning",2)
         ret = self.cam_R.Open(self.loc_R)
         if ret == None:
             return
         self.cam_R.Start()
         self.cam_R.SetParameterDouble("ExposureTime", 10000)
         self.cam_R.SetParameterDouble("Gain", 15.5)
+        self.cam_R.SetParameterDouble("Binning", 2)
 
     def GetFrame(self):
         self.Image_L = cv2.cvtColor(self.cam_L.GetFrame().clip(0,255).astype(np.uint8), cv2.COLOR_BayerRGGB2GRAY)
@@ -51,7 +53,7 @@ class Image_Handle():
             else:
                 break
         Projector.DestroyWindow()
-        return Threshold_list
+        return np.array(Threshold_list)
 
     def single_run_frame(self,numberOfImages):
         image_counter = 0
@@ -90,7 +92,7 @@ class Image_Handle():
                 image_counter += 1
             else :
                 break
-        return [Vert_list, INV_Vert_list, Horz_list, INV_Horz_list]
+        return [np.array(Vert_list), np.array(INV_Vert_list), np.array(Horz_list), np.array(INV_Horz_list)]
 
     def ContinThreshold(self):
         image_counter = 0
