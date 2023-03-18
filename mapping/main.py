@@ -6,6 +6,7 @@ from InputParameters import *
 import time
 from Detection import Detecting
 
+
 ## Gray code Pattern Generation (gets saved)
 #pattern = Graycode.GrayCode()
 #pattern.BinaireCode()
@@ -32,7 +33,7 @@ class Mapping():
             import StereoCalibration
         elif calibrate == 'no' or calibrate == 'No':
             print('Calibration parameters of last calibration used :')
-            PrintParameters()
+            self.triang.PrintParameters()
     
     def map_test_code(self):
         start = time.time()
@@ -50,12 +51,12 @@ class Mapping():
     def continuous_mapping(self):
         self.cont_handler.ContinFrame()
         self.cont_handler.ContinThreshold()
-        DecodeGrayCode(binaryMaxValue)
-        Gray2Dec()
+        self.detect.DecodeGrayCode(binaryMaxValue)
+        self.detect.Gray2Dec()
 
         ## Triangulation
-        PrintParameters()
-        Triangulate()
+        self.triang.PrintParameters()
+        self.triang.Triangulate()
 
 if __name__ == "__main__":
     map = Mapping()
