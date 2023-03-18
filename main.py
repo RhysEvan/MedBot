@@ -32,7 +32,6 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.map_run = False
         self.setupUi(self)
         ## Initialisation of GUI ##
-        ## if changes are made to App_GUI.ui PLEASE add chosen_bot callable to the setupUi function and to self.visual = interface(self.centralwidget, robot=chosen_bot)
         self.visual.kin.model_param("HangingArm")
         if pleora:
             ## Threaded Camera Left## 
@@ -98,7 +97,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     def image_update_left(self, Img):
         if not self.map_run:
             Img = self.predict_left.paste_predict(Img)
-            img = Image.fromarray(Image)
+            img = Image.fromarray(img)
             img  = ImageQt(img)
             self.camera_left.setPixmap(QPixmap.fromImage(img))
         else:
@@ -107,7 +106,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
     def image_update_right(self, img):
         if not self.map_run:
             img =  self.prediction_left.paste_predict(img)
-            img = Image.fromarray(Image)       
+            img = Image.fromarray(img)       
             img  = ImageQt(img)
             self.camera_right.setPixmap(QPixmap.fromImage(img))
         else:

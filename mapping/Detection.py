@@ -96,9 +96,8 @@ class Detecting():
                 ## array for Vertical Patterns
                 image_greyscaleVert = self.parent.Vert_list[i][j]
                 image_greyscaleVertINV = self.parent.INV_Vert_list[i][j]
-                image_greyscaleVert[image_greyscaleVert >= image_greyscaleVertINV] = 1
-                image_greyscaleVert[image_greyscaleVert > 1] = 0
-                image_binaryVert = image_greyscaleVert.astype('str')
+                image_binaryVert = np.where(image_greyscaleVert >= image_greyscaleVertINV, 1, 0)
+                #image_binaryVert = image_greyscaleVert.astype('str')
                 if j == 0:
                     ArrayVertLWithoutMask = np.add(ArrayVertLWithoutMask, image_binaryVert)
                 elif j == 1:
@@ -106,9 +105,8 @@ class Detecting():
                 ## Array for Horizontal patterns
                 image_greyscaleHor = self.parent.Horz_list[i][j]
                 image_greyscaleHorINV = self.parent.INV_Horz_list[i][j]
-                image_greyscaleHor[image_greyscaleHor >= image_greyscaleHorINV] = 1
-                image_greyscaleHor[image_greyscaleHor > 1] = 0
-                image_binaryHor = image_greyscaleHor.astype('str')
+                image_binaryHor = np.where(image_greyscaleHor >= image_greyscaleHorINV, 1, 0)
+                #image_binaryHor = image_greyscaleHor.astype('str')
                 if j == 0:
                     ArrayHorLWithoutMask = np.add(ArrayHorLWithoutMask, image_binaryHor)
                 elif j == 1:
