@@ -1,4 +1,4 @@
-from retna.main import Main
+import run_training
 import numpy as np
 from skimage.morphology import skeletonize
 from skimage.transform import resize
@@ -9,19 +9,22 @@ from PyQt5.QtGui import *
 import matplotlib.pyplot as plt
 
 class prediction():
-    def __init__(self, main):
-        self.retna = Main("","",[])
-        self.gui = main
+    def __init__(self):
+        self.retna = run_training.Main("","",[])
 
     def paste_predict(self, image):
-        if image == None:
+        if image is None:
             return
         else:
             #contours = self.wound_encase(image)
             #crop = self.cropper(image, contours)
             pred = self.retna.cam_predict(image, r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models", "\\pleora_state_dict_2.pt")
+            #skeleton = pred
             skeleton = skeletonize(pred)
-            image.paste(skeleton)
+            image = (resize(image, (480,640))*255).mean(axis=2)
+            image = np.tile(image[...,None],[1,1,3]).astype(np.uint8)
+            skeleton =  (resize(skeleton, image.shape)*255).astype(np.uint8)
+            image[skeleton>100] = skeleton[skeleton >100]
             return image
 
     def cropper(self,im,contours):

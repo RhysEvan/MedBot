@@ -4,8 +4,6 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 import numpy as np
-from PIL import Image
-from PIL.ImageQt import ImageQt
 
 #file based imports
 from static.Robot_Control_Panel import Ui_MainWindow
@@ -15,14 +13,12 @@ from connections.serial_com_CUSTOM import *
 from static.json_compiler import *
 from static.backend_GUI import backend
 from static.triggers import trigger
-from static.prediction import prediction
 #from static.map_sequencing import Map
-try:
-    from connections.cameras import *
-    pleora_lib = True
-except:
-    print("Pleora Library not Installed")
-    pleora_lib = False
+from connections.cameras import *
+pleora_lib = True
+#except:
+#    print("Pleora Library not Installed")
+#    pleora_lib = False
 
 class app_stitching(QMainWindow, Ui_MainWindow):
     def __init__(self, port = None, pleora= True):
@@ -58,9 +54,6 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.file = json_handler()
         ## all background related functions ##
         self.back = backend(self,custom_check = custom)
-        ##link to Retna through prediction calling ##
-        self.prediction_left = prediction(self)
-        self.prediction_right = prediction(self)
         ##link to 3D mapping code ##
         #self.mapping = Map(self)
 
@@ -94,20 +87,14 @@ class app_stitching(QMainWindow, Ui_MainWindow):
 
     ####################### threading method  ######################################
 
-    def image_update_left(self, Img):
+    def image_update_left(self, img):
         if not self.map_run:
-            Img = self.predict_left.paste_predict(Img)
-            img = Image.fromarray(img)
-            img  = ImageQt(img)
             self.camera_left.setPixmap(QPixmap.fromImage(img))
         else:
             self.mapping.handler.emit_camL = img
     
     def image_update_right(self, img):
         if not self.map_run:
-            img =  self.prediction_left.paste_predict(img)
-            img = Image.fromarray(img)       
-            img  = ImageQt(img)
             self.camera_right.setPixmap(QPixmap.fromImage(img))
         else:
             self.mapping.handler.emit_camR = img

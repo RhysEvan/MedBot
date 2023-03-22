@@ -6,12 +6,17 @@ import numpy as np
 import cv2
 from skimage import img_as_ubyte
 from CameraModel.Pleora.RGB.GenericRGBCamera import GenericRGBCamera
+from PIL import Image
+from PIL.ImageQt import ImageQt
+from static.prediction import prediction
+
 
 class Feed(QThread):
     def __init__(self , location = None, parent=None):
         super(Feed,self).__init__(parent)
         self.cam = GenericRGBCamera()
         self.loc = location
+        self.predict = prediction()
         self.first = True
         self.ColorActive = True
         self.MappingActive = False
@@ -40,12 +45,13 @@ class Feed(QThread):
         self.cam.Start()
         self.cam.SetParameterDouble("ExposureTime", 10000)
         self.cam.SetParameterDouble("Gain", 15.5)
-        self.cam.SetParameterDouble("Binning",2)
+        self.cam.SetParameterInteger("BinningHorizontal",2)
+        self.cam.SetParameterInteger("BinningVertical",2)
         self.calib_percentile_whitebalance(99)
         while self.ColorActive:
             if self.ret is not None:
                 Pic = self.RGBFrame()
-                if Pic:
+                if Pic is not None:
                     self.ImageUpdate.emit(Pic)
                 else:
                     self.cam.Close()
@@ -73,6 +79,9 @@ class Feed(QThread):
         if not (self.Image == 0).all() or self.first == True:
             self.Image = cv2.cvtColor(self.Image.astype(np.uint8), cv2.COLOR_BayerRGGB2RGB)
             Pic = self.white_balance_image(self.Image,self.Calib)
+            img = self.predict.paste_predict(Pic)
+            img = Image.fromarray(img)
+            Pic = ImageQt(img)
             self.first = False
             return Pic
         else:

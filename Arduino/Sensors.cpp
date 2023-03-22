@@ -22,7 +22,7 @@ void Sensors::init(int id) {
     while(1){
         if(ams5600.detectMagnet() == 1 ){
             Serial.print("Current Magnitude: ");
-            Serial.println(ams5600.getMagnitude());
+            Serial.println(ams5600.readMagnitude());
             break;
         }
         else{
@@ -36,7 +36,7 @@ void Sensors::init(int id) {
 double Sensors::getAngle(int id) {
   tcaselect(id);
   /* Raw data reports 0 - 4095 segments, which is 0.087 of a degree */
-  double retVal = (ams5600.getRawAngle() * 0.087) - amsOffsets[id];
+  double retVal = (ams5600.readAngle() * 0.087) - amsOffsets[id];
   
   if (retVal<=-180.0) retVal=360+retVal;
   if (retVal>180.0) retVal=360-retVal;
