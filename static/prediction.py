@@ -1,4 +1,4 @@
-import run_training
+import Retna_run_training
 import numpy as np
 from skimage.morphology import skeletonize
 from skimage.transform import resize
@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 class prediction():
     def __init__(self):
-        self.retna = run_training.Main("","",[])
+        self.retna = Retna_run_training.Main("","",[])
 
     def paste_predict(self, image):
         if image is None:
