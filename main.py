@@ -26,9 +26,10 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.vis_path = True
         self.animate = False
         self.map_run = False
+        self.robot_type = "HangingArm"
         self.setupUi(self)
         ## Initialisation of GUI ##
-        self.visual.kin.model_param("HangingArm")
+        self.visual.kin.model_param(self.robot_type)
         if pleora:
             ## Threaded Camera Left## 
             self.cam_l = Feed("2BA200004266") ## Number represents the camera adress on the computer ##

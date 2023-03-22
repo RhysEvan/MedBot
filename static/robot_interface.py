@@ -10,6 +10,7 @@ class dynamic_gui:
         self.val = partial(self.slider_change)
         for i,key in enumerate(preset_models.keys()):
             self.main.robot_options.insertItem(i,key)
+        self.param_load(self.main.robot_type)
 
     def show_path(self):
         self.main.vis_path = not self.main.vis_path
@@ -27,6 +28,7 @@ class dynamic_gui:
     def clicked(self):
         self.robot = self.main.robot_options.currentItem()
         self.main.graph.kin.model_param(self.robot.text())
+        self.param_load(self.robot.text())
         self.backend.motor_list = []
         self.backend.coord_list = []
         self.main.motorlist.clear()
@@ -66,6 +68,44 @@ class dynamic_gui:
                 try: int(var.text())
                 except: return
                 self.backend.location_3d[i] = int(var.text())
+
+    #################################################################################
+    ######################## DH parameters ##########################################
+    #################################################################################
+
+    def change_alpha(self,alpha):
+        param = preset_models[self.main.robot_type]
+        param["alpha"] = alpha
+        
+    def change_theta(self, theta):
+        param = preset_models[self.main.robot_type]
+        param["theta"] = theta
+    
+    def change_radius(self, radius):
+        param = preset_models[self.main.robot_type]
+        param["radius"] = radius
+    
+    def change_dists(self, dists): 
+        param = preset_models[self.main.robot_type]
+        param["dists"] = dists
+
+    def change_active(self, active):
+        param = preset_models[self.main.robot_type]
+        param["active"] = active
+    
+    def change_limits(self,limits):
+        param = preset_models[self.main.robot_type]
+        param["limits"] = limits
+    
+    def param_load(self, robot):
+        param = preset_models[robot]
+        self.main.DH_param_1.setText(str(param["alpha"]))
+        self.main.DH_param_2.setText(str(param["theta"]))
+        self.main.DH_param_3.setText(str(param["radius"]))
+        self.main.DH_param_4.setText(str(param["dists"]))
+        self.main.DH_param_5.setText(str(param["active"]))
+        self.main.DH_param_6.setText(str(param["limits"]))
+
 
 def val(i, pos, limits, radius, theta, active):
     if i ==0 and pos != False:

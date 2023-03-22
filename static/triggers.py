@@ -23,4 +23,11 @@ class trigger():
         main.alphacoord.textEdited.connect(main.back.dynamic.location)
         main.betacoord.textEdited.connect(main.back.dynamic.location)
         main.gammacoord.textEdited.connect(main.back.dynamic.location)
+
+        main.DH_param_1.textEdited.connect(main.back.dynamic.change_alpha)
+        main.DH_param_2.textEdited.connect(main.back.dynamic.change_theta)
+        main.DH_param_3.textEdited.connect(main.back.dynamic.change_radius)
+        main.DH_param_4.textEdited.connect(main.back.dynamic.change_dists)
+        main.DH_param_5.textEdited.connect(main.back.dynamic.change_active)
+        main.DH_param_6.textEdited.connect(main.back.dynamic.change_limits)
  
