@@ -25,14 +25,14 @@ class Image_Handle():
         if ret == None:
             return
         self.cam_L.Start()
-        self.cam_L.SetParameterDouble("ExposureTime", 10000)
+        self.cam_L.SetParameterDouble("ExposureTime", 17000)
         self.cam_L.SetParameterDouble("Gain", 15.5)
         self.cam_L.SetParameterDouble("Binning",2)
         ret = self.cam_R.Open(self.loc_R)
         if ret == None:
             return
         self.cam_R.Start()
-        self.cam_R.SetParameterDouble("ExposureTime", 10000)
+        self.cam_R.SetParameterDouble("ExposureTime", 17000)
         self.cam_R.SetParameterDouble("Gain", 15.5)
         self.cam_R.SetParameterDouble("Binning", 2)
 

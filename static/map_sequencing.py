@@ -1,4 +1,4 @@
-from mapping import main
+from . import mapping_run
 
 class Map():
     def __init__(self, main):

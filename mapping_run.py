@@ -1,10 +1,10 @@
-from Image_processor import Image_Handle
-from Graycode import *
-from Triangulation import triangulator
+from mapping.Image_processor import Image_Handle
+from mapping.Graycode import *
+from mapping.Triangulation import triangulator
 import cv2
-from InputParameters import *
+from mapping.InputParameters import *
 import time
-from Detection import Detecting
+from mapping.Detection import Detecting
 
 
 ## Gray code Pattern Generation (gets saved)
@@ -30,7 +30,7 @@ class Mapping():
         calibrate = input('Do you want to do a new calibration? Yes/no \nIf not, parameters of last calibration will be used. These may be incorrect. \nYes / no : ')
         if calibrate == 'yes' or calibrate == 'Yes':
             print('Starting Calibration...')
-            import StereoCalibration
+            import mapping.StereoCalibration
         elif calibrate == 'no' or calibrate == 'No':
             print('Calibration parameters of last calibration used :')
             self.triang.PrintParameters()
