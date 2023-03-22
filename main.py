@@ -9,16 +9,16 @@ import numpy as np
 from static.Robot_Control_Panel import Ui_MainWindow
 from connections.serial_com_GRBL import *
 from connections.serial_com_CUSTOM import *
-
 from static.json_compiler import *
 from static.backend_GUI import backend
 from static.triggers import trigger
 #from static.map_sequencing import Map
-from connections.cameras import *
-pleora_lib = True
-#except:
-#    print("Pleora Library not Installed")
-#    pleora_lib = False
+try:
+    from connections.cameras import *
+    pleora_lib = True
+except:
+    print("Pleora Library not Installed")
+    pleora_lib = False
 
 class app_stitching(QMainWindow, Ui_MainWindow):
     def __init__(self, port = None, pleora= True):
