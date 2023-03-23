@@ -3,11 +3,11 @@ import cv2
 import numpy as np
 import cv2 as cv
 import open3d as o3d
-import InputParameters
+import mapping.InputParameters as InputParameters
 import csv
-import Visualization
+import mapping.Visualization as Visualization
 import pickle
-from Detection import Detecting
+from mapping.Detection import Detecting
 
 class triangulator():
     def __init__(self, parent):

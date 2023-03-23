@@ -1,6 +1,6 @@
 import os
-import Graycode
-import InputParameters
+import mapping.Graycode as Graycode
+import mapping.InputParameters as InputParameters
 import cv2 as cv
 import numpy as np
 import numpy.ma as ma
@@ -85,11 +85,14 @@ class Detecting():
         start = time.time()
 
         #OLD METHOD.PY has all the methods that were not used for this thesis
-        ArrayVertLWithoutMask = np.full(self.parent.Vert_list[0][0].shape, "", dtype=object)
-        ArrayHorLWithoutMask = np.full(self.parent.Horz_list[0][0].shape, "", dtype=object)
-        ArrayVertRWithoutMask = np.full(self.parent.Vert_list[0][1].shape, "", dtype=object)
-        ArrayHorRWithoutMask = np.full(self.parent.Horz_list[0][1].shape, "", dtype=object)
-
+        listVertLWithoutMask = []
+        listHorLWithoutMask = []
+        listVertRWithoutMask = []
+        listHorRWithoutMask = []
+        maskingLVert = np.full(self.parent.Vert_list[0][0].shape, 0, dtype=object)
+        maskingRVert = np.full(self.parent.Horz_list[0][0].shape, 0, dtype=object)
+        maskingLHor = np.full(self.parent.Vert_list[0][1].shape, 0, dtype=object)
+        maskingRHor = np.full(self.parent.Horz_list[0][1].shape, 0, dtype=object)
         for i in range(Graycode.length - numberOfImages):  ## -1 because resolution of projector is higher than camera's
             start2 = time.time()
             for j in range(2):
@@ -97,45 +100,46 @@ class Detecting():
                 image_greyscaleVert = self.parent.Vert_list[i][j]
                 image_greyscaleVertINV = self.parent.INV_Vert_list[i][j]
                 image_binaryVert = np.where(image_greyscaleVert >= image_greyscaleVertINV, 1, 0)
-                #image_binaryVert = image_greyscaleVert.astype('str')
                 if j == 0:
-                    ArrayVertLWithoutMask = np.add(ArrayVertLWithoutMask, image_binaryVert)
+                    listVertLWithoutMask.append(image_binaryVert)
+                    maskingLVert = np.add(maskingLVert, image_binaryVert)
                 elif j == 1:
-                    ArrayVertRWithoutMask = np.add(ArrayVertRWithoutMask, image_binaryVert)
+                    listVertRWithoutMask.append(image_binaryVert)
+                    maskingRVert = np.add(maskingRVert, image_binaryVert)
                 ## Array for Horizontal patterns
                 image_greyscaleHor = self.parent.Horz_list[i][j]
                 image_greyscaleHorINV = self.parent.INV_Horz_list[i][j]
                 image_binaryHor = np.where(image_greyscaleHor >= image_greyscaleHorINV, 1, 0)
-                #image_binaryHor = image_greyscaleHor.astype('str')
                 if j == 0:
-                    ArrayHorLWithoutMask = np.add(ArrayHorLWithoutMask, image_binaryHor)
+                    listHorLWithoutMask.append(image_binaryHor)
+                    maskingLHor = np.add(maskingLHor, image_binaryHor)
                 elif j == 1:
-                    ArrayHorRWithoutMask = np.add(ArrayHorRWithoutMask, image_binaryHor)
-                
-            end2 = time.time()
-            print("time for a picture: "+str(end2-start2))
+                    listHorRWithoutMask.append(image_binaryHor)
+                    maskingRHor = np.add(maskingRHor, image_binaryHor)
+
             print(i,'done')
+        self.ArrayVertLWithoutMask = np.array(listVertLWithoutMask)
+        self.ArrayVertRWithoutMask = np.array(listVertRWithoutMask)
+        self.ArrayHorLWithoutMask = np.array(listHorLWithoutMask)
+        self.ArrayHorRWithoutMask = np.array(listHorRWithoutMask)
 
         ## If no mask is needed. or masking cannot be done correctly because of reflective surface set nomask to True. This way no mask will be added
         nomask = False
         if nomask == True:
-            self.maskX = np.zeros_like(ArrayVertLWithoutMask)
-            self.maskY= np.zeros_like(ArrayVertRWithoutMask)
-        start1 = time.time()
+            self.maskX = np.zeros_like(self.ArrayVertLWithoutMask)
+            self.maskY= np.zeros_like(self.ArrayVertRWithoutMask)
         ################################################# APPLYING MASKS TO DIFFERENT MATRICES FOR LATER USE #########################################################
-        arrayVertLMasked = ma.masked_array(ArrayVertLWithoutMask,mask= self.maskX)
-        self.arrayVertLMasked = ma.filled(arrayVertLMasked, '0')
+        arrayVertLMasked = ma.masked_array(maskingLVert,mask= self.maskX)
+        self.arrayVertLMasked = ma.filled(arrayVertLMasked, 0)
 
-        arrayHorLMasked = ma.masked_array(ArrayHorLWithoutMask, mask= self.maskX)
-        self.arrayHorLMasked = ma.filled(arrayHorLMasked, '0')
+        arrayHorLMasked = ma.masked_array(maskingLHor, mask= self.maskX)
+        self.arrayHorLMasked = ma.filled(arrayHorLMasked, 0)
 
-        arrayVertRMasked = ma.masked_array(ArrayVertRWithoutMask, mask= self.maskY)
-        self.arrayVertRMasked = ma.filled(arrayVertRMasked, '0')
+        arrayVertRMasked = ma.masked_array(maskingRVert, mask= self.maskY)
+        self.arrayVertRMasked = ma.filled(arrayVertRMasked, 0)
 
-        arrayHorRMasked = ma.masked_array(ArrayHorRWithoutMask, mask= self.maskY)
-        self.arrayHorRMasked = ma.filled(arrayHorRMasked, '0')
-        end1 = time.time()
-        print("intermideary timer final part: "+str(end1-start1))
+        arrayHorRMasked = ma.masked_array(maskingRHor, mask= self.maskY)
+        self.arrayHorRMasked = ma.filled(arrayHorRMasked, 0)
         end = time.time()
         totaltime = end - start
         print('Total computing time of method', InputParameters.methodOfTriangulation, ": ", str(totaltime))
@@ -156,7 +160,7 @@ class Detecting():
         print('Converting Gray to dec code')
         for i in range(self.parent.Vert_list[0][0].shape[0]):
             for j in range(self.parent.Vert_list[0][0].shape[1]):
-                self.arrayVertLMasked[i][j] = self.inversegrayCode(int(self.arrayVertLMasked[i][j], 2))
+                self.arrayVertLMasked[i][j] = self.inversegrayCode(int(self.arrayVertLMasked[i][j],2))
                 self.arrayHorLMasked[i][j] = self.inversegrayCode(int(self.arrayHorLMasked[i][j], 2))
 
         for i in range(self.parent.Horz_list[0][0].shape[0]):

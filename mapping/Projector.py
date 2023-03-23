@@ -1,7 +1,7 @@
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"           ## Parameter to turn off Pygame console prints
 import pygame
-import InputParameters
+import mapping.InputParameters as InputParameters
 
 def imgToScrn(scrn,imgFilename):                ## Function to control projector and display full screen
     pygame.init()

@@ -2,8 +2,8 @@ import cv2
 import time
 import os
 import numpy as np
-import Projector
-import InputParameters
+import mapping.Projector as Projector
+import mapping.InputParameters as InputParameters
 from CameraModel.Pleora.RGB.GenericRGBCamera import GenericRGBCamera
 from skimage import img_as_ubyte
 import matplotlib.pyplot as plt

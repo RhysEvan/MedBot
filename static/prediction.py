@@ -20,11 +20,11 @@ class prediction():
             #crop = self.cropper(image, contours)
             pred = self.retna.cam_predict(image, r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models", "\\pleora_state_dict_2.pt")
             #skeleton = pred
-            skeleton = thin(pred, max_num_iter = 5)
-            image = (resize(image, (480,640))*255).mean(axis=2)
+            skeleton = skeletonize(pred)
+            image = (resize(image, (480,640))*255).astype(np.uint8)
             #image = np.tile(image[...,None],[1,1,3]).astype(np.uint8)
             skeleton =  (resize(skeleton, image.shape)*255).astype(np.uint8)
-            image[skeleton>10] = skeleton[skeleton >10]
+            image[skeleton>100] = skeleton[skeleton >100]
             return image
 
     def cropper(self,im,contours):

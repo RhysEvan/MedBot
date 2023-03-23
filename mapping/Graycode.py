@@ -5,8 +5,8 @@ import math
 import sys
 import numpy.matlib
 from PIL import Image
-import Image_processor
-import InputParameters
+import mapping.Image_processor as Image_processor
+import mapping.InputParameters as InputParameters
 np.set_printoptions(threshold=sys.maxsize)
 
 
