@@ -3,6 +3,8 @@ import numpy as np
 from torch import nn
 import torch.nn.functional as F
 import torch.optim as optim
+import random
+from scipy.spatial.transform import Rotation as R
 
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider, Button
@@ -110,6 +112,31 @@ class Kinematics():
         target = np.array(target)    
 
         return inputs, target
+
+    def generate_paths(self, n=100):
+        #initial point:
+        points = [50,50,50,10,10,10]
+        for x in range(n):
+            # Generate a random displacement vector within a 20mm radius sphere
+            disp = np.random.normal(size=6)
+            disp /= np.linalg.norm(disp)
+            disp *= random.uniform(0, 20)
+
+            # Generate random roll, pitch, and yaw angles
+            roll = random.uniform(-np.pi/4, np.pi/4)
+            pitch = random.uniform(-np.pi/4, np.pi/4)
+            yaw = random.uniform(-np.pi/4, np.pi/4)
+
+            # Create a rotation matrix from the roll, pitch, and yaw angles
+            r = R.from_euler('xyz', [roll, pitch, yaw], degrees=False)
+            rot_mat = r.as_matrix()
+
+            # Rotate the displacement vector by the rotation matrix
+            disp = rot_mat.dot(disp)
+
+            new_point = points[-1] + disp
+            points.append(new_point)
+        return points
 
     ########
     def motorscan(self):
