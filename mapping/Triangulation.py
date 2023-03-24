@@ -37,13 +37,13 @@ class triangulator():
 
     ## Function for finding XYZ Coordinates of point, These XYZ coordinates are saved in a Point Cloud.ply file in the main directory
     def Triangulate(self):
-        testarray = []
-        colors = []
+        self.testarray = []
+        self.colors = []
         i = 0
         with open('ProjectionMatrixLeftCam.pkl', 'rb') as file1:
-            p1 = pickle.load(file1)
+            self.p1 = pickle.load(file1)
         with open('ProjectionMatrixRightCam.pkl', 'rb') as file2:
-            p2 = pickle.load(file2)
+            self.p2 = pickle.load(file2)
         with open('CameraMatrixL.pkl', 'rb') as file3:
             IntrinsicMatrixL = pickle.load(file3)
         with open('CameraMatrixR.pkl','rb') as file4:
@@ -64,28 +64,28 @@ class triangulator():
         ## Reading image for colors of point cloud
         img = self.parent.Horz_list[-1][0]
 
-        inversLeftCam,inversRightCam = self.parent.detect.FindCorrespondence()
+        inverseLeftCam,inverseRightCam = self.parent.detect.FindCorrespondence()
         ### Finding shape for looping
-        shapeInversLeft = np.shape(inversLeftCam)
-        shapeInversRight = np.shape(inversRightCam)
+        shapeInversLeft = np.shape(inverseLeftCam)
+        shapeInversRight = np.shape(inverseRightCam)
 
         methodOfTriangulation = InputParameters.methodOfTriangulation
 
         if methodOfTriangulation == 1:
             for ii in range(0, min(shapeInversLeft[0], shapeInversRight[0]) - 1):
                 for jj in range(0, min(shapeInversLeft[1], shapeInversRight[1]) - 1):
-                    if inversLeftCam[ii][jj][0] != 0 and inversLeftCam[ii][jj][1] != 0 and inversRightCam[ii][jj][
-                        0] != 0 and inversRightCam[ii][jj][1] != 0:
-                        projpoints1 = np.array([[inversLeftCam[ii][jj][0], inversLeftCam[ii][jj][1]],
-                                                [inversRightCam[ii][jj][0], inversRightCam[ii][jj][1]]], dtype=np.float32)
+                    if inverseLeftCam[ii][jj][0] != 0 and inverseLeftCam[ii][jj][1] != 0 and inverseRightCam[ii][jj][
+                        0] != 0 and inverseRightCam[ii][jj][1] != 0:
+                        projpoints1 = np.array([[inverseLeftCam[ii][jj][0], inverseLeftCam[ii][jj][1]],
+                                                [inverseRightCam[ii][jj][0], inverseRightCam[ii][jj][1]]], dtype=np.float32)
 
                         points4D = cv.triangulatePoints(p1, p2, projpoints1[0], projpoints1[1])  # De correcte manier
                         points3D = points4D[:3] / points4D[3]  ## From Homogenous coordinates to Cartesian
                         testarray.append(points3D[:3])
 
                         ## Array for colors
-                        a = inversLeftCam[ii][jj][0]
-                        b = inversLeftCam[ii][jj][1]
+                        a = inverseLeftCam[ii][jj][0]
+                        b = inverseLeftCam[ii][jj][1]
                         img = cv.cvtColor(img, cv.COLOR_RGB2BGR)
                         colors.append(img[int(b)][int(a)] / 255)
 
@@ -93,118 +93,76 @@ class triangulator():
             for ii in range(0,min(shapeInversLeft[0],shapeInversRight[0])-1):
                 for jj in range(0,min(shapeInversLeft[1],shapeInversRight[1])-1):
                     flag = False
-                    if inversLeftCam[ii][jj][0] != 0 and inversLeftCam[ii][jj][1] != 0 and inversRightCam[ii][jj][0] != 0 and inversRightCam[ii][jj][1] != 0:
 
-                        projpoints1 = np.array([[inversLeftCam[ii][jj][0],inversLeftCam[ii][jj][1]],
-                                                [inversRightCam[ii][jj][0], inversRightCam[ii][jj][1]]], dtype=np.float32)
+                    leftframe = inverseLeftCam[ii][jj]
+                    rightframe = inverseRightCam[ii][jj]
+                    
+                    if leftframe[0] != 0 and leftframe[1] != 0 and rightframe[0] != 0 and rightframe[1] != 0:
+                        self.pointer(leftframe,rightframe)
+                        self.array_colorizer(img, leftframe)
 
-                        points4D = cv.triangulatePoints(p1, p2, projpoints1[0], projpoints1[1])  # De correcte manier
-                        points3D = points4D[:3] / points4D[3]  ## From Homogenous coordinates to Cartesian
-                        testarray.append(points3D[:3])
-                        a = inversLeftCam[ii][jj][0]
-                        b = inversLeftCam[ii][jj][1]
-                        img = cv.cvtColor(img, cv.COLOR_GRAY2BGR)
-                        colors.append(img[int(b)][int(a)] / 255)
-                    elif inversLeftCam[ii][jj][0] != 0 and inversLeftCam[ii][jj][1] != 0 and inversRightCam[ii][jj][0] == 0 and inversRightCam[ii][jj][1] == 0:
-                        if inversRightCam[ii][jj+1][0] != 0 and inversRightCam[ii][jj+1][1] != 0:
-                            projpoints1 = np.array([[inversLeftCam[ii][jj][0], inversLeftCam[ii][jj][1]],
-                                                [inversRightCam[ii][jj+1][0], inversRightCam[ii][jj+1][1]]], dtype=np.float32)
-                            points4D = cv.triangulatePoints(p1, p2, projpoints1[0], projpoints1[1])  # De correcte manier
-                            points3D = points4D[:3] / points4D[3]  ## From Homogenous coordinates to Cartesian
-                            testarray.append(points3D[:3])
-                            flag = True
-                            a = inversLeftCam[ii][jj][0]
-                            b = inversLeftCam[ii][jj][1]
-                            img = cv.cvtColor(img, cv.COLOR_GRAY2BGR)
-                            colors.append(img[int(b)][int(a)] / 255)
-                        if inversRightCam[ii][jj-1][0] != 0 and inversRightCam[ii][jj-1][1] != 0 and flag == False:
-                            projpoints1 = np.array([[inversLeftCam[ii][jj][0], inversLeftCam[ii][jj][1]],
-                                                    [inversRightCam[ii][jj-1][0], inversRightCam[ii][jj-1][1]]],
-                                                dtype=np.float32)
-                            points4D = cv.triangulatePoints(p1, p2, projpoints1[0], projpoints1[1])  # De correcte manier
-                            points3D = points4D[:3] / points4D[3]  ## From Homogenous coordinates to Cartesian
-                            testarray.append(points3D[:3])
-                            flag = True
-                            a = inversLeftCam[ii][jj][0]
-                            b = inversLeftCam[ii][jj][1]
-                            img = cv.cvtColor(img, cv.COLOR_GRAY2BGR)
-                            colors.append(img[int(b)][int(a)] / 255)
-                        if inversRightCam[ii+1][jj][0] != 0 and inversRightCam[ii+1][jj][1] != 0 and flag == False:
-                            projpoints1 = np.array([[inversLeftCam[ii][jj][0], inversLeftCam[ii][jj][1]],
-                                                    [inversRightCam[ii+1][jj][0], inversRightCam[ii+1][jj][1]]],
-                                                dtype=np.float32)
-                            points4D = cv.triangulatePoints(p1, p2, projpoints1[0], projpoints1[1])  # De correcte manier
-                            points3D = points4D[:3] / points4D[3]  ## From Homogenous coordinates to Cartesian
-                            testarray.append(points3D[:3])
-                            flag = True
-                            a = inversLeftCam[ii][jj][0]
-                            b = inversLeftCam[ii][jj][1]
-                            img = cv.cvtColor(img, cv.COLOR_GRAY2BGR)
-                            colors.append(img[int(b)][int(a)] / 255)
-                        if inversRightCam[ii-1][jj][0] != 0 and inversRightCam[ii-1][jj][1] != 0 and flag == False:
-                            projpoints1 = np.array([[inversLeftCam[ii][jj][0], inversLeftCam[ii][jj][1]],
-                                                    [inversRightCam[ii-1][jj][0], inversRightCam[ii-1][jj][1]]],
-                                                dtype=np.float32)
-                            points4D = cv.triangulatePoints(p1, p2, projpoints1[0], projpoints1[1])  # De correcte manier
-                            points3D = points4D[:3] / points4D[3]  ## From Homogenous coordinates to Cartesian
-                            testarray.append(points3D[:3])
-                            flag = True
-                            a = inversLeftCam[ii][jj][0]
-                            b = inversLeftCam[ii][jj][1]
-                            img = cv.cvtColor(img, cv.COLOR_GRAY2BGR)
-                            colors.append(img[int(b)][int(a)] / 255)
-                    elif inversLeftCam[ii][jj][0] == 0 and inversLeftCam[ii][jj][1] == 0 and inversRightCam[ii][jj][0] != 0 and inversRightCam[ii][jj][1] != 0:
-                        if inversLeftCam[ii][jj + 1][0] != 0 and inversLeftCam[ii][jj + 1][1] != 0:
-                            projpoints1 = np.array([[inversLeftCam[ii][jj + 1][0], inversLeftCam[ii][jj + 1][1]],
-                                                    [inversRightCam[ii][jj][0], inversRightCam[ii][jj + 1][1]]],
-                                                dtype=np.float32)
-                            points4D = cv.triangulatePoints(p1, p2, projpoints1[0], projpoints1[1])  # De correcte manier
-                            points3D = points4D[:3] / points4D[3]  ## From Homogenous coordinates to Cartesian
-                            testarray.append(points3D[:3])
-                            flag = True
-                            a = inversLeftCam[ii][jj+1][0]
-                            b = inversLeftCam[ii][jj+1][1]
-                            img = cv.cvtColor(img, cv.COLOR_GRAY2BGR)
-                            colors.append(img[int(b)][int(a)] / 255)
-                        if inversLeftCam[ii][jj - 1][0] != 0 and inversLeftCam[ii][jj - 1][1] != 0 and flag == False:
-                            projpoints1 = np.array([[inversLeftCam[ii][jj - 1][0], inversLeftCam[ii][jj - 1][1]],
-                                                    [inversRightCam[ii][jj][0], inversRightCam[ii][jj][1]]],
-                                                dtype=np.float32)
-                            points4D = cv.triangulatePoints(p1, p2, projpoints1[0], projpoints1[1])  # De correcte manier
-                            points3D = points4D[:3] / points4D[3]  ## From Homogenous coordinates to Cartesian
-                            testarray.append(points3D[:3])
-                            flag = True
-                            a = inversLeftCam[ii][jj-1][0]
-                            b = inversLeftCam[ii][jj-1][1]
-                            img = cv.cvtColor(img, cv.COLOR_GRAY2BGR)
-                            colors.append(img[int(b)][int(a)] / 255)
-                        if inversLeftCam[ii + 1][jj][0] != 0 and inversLeftCam[ii + 1][jj][1] != 0 and flag == False:
-                            projpoints1 = np.array([[inversLeftCam[ii + 1][jj][0], inversLeftCam[ii + 1][jj][1]],
-                                                    [inversRightCam[ii][jj][0], inversRightCam[ii][jj][1]]],
-                                                dtype=np.float32)
-                            points4D = cv.triangulatePoints(p1, p2, projpoints1[0], projpoints1[1])  # De correcte manier
-                            points3D = points4D[:3] / points4D[3]  ## From Homogenous coordinates to Cartesian
-                            testarray.append(points3D[:3])
-                            flag = True
-                            a = inversLeftCam[ii+1][jj][0]
-                            b = inversLeftCam[ii+1][jj][1]
-                            img = cv.cvtColor(img, cv.COLOR_GRAY2BGR)
-                            colors.append(img[int(b)][int(a)] / 255)
-                        if inversLeftCam[ii - 1][jj][0] != 0 and inversLeftCam[ii - 1][jj][1] != 0 and flag == False:
-                            projpoints1 = np.array([[inversLeftCam[ii - 1][jj][0], inversLeftCam[ii - 1][jj][1]],
-                                                    [inversRightCam[ii][jj][0], inversRightCam[ii][jj][1]]],
-                                                dtype=np.float32)
-                            points4D = cv.triangulatePoints(p1, p2, projpoints1[0], projpoints1[1])  # De correcte manier
-                            points3D = points4D[:3] / points4D[3]  ## From Homogenous coordinates to Cartesian
-                            testarray.append(points3D[:3])
-                            flag = True
-                            a = inversLeftCam[ii-1][jj][0]
-                            b = inversLeftCam[ii-1][jj][1]
-                            img = cv.cvtColor(img, cv.COLOR_GRAY2BGR)
-                            colors.append(img[int(b)][int(a)] / 255)
+                    elif leftframe[0] != 0 and leftframe[1] != 0 and rightframe[0] == 0 and rightframe[1] == 0:
 
-        testarray = np.array(testarray)         ## XYZ Points
-        colors = np.array(colors)               ## Matching RGB values
+                        rightframe = inverseRightCam[ii][jj+1]
+
+                        if rightframe[0] != 0 and rightframe[1] != 0:
+                            self.pointer(leftframe,rightframe)
+                            flag = True
+                            self.array_colorizer(img, leftframe)
+                        
+                        rightframe = inverseRightCam[ii][jj-1]
+
+                        if rightframe[0] != 0 and rightframe[1] != 0 and flag == False:
+                            self.pointer(leftframe,rightframe)
+                            flag = True
+                            self.array_colorizer(img, leftframe)
+                        
+                        rightframe = inverseRightCam[ii+1][jj]
+                        
+                        if rightframe[0] != 0 and rightframe[1] != 0 and flag == False:
+                            self.pointer(leftframe,rightframe)
+                            flag = True
+                            self.array_colorizer(img, leftframe)
+
+                        rightframe = inverseRightCam[ii-1][jj]
+
+                        if rightframe[0] != 0 and rightframe[1] != 0 and flag == False:
+                            self.pointer(leftframe,rightframe)
+                            flag = True
+                            self.array_colorizer(img, leftframe)
+
+                    elif leftframe[0] == 0 and leftframe[1] == 0 and rightframe[0] != 0 and rightframe[1] != 0:
+
+                        leftframe = inverseLeftCam[ii][jj+1]
+
+                        if leftframe[0] != 0 and leftframe[1] != 0:
+                            self.pointer(leftframe, rightframe)
+                            flag = True
+                            self.array_colorizer(img, leftframe)
+                        
+                        leftframe = inverseLeftCam[ii][jj-1]
+
+                        if leftframe[0] != 0 and leftframe[1] != 0 and flag == False:
+                            self.pointer(leftframe,rightframe)
+                            flag = True
+                            self.array_colorizer(img, leftframe)
+
+                        leftframe = inverseLeftCam[ii + 1][jj]
+
+                        if leftframe[0] != 0 and leftframe[1] != 0 and flag == False:
+                            self.pointer(leftframe,rightframe)
+                            flag = True
+                            self.array_colorizer(img, leftframe)
+                        
+                        leftframe = inverseLeftCam[ii - 1][jj]
+
+                        if leftframe[0] != 0 and leftframe[1] != 0 and flag == False:
+                            self.pointer(leftframe,rightframe)
+                            flag = True
+                            self.array_colorizer(img, leftframe)
+
+        testarray = np.array(self.testarray)         ## XYZ Points
+        colors = np.array(self.colors)               ## Matching RGB values
         ## Writing PLY file trhough open3D
         print("Number of points : ",np.shape(testarray))
         print("Number of colors :",np.shape(colors))
@@ -215,6 +173,19 @@ class triangulator():
         ######################################VISUALIZATION#################################################################
         Visualization.visualisePointCloud(pcd)
 
+    def pointer(self, leftframe, rightframe):
+        projpoints1 = np.array([[leftframe[0],leftframe[1]],
+                                [rightframe[0], rightframe[1]]], dtype=np.float32)
+
+        points4D = cv.triangulatePoints(self.p1, self.p2, projpoints1[0], projpoints1[1])  # De correcte manier
+        points3D = points4D[:3] / points4D[3]  ## From Homogenous coordinates to Cartesian
+        self.testarray.append(points3D[:3])
+
+    def array_colorizer(self, img, frame):
+        a = frame[0]
+        b = frame[1]
+        img = cv.cvtColor(img, cv.COLOR_GRAY2BGR)
+        self.colors.append(img[int(b)][int(a)] / 255)
 
     ## Currently Threshold picture is being used instead of taking a separate picture for colors
     def TakeColorImage():

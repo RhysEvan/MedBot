@@ -1,9 +1,11 @@
 from static.presets_robot_models import preset_models
 from kinematics import get_DH_params
 from functools import partial
+from inverse_run import inverse_ai
 
 class dynamic_gui:
     def __init__(self, backend):
+        self.inverse = inverse_ai()
         self.backend = backend
         self.main = self.backend.main
         self.first = 0
@@ -46,20 +48,18 @@ class dynamic_gui:
         self.backend.slider_visual()
     
     ################################################################################
-    ####################### absolute movement ######################################
+    ########################## Motor movement ######################################
     ################################################################################
 
-    def slider_input(self):
+    def slider_motor(self):
         try:    reference = self.main.graph.kin.limits.index([])
         except: reference = len(self.main.graph.kin.limits)
         for i in range(len(self.backend.limits)):
-            if i < reference:
-                self.backend.absolute[i] = str(self.backend.joint[i].value())
-                self.backend.slider_text[i].setText(self.backend.absolute[i])
+            self.backend.absolute[i] = str(self.backend.joint[i].value())
+            self.backend.slider_text[i].setText(self.backend.absolute[i])
+            if i < reference: 
                 self.main.graph.set_active_motor(i,self.backend.absolute[i])
             else:
-                self.backend.absolute[i] = str(self.backend.joint[i].value())
-                self.backend.slider_text[i].setText(self.backend.absolute[i])
                 self.main.graph.set_active_motor(i+1,self.backend.absolute[i])
     
     def location(self):
@@ -70,7 +70,25 @@ class dynamic_gui:
                 self.backend.location_3d[i] = int(var.text())
 
     #################################################################################
-    ######################## DH parameters ##########################################
+    ############################ End movement #######################################
+    #################################################################################
+
+    def slider_end(self):
+        mem = []
+        try:    reference = self.main.graph.kin.limits.index([])
+        except: reference = len(self.main.graph.kin.limits)
+        for i in range(len(self.backend.cartesian)):
+            mem.append(self.backend.cartesian[i].value())
+        motor_positions = self.inverse.computing(mem)
+        for i in range(len(self.backend.limits)):
+            if i < reference: 
+                self.main.graph.set_active_motor(i,motor_positions[i])
+            else:
+                self.main.graph.set_active_motor(i+1,motor_positions[i])
+
+
+    #################################################################################
+    ########################### DH parameters #######################################
     #################################################################################
 
     def change_alpha(self,alpha):

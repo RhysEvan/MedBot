@@ -41,22 +41,26 @@ class Feed(QThread):
                     self.cam.Close()
                     self.reconnect()
 
-    def Color_run(self): 
+    def Color_run(self):
         self.cam.Start()
         self.cam.SetParameterDouble("ExposureTime", 10000)
         self.cam.SetParameterDouble("Gain", 15.5)
         self.cam.SetParameterInteger("BinningHorizontal",2)
         self.cam.SetParameterInteger("BinningVertical",2)
         self.calib_percentile_whitebalance(99)
+        then = 0
         while self.ColorActive:
-            if self.ret is not None:
-                Pic = self.RGBFrame()
-                if Pic is not None:
-                    self.ImageUpdate.emit(Pic)
-                else:
-                    self.cam.Close()
-                    self.reconnect()
-                    
+            now = time.time()
+            if (now-then) > 0.1:
+                if self.ret is not None:
+                    Pic = self.RGBFrame()
+                    if Pic is not None:
+                        self.ImageUpdate.emit(Pic)
+                        then = time.time()
+                    else:
+                        self.cam.Close()
+                        self.reconnect()
+                        
     def reconnect(self):
         while True:
             time.sleep(1)

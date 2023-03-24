@@ -75,6 +75,9 @@ class NeuralNetworkStack(nn.Module):
         else:
             x = torch.clamp(x,0)
 
+        out = self.layer_last(x)  
+        return out
+
 def get_DH_params(model):
     
     alpha = model["alpha"]
@@ -85,3 +88,8 @@ def get_DH_params(model):
     limits = model["limits"]
     
     return alpha, theta, radius, dists, active, limits
+
+def linear_layer(depth):
+    return nn.Sequential( nn.Linear(depth, depth*2),   nn.LeakyReLU(),
+                          nn.Linear(depth*2, depth),   nn.LeakyReLU()
+    )

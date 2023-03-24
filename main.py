@@ -23,9 +23,11 @@ except:
 class app_stitching(QMainWindow, Ui_MainWindow):
     def __init__(self, port = None, pleora= True):
         super().__init__()
-        self.vis_path = True
+        self.vis_path = False
         self.animate = False
         self.map_run = False
+        # if self.presets is true it loads in the base preset py file. If it is false it will load in the custom json.
+        self.presets = True
         self.robot_type = "HangingArm"
         self.setupUi(self)
         ## Initialisation of GUI ##

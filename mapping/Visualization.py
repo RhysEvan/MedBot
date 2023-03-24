@@ -8,7 +8,6 @@ def visualisePointCloud(pcd):
     vis.create_window()
     vis.add_geometry(pcd)
     vis.poll_events()
-    vis.update_rerender()
     vis.run()
 
 

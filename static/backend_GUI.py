@@ -21,6 +21,7 @@ class backend():
         ## visual locations of the graph when initializing ##
         self.slider_text = [self.main.text_aabs, self.main.text_babs, self.main.text_cabs, self.main.text_dabs, self.main.text_eabs, self.main.text_fabs]
         self.joint = [self.main.aabs, self.main.babs, self.main.cabs, self.main.dabs, self.main.eabs, self.main.fabs]
+        self.cartesian = [self.main.End_X, self.main.End_Y, self.main.End_Z, self.main.End_al, self.main.End_bt, self.main.End_gm]
         self.location_3d = [self.x_loc, self.y_loc, self.z_loc, self.alpha_loc, self.beta_loc, self.gamma_loc]
         self.location_input = [self.main.xcoord, self.main.ycoord, self.main.zcoord, self.main.alphacoord, self.main.betacoord, self.main.gammacoord]
         self.copying()
@@ -137,7 +138,8 @@ class backend():
             self.main.motorlist.addItem(s)
     
     def motorliststring(self, i, val):
-        mot_id = ["A: ", "B: ", "C: ", "D: ", "E: "]
+        #Use Ord() to dynamically 
+        mot_id = ["A: ", "B: ", "C: ", "D: ", "E: ","F: ","G: ","H: ", ]
         st = mot_id[i]+str(val)+" "
         return st
 

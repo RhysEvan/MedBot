@@ -55,9 +55,9 @@ class Detecting():
             self.BinaryAllWhite.append(image_binaryAllWhite)
             self.BinaryAllBlack.append(image_binaryAllBlack)
         ShadowmaskL = np.empty(self.parent.Vert_list[0][0].shape, dtype=object)
-        ShadowmaskL = image_binaryAllWhite[0][0] == image_binaryAllBlack[1][0]  ## All pixels where binaryWhite = binaryBlack are not used.
+        ShadowmaskL = self.BinaryAllWhite[0] == self.BinaryAllBlack[0]  ## All pixels where binaryWhite = binaryBlack are not used.
         ShadowmaskR = np.empty(self.parent.Vert_list[0][0].shape, dtype=object)
-        ShadowmaskR = image_binaryAllWhite[0][1] == image_binaryAllBlack[1][1]  ## All pixels where binaryWhite = binaryBlack are not used.
+        ShadowmaskR = self.BinaryAllWhite[1] == self.BinaryAllBlack[1]  ## All pixels where binaryWhite = binaryBlack are not used.
 
         return ShadowmaskL,ShadowmaskR,threshold
 
@@ -102,20 +102,24 @@ class Detecting():
                 image_binaryVert = np.where(image_greyscaleVert >= image_greyscaleVertINV, 1, 0)
                 if j == 0:
                     listVertLWithoutMask.append(image_binaryVert)
-                    maskingLVert = np.add(maskingLVert, image_binaryVert)
+                    maskingLVert = np.left_shift(maskingLVert,1)
+                    maskingLVert = np.bitwise_or(maskingLVert, image_binaryVert)
                 elif j == 1:
                     listVertRWithoutMask.append(image_binaryVert)
-                    maskingRVert = np.add(maskingRVert, image_binaryVert)
+                    maskingRVert = np.left_shift(maskingRVert,1)
+                    maskingRVert = np.bitwise_or(maskingRVert, image_binaryVert)
                 ## Array for Horizontal patterns
                 image_greyscaleHor = self.parent.Horz_list[i][j]
                 image_greyscaleHorINV = self.parent.INV_Horz_list[i][j]
                 image_binaryHor = np.where(image_greyscaleHor >= image_greyscaleHorINV, 1, 0)
                 if j == 0:
                     listHorLWithoutMask.append(image_binaryHor)
-                    maskingLHor = np.add(maskingLHor, image_binaryHor)
+                    maskingLHor = np.left_shift(maskingLHor, 1)
+                    maskingLHor = np.bitwise_or(maskingLHor, image_binaryHor)
                 elif j == 1:
                     listHorRWithoutMask.append(image_binaryHor)
-                    maskingRHor = np.add(maskingRHor, image_binaryHor)
+                    maskingRHor = np.left_shift(maskingRHor, 1)
+                    maskingRHor = np.bitwise_or(maskingRHor, image_binaryHor)
 
             print(i,'done')
         self.ArrayVertLWithoutMask = np.array(listVertLWithoutMask)
@@ -156,17 +160,27 @@ class Detecting():
 
     ## Function to get decimal value of gray code
     def Gray2Dec(self):
-        self.gradientImage()
         print('Converting Gray to dec code')
-        for i in range(self.parent.Vert_list[0][0].shape[0]):
-            for j in range(self.parent.Vert_list[0][0].shape[1]):
-                self.arrayVertLMasked[i][j] = self.inversegrayCode(int(self.arrayVertLMasked[i][j],2))
-                self.arrayHorLMasked[i][j] = self.inversegrayCode(int(self.arrayHorLMasked[i][j], 2))
+        if type(self.arrayVertLMasked[0][0]) == str:
+            for i in range(self.parent.Vert_list[0][0].shape[0]):
+                for j in range(self.parent.Vert_list[0][0].shape[1]):
+                    self.arrayVertLMasked[i][j] = self.inversegrayCode(int(self.arrayVertLMasked[i][j],2))
+                    self.arrayHorLMasked[i][j] = self.inversegrayCode(int(self.arrayHorLMasked[i][j], 2))
 
-        for i in range(self.parent.Horz_list[0][0].shape[0]):
-            for j in range(self.parent.Horz_list[0][0].shape[1]):
-                self.arrayVertRMasked[i][j] = self.inversegrayCode(int(self.arrayVertRMasked[i][j], 2))
-                self.arrayHorRMasked[i][j] = self.inversegrayCode(int(self.arrayHorRMasked[i][j], 2))
+            for i in range(self.parent.Horz_list[0][0].shape[0]):
+                for j in range(self.parent.Horz_list[0][0].shape[1]):
+                    self.arrayVertRMasked[i][j] = self.inversegrayCode(int(self.arrayVertRMasked[i][j], 2))
+                    self.arrayHorRMasked[i][j] = self.inversegrayCode(int(self.arrayHorRMasked[i][j], 2))
+        elif type(self.arrayVertLMasked[0][0]) == int:
+            for i in range(self.parent.Vert_list[0][0].shape[0]):
+                for j in range(self.parent.Vert_list[0][0].shape[1]):
+                    self.arrayVertLMasked[i][j] = self.inversegrayCode(self.arrayVertLMasked[i][j])
+                    self.arrayHorLMasked[i][j] = self.inversegrayCode(self.arrayHorLMasked[i][j])
+
+            for i in range(self.parent.Horz_list[0][0].shape[0]):
+                for j in range(self.parent.Horz_list[0][0].shape[1]):
+                    self.arrayVertRMasked[i][j] = self.inversegrayCode(self.arrayVertRMasked[i][j])
+                    self.arrayHorRMasked[i][j] = self.inversegrayCode(self.arrayHorRMasked[i][j])
 
     ## Extra function for plotting a gradient picture of the scene.
     def gradientImage(self):

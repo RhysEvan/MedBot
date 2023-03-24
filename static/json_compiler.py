@@ -21,3 +21,6 @@ class json_handler():
         recording = json.loads(temp)
         file.close()
         return recording
+    
+    def presets_json(self):
+        print("work on it.")

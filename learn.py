@@ -97,15 +97,19 @@ def evaluate_plot(For_model, model):
     axs[1].plot([pred_xys[:,0],inputs[:,0]], [pred_xys[:,2],inputs[:,2]],"g-")
     ######
 
-def distance_loss(pred, targ):
-    
+def total_loss(pred, targ):
+    x1 = distance_loss(pred, targ)
+    x2 = theta_loss(pred)
+    return x2*.2+x1*.8
+
+def distance_loss(pred, targ):  
     x = ((pred - targ)**2).sum(dim=-1)
     return x.mean()
 
 def theta_loss(pred):
     #input is the list with all theta values predicted by the ai.
-    pred_next = pred.pop(0)
-    pred_prev = pred.pop(-1)
+    pred_next = pred[1:]
+    pred_prev = pred[:-1]
     x = ((pred_next-pred_prev)**2).sum(dim=-1)
     return x.mean()
 
@@ -127,14 +131,13 @@ class NeuralNetworkStack(nn.Module):
         self.layer_last = nn.Linear(depth*(nlayers+1)+n_in, n_out)
         
     def forward(self, x_in):
-                
         x_next = self.layer_first(x_in)
     
         out_list = [x_in,x_next]
         for n, block in enumerate(self.blocks):
             x_next = block(x_next) 
             out_list.append(x_next)  
-            
+        
         x = torch.cat(out_list, dim=1)
         
         if self.training:
@@ -191,4 +194,15 @@ def linear_layer(depth):
     return nn.Sequential( nn.Linear(depth, depth*2),   nn.LeakyReLU(),
                           nn.Linear(depth*2, depth),   nn.LeakyReLU()
     )
-     
+
+
+def get_DH_params(model):
+    
+    alpha = model["alpha"]
+    theta =  model["theta"]
+    radius = model["radius"]
+    dists = model["dists"]
+    active = model["active"]
+    limits = model["limits"]
+    
+    return alpha, theta, radius, dists, active, limits

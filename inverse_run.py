@@ -1,14 +1,13 @@
 import sys
 import os
-sys.path.insert(1,r'./')
 import numpy as np
 import matplotlib.pyplot as plt
 import torch
-from forward import *
+from Inverse_Kinematics.forward import *
 from static.presets_robot_models import preset_models
 import kinematics
 from inverse import with_torch
-class motor_inverter():
+class inverse_ai():
     def __init__(self, coordinates = None):
         self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = get_DH_params(preset_models["HangingArm"])
         self.For_model = kinematics.Kinematics("HangingArm")
@@ -21,7 +20,13 @@ class motor_inverter():
     def transform(self, coord):
         n = len(coord)
         self.motor_positions = self.process(n, coord)
-    
+
+    def computing(self, input):
+        input = np.array(input)
+        input = input[:3][None,:]
+        pred = self.model(torch.Tensor(input)).detach()
+        return pred[0]
+
     def process(self, n, inputs):
         #######################
         pred = self.model(torch.Tensor(inputs[n:n+1])).detach()
@@ -71,4 +76,4 @@ class motor_inverter():
 
 
 if __name__ == "__main__":
-    motor_inverter()
+    inverse_ai()
