@@ -95,6 +95,23 @@ class Kinematics():
 
         return mot_pos
     
+    def random_positions_paths(self,):
+        
+        mot_pos = self.get_motor_positions()
+        active = self.active
+        limits = self.limits
+        
+        for n,limit in enumerate(limits):
+            if active[n]=="": continue
+            if len(limit)==0: continue
+
+            v = np.random.uniform(limit[0],limit[1])
+
+            if active[n]=="t":            mot_pos[1,n] = v
+            if active[n]=="r":            mot_pos[2,n] = v
+
+        return mot_pos
+    
     def generate_maps(self,n=100):
         
         inputs, target = [],[]
@@ -114,29 +131,22 @@ class Kinematics():
         return inputs, target
 
     def generate_paths(self, n=100):
-        #initial point:
-        points = [50,50,50,10,10,10]
+         
+        inputs, target = [],[]
         for x in range(n):
-            # Generate a random displacement vector within a 20mm radius sphere
-            disp = np.random.normal(size=6)
-            disp /= np.linalg.norm(disp)
-            disp *= random.uniform(0, 20)
 
-            # Generate random roll, pitch, and yaw angles
-            roll = random.uniform(-np.pi/4, np.pi/4)
-            pitch = random.uniform(-np.pi/4, np.pi/4)
-            yaw = random.uniform(-np.pi/4, np.pi/4)
+            mot_pos = self.random_positions_paths()
+            self.set_motor_positions(mot_pos)
+            act_pos = self.get_active()
+            end_pos = self.run_forward()
 
-            # Create a rotation matrix from the roll, pitch, and yaw angles
-            r = R.from_euler('xyz', [roll, pitch, yaw], degrees=False)
-            rot_mat = r.as_matrix()
+            inputs.append(end_pos)
+            target.append(act_pos)
 
-            # Rotate the displacement vector by the rotation matrix
-            disp = rot_mat.dot(disp)
+        inputs = np.array(inputs)
+        target = np.array(target)    
 
-            new_point = points[-1] + disp
-            points.append(new_point)
-        return points
+        return inputs, target
 
     ########
     def motorscan(self):

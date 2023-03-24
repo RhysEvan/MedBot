@@ -68,6 +68,35 @@ def train_positions(For_model, model, n_cycles = 500):
         if n%10==0: optimizer.param_groups[0]["lr"] = optimizer.param_groups[0]["lr"]*0.5  
         #if n%100==0: optimizer.param_groups[0]["lr"] = 1e-3  
 
+def train_positions_paths(For_model, model, n_cycles = 500):
+
+    optimizer = optim.Adam(model.parameters(), lr=1e-3)
+
+    For_model
+    
+    for n in range(n_cycles):
+        inputs = For_model.generate_paths(1000)
+        inputs = torch.Tensor(inputs)
+
+        pred = model(inputs)
+
+        if inputs.shape[-1]==3:         orientation=False
+        else:                           orientation=True
+     
+        pred_xys = inverse.with_torch().forward_from_active(For_model, pred, orientation=orientation)
+        pred_xys = pred_xys[:,-1,:]
+
+        loss = total_loss(pred_xys, inputs).mean()
+
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        print(np.array(loss.item()).round(2))       
+
+        if n%10==0: optimizer.param_groups[0]["lr"] = optimizer.param_groups[0]["lr"]*0.5  
+        #if n%100==0: optimizer.param_groups[0]["lr"] = 1e-3  
+
 def evaluate_plot(For_model, model):
     
     inputs, target = For_model.generate_maps(1000)
@@ -97,10 +126,39 @@ def evaluate_plot(For_model, model):
     axs[1].plot([pred_xys[:,0],inputs[:,0]], [pred_xys[:,2],inputs[:,2]],"g-")
     ######
 
+def evaluate_plot(For_model, model):
+    
+    inputs = For_model.generate_paths(1000)
+    inputs = torch.Tensor(inputs)
+    model.eval()
+
+    pred = model(inputs)
+
+    if inputs.shape[-1]==3:         orientation=False
+    else:                           orientation=True
+     
+    pred_xys = inverse.with_torch().forward_from_active(For_model, pred, orientation=orientation)
+
+    loss = distance_loss(pred_xys, inputs)
+    print(loss)
+
+    pred_xys = np.array(pred_xys.detach()).squeeze()
+    inputs = np.array(inputs)
+
+    fig,axs = plt.subplots(1,2)
+    axs[0].plot(pred_xys[:,0],pred_xys[:,1],"ro")
+    axs[0].plot(inputs[:,0],inputs[:,1],"bo")
+    axs[0].plot([pred_xys[:,0],inputs[:,0]], [pred_xys[:,1],inputs[:,1]],"g-")
+
+    axs[1].plot(pred_xys[:,0],pred_xys[:,2],"ro")
+    axs[1].plot(inputs[:,0],inputs[:,2],"bo")
+    axs[1].plot([pred_xys[:,0],inputs[:,0]], [pred_xys[:,2],inputs[:,2]],"g-")
+    ######
+
 def total_loss(pred, targ):
     x1 = distance_loss(pred, targ)
     x2 = theta_loss(pred)
-    return x2*.2+x1*.8
+    return x2*.3+x1*.7
 
 def distance_loss(pred, targ):  
     x = ((pred - targ)**2).sum(dim=-1)
@@ -114,6 +172,37 @@ def theta_loss(pred):
     return x.mean()
 
 #########################################
+class NeuralNetworkBlind(nn.Module):
+    def __init__(self, input, output, nlayers = 8, depth=20):
+        super().__init__()
+        Mod_list = []
+        for i in range(nlayers):
+            block = linear_layer(depth)
+            Mod_list.append( block )
+        self.blocks = nn.ModuleList(Mod_list)
+        self.layer_first = nn.Linear(input, depth)
+        self.layer_last = nn.Linear(depth*(nlayers+1)+input, output)
+        
+    def forward(self, x_in):
+            x_next = self.layer_first(x_in)
+        
+            out_list = [x_in,x_next]
+            for n, block in enumerate(self.blocks):
+                x_next = block(x_next) 
+                out_list.append(x_next)  
+            
+            x = torch.cat(out_list, dim=1)
+            
+            if self.training:
+                x = F.leaky_relu(x)
+                #x = 1-F.leaky_relu(1-x)
+            else:
+                x = torch.clamp(x,0)
+
+            out = self.layer_last(x)
+            
+            return out
+        
 
 class NeuralNetworkStack(nn.Module):
 
@@ -126,7 +215,6 @@ class NeuralNetworkStack(nn.Module):
             Mod_list.append( block )
         
         self.blocks = nn.ModuleList(Mod_list)
-
         self.layer_first = nn.Linear(n_in, depth)
         self.layer_last = nn.Linear(depth*(nlayers+1)+n_in, n_out)
         
