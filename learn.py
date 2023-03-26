@@ -81,7 +81,7 @@ def train_positions_paths(For_model, model, n_cycles = 500):
     for n in range(n_cycles):
         n += 1
         if not second:
-            inputs, target = For_model.generate_maps(1000)
+            inputs, target = For_model.generate_paths(2000)
         else:
              inputs, target = For_model.generate_paths(4000)
         inputs = torch.Tensor(inputs)
@@ -92,9 +92,10 @@ def train_positions_paths(For_model, model, n_cycles = 500):
      
         pred_xys = inverse.with_torch().forward_from_active(For_model, pred, orientation=orientation)
         pred_xys = pred_xys[:,-1,:]
-        if first or val_loss > 500 and not second:
-            loss = distance_loss(pred_xys, inputs).mean()
+        if first or val_loss > 200 and not second:
+            loss = total_loss(pred_xys, inputs).mean()
         else:
+            return
             loss = total_loss(pred_xys, inputs).mean()
             second = True
             if not lock:
@@ -120,10 +121,13 @@ def train_positions_paths(For_model, model, n_cycles = 500):
         else:
             print(np.array(loss.item()).round(2))
             memory +=1
-            if memory%10==0:
+            if memory%25 ==0:
+                optimizer.param_groups[0]["lr"] = 1e-3
+                print("{} making lr bigger {}".format(np.array(loss.item()).round(2), optimizer.param_groups[0]["lr"]))
+            elif memory%5==0:
                 optimizer.param_groups[0]["lr"] = optimizer.param_groups[0]["lr"]*0.5 
                 print("{} making lr smaller {}".format(np.array(loss.item()).round(2), optimizer.param_groups[0]["lr"]))
-                memory = 0
+                
             if optimizer.param_groups[0]["lr"]<1e-15:
                 optimizer.param_groups[0]["lr"] = 1e-3
         #if n%10==0: optimizer.param_groups[0]["lr"] = optimizer.param_groups[0]["lr"]*0.5 
@@ -141,8 +145,8 @@ def evaluate_plot(For_model, model):
     else:                           orientation=True
      
     pred_xys = inverse.with_torch().forward_from_active(For_model, pred, orientation=orientation)
-
-    loss = distance_loss(pred_xys, inputs)
+    pred_xys = pred_xys[:,-1,:]
+    loss = distance_loss(pred_xys, inputs).mean()
     print(loss)
 
     pred_xys = np.array(pred_xys.detach()).squeeze()
@@ -161,7 +165,7 @@ def evaluate_plot(For_model, model):
 def total_loss(pred, targ):
     x1 = distance_loss(pred, targ)
     x2 = theta_loss(pred)
-    return x2*.2+x1
+    return x2*.05+x1
 
 def distance_loss(pred, targ): 
     x = 0
@@ -172,7 +176,7 @@ def distance_loss(pred, targ):
         eul_targ = targ[i][3:]
         dif_cart = ((cart_pred - cart_targ)**2).sum(dim=-1)
         dif_eul = ((eul_pred - eul_targ)**2).sum(dim=-1)
-        x += (dif_cart*.8 + dif_eul*.2)/len(pred)
+        x += (dif_cart*.9 + dif_eul*.1)/len(pred)
     return x.mean()
 
 def theta_loss(pred):

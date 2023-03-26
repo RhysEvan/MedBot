@@ -152,7 +152,6 @@ class Kinematics():
             self.set_motor_positions(mot_pos)
             act_pos = self.get_active()
             end_pos = self.run_forward()
-
             inputs.append(end_pos)
             target.append(act_pos)
 
