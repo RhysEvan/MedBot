@@ -95,22 +95,33 @@ class Kinematics():
 
         return mot_pos
     
-    def random_positions_paths(self,):
-        
+    def random_positions_paths(self,pos):
         mot_pos = self.get_motor_positions()
         active = self.active
         limits = self.limits
-        
+        skip = False
         for n,limit in enumerate(limits):
-            if active[n]=="": continue
+            i = 0
+            if active[n]=="": 
+                skip = True
+                continue
             if len(limit)==0: continue
-
-            v = np.random.uniform(limit[0],limit[1])
-
-            if active[n]=="t":            mot_pos[1,n] = v
-            if active[n]=="r":            mot_pos[2,n] = v
-
-        return mot_pos
+            while i == 0:
+                val = (limit[1]+limit[0])/5
+                v = np.random.uniform(-val,val)
+                if not skip:
+                    if pos[n]+v > limit[0] and pos[n]+v < limit[1]:
+                        pos[n] = pos[n]+v
+                        if active[n]=="t":            mot_pos[1,n] = v
+                        if active[n]=="r":            mot_pos[2,n] = v
+                        i = 1
+                else:
+                    if pos[n-1]+v > limit[0] and pos[n-1]+v < limit[1]:
+                        pos[n-1] = pos[n-1]+v
+                        if active[n]=="t":            mot_pos[1,n] = v
+                        if active[n]=="r":            mot_pos[2,n] = v
+                        i = 1
+        return mot_pos, pos
     
     def generate_maps(self,n=100):
         
@@ -130,12 +141,14 @@ class Kinematics():
 
         return inputs, target
 
-    def generate_paths(self, n=100):
-         
+    def generate_paths(self,n=100):
+        prev_pos = self.random_positions()
+        self.set_motor_positions(prev_pos)
+        prev_pos = self.get_active()
         inputs, target = [],[]
         for x in range(n):
-
-            mot_pos = self.random_positions_paths()
+            
+            mot_pos, prev_pos= self.random_positions_paths(prev_pos)
             self.set_motor_positions(mot_pos)
             act_pos = self.get_active()
             end_pos = self.run_forward()

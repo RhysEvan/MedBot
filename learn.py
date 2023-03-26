@@ -71,13 +71,20 @@ def train_positions(For_model, model, n_cycles = 500):
 def train_positions_paths(For_model, model, n_cycles = 500):
 
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
-
+    first = True
+    second = False
     For_model
-    
+    divide = 1
+    memory = 0
+    lock = False
+    val_loss = 10000
     for n in range(n_cycles):
-        inputs = For_model.generate_paths(1000)
+        n += 1
+        if not second:
+            inputs, target = For_model.generate_maps(1000)
+        else:
+             inputs, target = For_model.generate_paths(4000)
         inputs = torch.Tensor(inputs)
-
         pred = model(inputs)
 
         if inputs.shape[-1]==3:         orientation=False
@@ -85,50 +92,46 @@ def train_positions_paths(For_model, model, n_cycles = 500):
      
         pred_xys = inverse.with_torch().forward_from_active(For_model, pred, orientation=orientation)
         pred_xys = pred_xys[:,-1,:]
-
-        loss = total_loss(pred_xys, inputs).mean()
+        if first or val_loss > 500 and not second:
+            loss = distance_loss(pred_xys, inputs).mean()
+        else:
+            loss = total_loss(pred_xys, inputs).mean()
+            second = True
+            if not lock:
+                low_loss = val_loss
 
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
+        val_loss = np.array(loss.item()).round(2)   
 
-        print(np.array(loss.item()).round(2))       
+        if first or second and not lock:
+            print(np.array(loss.item()).round(2)) 
+            low_loss = val_loss
+            first = False
+            if second:
+                lock = True
 
-        if n%10==0: optimizer.param_groups[0]["lr"] = optimizer.param_groups[0]["lr"]*0.5  
+        elif low_loss>val_loss:
+            print("{}  caching model imporvement".format(np.array(loss.item()).round(2)))
+            cach = model
+            low_loss = val_loss
+            memory = 0
+        else:
+            print(np.array(loss.item()).round(2))
+            memory +=1
+            if memory%10==0:
+                optimizer.param_groups[0]["lr"] = optimizer.param_groups[0]["lr"]*0.5 
+                print("{} making lr smaller {}".format(np.array(loss.item()).round(2), optimizer.param_groups[0]["lr"]))
+                memory = 0
+            if optimizer.param_groups[0]["lr"]<1e-15:
+                optimizer.param_groups[0]["lr"] = 1e-3
+        #if n%10==0: optimizer.param_groups[0]["lr"] = optimizer.param_groups[0]["lr"]*0.5 
         #if n%100==0: optimizer.param_groups[0]["lr"] = 1e-3  
 
 def evaluate_plot(For_model, model):
     
-    inputs, target = For_model.generate_maps(1000)
-    inputs = torch.Tensor(inputs)
-    model.eval()
-
-    pred = model(inputs)
-
-    if inputs.shape[-1]==3:         orientation=False
-    else:                           orientation=True
-     
-    pred_xys = inverse.with_torch().forward_from_active(For_model, pred, orientation=orientation)
-
-    loss = distance_loss(pred_xys, inputs)
-    print(loss)
-
-    pred_xys = np.array(pred_xys.detach()).squeeze()
-    inputs = np.array(inputs)
-
-    fig,axs = plt.subplots(1,2)
-    axs[0].plot(pred_xys[:,0],pred_xys[:,1],"ro")
-    axs[0].plot(inputs[:,0],inputs[:,1],"bo")
-    axs[0].plot([pred_xys[:,0],inputs[:,0]], [pred_xys[:,1],inputs[:,1]],"g-")
-
-    axs[1].plot(pred_xys[:,0],pred_xys[:,2],"ro")
-    axs[1].plot(inputs[:,0],inputs[:,2],"bo")
-    axs[1].plot([pred_xys[:,0],inputs[:,0]], [pred_xys[:,2],inputs[:,2]],"g-")
-    ######
-
-def evaluate_plot(For_model, model):
-    
-    inputs = For_model.generate_paths(1000)
+    inputs, target = For_model.generate_paths(1000)
     inputs = torch.Tensor(inputs)
     model.eval()
 
@@ -158,10 +161,18 @@ def evaluate_plot(For_model, model):
 def total_loss(pred, targ):
     x1 = distance_loss(pred, targ)
     x2 = theta_loss(pred)
-    return x2*.3+x1*.7
+    return x2*.2+x1
 
-def distance_loss(pred, targ):  
-    x = ((pred - targ)**2).sum(dim=-1)
+def distance_loss(pred, targ): 
+    x = 0
+    for i in range(len(pred)):
+        cart_pred = pred[i][:3]
+        cart_targ = targ[i][:3]
+        eul_pred = pred[i][3:]
+        eul_targ = targ[i][3:]
+        dif_cart = ((cart_pred - cart_targ)**2).sum(dim=-1)
+        dif_eul = ((eul_pred - eul_targ)**2).sum(dim=-1)
+        x += (dif_cart*.8 + dif_eul*.2)/len(pred)
     return x.mean()
 
 def theta_loss(pred):
@@ -173,11 +184,11 @@ def theta_loss(pred):
 
 #########################################
 class NeuralNetworkBlind(nn.Module):
-    def __init__(self, input, output, nlayers = 8, depth=20):
+    def __init__(self, input, output, nlayers = 8, depth=6):
         super().__init__()
         Mod_list = []
         for i in range(nlayers):
-            block = linear_layer(depth)
+            block = linear_deep(depth)
             Mod_list.append( block )
         self.blocks = nn.ModuleList(Mod_list)
         self.layer_first = nn.Linear(input, depth)
@@ -283,6 +294,10 @@ def linear_layer(depth):
                           nn.Linear(depth*2, depth),   nn.LeakyReLU()
     )
 
+def linear_deep(depth):
+    return nn.Sequential( nn.Linear(depth, depth*2), nn.LeakyReLU(),
+                          nn.Linear(depth*2,depth*4), nn.LeakyReLU(),
+                          nn.Linear(depth*4,depth), nn.LeakyReLU(),)
 
 def get_DH_params(model):
     
