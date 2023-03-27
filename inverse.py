@@ -36,9 +36,9 @@ class with_torch():
 
         if orientation:
             rot = self.torch_mat_to_rot( DH[:3,:3] )
-            if rot[[0]]<0:  
+            if rot[[0]]<0 or rot[[2]]<0:
                     rot[[0,2]] = rot[[0,2]] + np.pi
-                    rot[[1]]   = np.pi - rot[[1]] 
+                    rot[[1]]   = np.pi - rot[[1]]
             rot = torch.rad2deg(rot)[None,]
             positions = torch.cat((positions,rot),dim=-1)
 

@@ -81,7 +81,7 @@ def train_positions_paths(For_model, model, n_cycles = 500):
     for n in range(n_cycles):
         n += 1
         if not second:
-            inputs, target = For_model.generate_paths(2000)
+            inputs, target = For_model.generate_paths(3000)
         else:
              inputs, target = For_model.generate_paths(4000)
         inputs = torch.Tensor(inputs)
@@ -114,7 +114,7 @@ def train_positions_paths(For_model, model, n_cycles = 500):
                 lock = True
 
         elif low_loss>val_loss:
-            print("{}  caching model imporvement".format(np.array(loss.item()).round(2)))
+            print("{}  caching model improvement".format(np.array(loss.item()).round(2)))
             cach = model
             low_loss = val_loss
             memory = 0
@@ -135,7 +135,7 @@ def train_positions_paths(For_model, model, n_cycles = 500):
 
 def evaluate_plot(For_model, model):
     
-    inputs, target = For_model.generate_paths(1000)
+    inputs, target = For_model.generate_paths(5)
     inputs = torch.Tensor(inputs)
     model.eval()
 
@@ -146,9 +146,8 @@ def evaluate_plot(For_model, model):
      
     pred_xys = inverse.with_torch().forward_from_active(For_model, pred, orientation=orientation)
     pred_xys = pred_xys[:,-1,:]
-    loss = distance_loss(pred_xys, inputs).mean()
-    print(loss)
-
+    loss = total_loss(pred_xys,inputs)
+    
     pred_xys = np.array(pred_xys.detach()).squeeze()
     inputs = np.array(inputs)
 
@@ -165,7 +164,7 @@ def evaluate_plot(For_model, model):
 def total_loss(pred, targ):
     x1 = distance_loss(pred, targ)
     x2 = theta_loss(pred)
-    return x2*.05+x1
+    return .03*x2+x1
 
 def distance_loss(pred, targ): 
     x = 0
@@ -175,39 +174,50 @@ def distance_loss(pred, targ):
         eul_pred = pred[i][3:]
         eul_targ = targ[i][3:]
         dif_cart = ((cart_pred - cart_targ)**2).sum(dim=-1)
-        dif_eul = ((eul_pred - eul_targ)**2).sum(dim=-1)
-        x += (dif_cart*.9 + dif_eul*.1)/len(pred)
+        dif_eul = compare_angles(eul_pred, eul_targ)
+        x += (dif_cart*1 + dif_eul*1)/len(pred)
     return x.mean()
 
 def theta_loss(pred):
     #input is the list with all theta values predicted by the ai.
-    pred_next = pred[1:]
-    pred_prev = pred[:-1]
-    x = ((pred_next-pred_prev)**2).sum(dim=-1)
+    x = 0
+    for i in range(len(pred)-1):
+        pred_next_cart = pred[i+1][:3]
+        pred_next_eul = pred[i+1][3:]
+        pred_prev_cart = pred[i][:3]
+        pred_prev_eul = pred[i][3:]
+        dif_cart = ((pred_next_cart - pred_prev_cart)**2).sum(dim=-1)
+        dif_eul = compare_angles(pred_next_eul, pred_prev_eul)
+        x += dif_cart + dif_eul
     return x.mean()
+
+def compare_angles(angle_pred, angle_targ):
+    diff = torch.abs(angle_pred - angle_targ)
+    diff[diff>180] = 360 - diff[diff>180] 
+    result = (diff**2).sum(dim=-1) 
+    return result.mean()
 
 #########################################
 class NeuralNetworkBlind(nn.Module):
-    def __init__(self, input, output, nlayers = 8, depth=6):
+    def __init__(self, input, output, nlayers = 8, depth=20):
         super().__init__()
         Mod_list = []
         for i in range(nlayers):
-            block = linear_deep(depth)
+            block = linear_deep(depth*2**(i+1))
             Mod_list.append( block )
         self.blocks = nn.ModuleList(Mod_list)
-        self.layer_first = nn.Linear(input, depth)
-        self.layer_last = nn.Linear(depth*(nlayers+1)+input, output)
+        self.layer_first = nn.Linear(input, depth*2)
+        self.drop = nn.Dropout(0.5)
+        self.layer_last = nn.Linear(depth*nlayers*2**(nlayers-1)+input-2*depth, output)
         
     def forward(self, x_in):
             x_next = self.layer_first(x_in)
-        
             out_list = [x_in,x_next]
             for n, block in enumerate(self.blocks):
                 x_next = block(x_next) 
-                out_list.append(x_next)  
-            
+                out_list.append(x_next) 
             x = torch.cat(out_list, dim=1)
-            
+
             if self.training:
                 x = F.leaky_relu(x)
                 #x = 1-F.leaky_relu(1-x)
@@ -301,7 +311,7 @@ def linear_layer(depth):
 def linear_deep(depth):
     return nn.Sequential( nn.Linear(depth, depth*2), nn.LeakyReLU(),
                           nn.Linear(depth*2,depth*4), nn.LeakyReLU(),
-                          nn.Linear(depth*4,depth), nn.LeakyReLU(),)
+                          nn.Linear(depth*4,depth*2), nn.LeakyReLU(),)
 
 def get_DH_params(model):
     

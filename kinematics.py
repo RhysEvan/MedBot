@@ -58,7 +58,7 @@ class Kinematics():
         Tfs = make_transforms(*DH)[-1]
         orient = R.from_matrix(Tfs[:3,:3]).as_euler("XYZ")
 
-        if orient[0]<0:  
+        if orient[0]<0 or orient[2]<0:  
             orient[[0,2]] = orient[[0,2]] + np.pi
             orient[[1]]   = np.pi - orient[[1]] 
 
@@ -107,7 +107,7 @@ class Kinematics():
                 continue
             if len(limit)==0: continue
             while i == 0:
-                val = (limit[1]+limit[0])/5
+                val = (limit[1]+limit[0])/100
                 v = np.random.uniform(-val,val)
                 if not skip:
                     if pos[n]+v > limit[0] and pos[n]+v < limit[1]:
