@@ -12,7 +12,7 @@ public:
   void init(int);
   double getAngle(int);
 private:
-  AMS_5600 ams5600;
+  AS5600 ams5600;
   double amsOffsets[6] = {154,254,287,215,219,322};
   void tcaselect(uint8_t);
 };

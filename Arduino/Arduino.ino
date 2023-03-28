@@ -21,6 +21,8 @@ AccelStepper newStepper(int stepPin, int dirPin, int enablePin) {
 }
 AccelStepper steppers[6];
 
+MultiStepper msteppers;
+
 int uddir = 1;
 unsigned long lastMillis;
 bool b_move_complete = true;
@@ -42,7 +44,7 @@ void setup() {
   steppers[3] = newStepper(54,55,38);
   steppers[4] = newStepper(60,61,56);
   steppers[5] = newStepper(46,48,62);
-  for (int i = 0; i < 6; i++){msteppers.addStepper(steppers[i])}
+  for (int i = 0; i < 6; i++){msteppers.addStepper(steppers[i]);}
 
   SCmd.addCommand("M", move_stepper);
   SCmd.addCommand("V", change_velocity);
@@ -59,7 +61,7 @@ void setup() {
   Serial.println("HangingArm");
   //
   Timer3.initialize(500);
-  Timer3.attachInterrupt(runSteppers)
+  Timer3.attachInterrupt(runSteppers);
 
 }
 void runSteppers(void) {
@@ -69,9 +71,9 @@ void runSteppers(void) {
 void loop() {
   SCmd.readSerial(); 
   limitswitch();
-  if (millis() - delaytime > 10) {
+  if (millis() - lastMillis > 10) {
     for (int i=0; i<6; i++) {
-      double sensorPosition = convert(sensors.getAngle(i));
+      double sensorPosition = convert(sensors.getAngle(i), i);
       double motorPosition = steppers[i].currentPosition();
       steppers[i].setCurrentPosition((0.9*motorPosition + 0.1*sensorPosition));
       msteppers.moveTo(stepperPos);
@@ -175,7 +177,7 @@ void stop_all() {
   }
 }
 void homing(){
-  Serial.println("Home, x and y use -100000, other joints need angle turned to original reference (to be determined)")
+  Serial.println("Home, x and y use -100000, other joints need angle turned to original reference (to be determined)");
   //for (int i = 0; i < 6; i++) {steppers[i].move(-100000);}
   }
 
@@ -212,14 +214,14 @@ void move_stepper() {
 
   Serial.print("moving ");
   Serial.print(angle);
-  steps = convert(angle)
+  steps = convert(angle, step_idx);
   stepperPos[step_idx] = steps;
   //TODO FIX angle parameter and set up a limiter factor
   b_move_complete = false;
 }
 
-void convert(double angle) {double steps;
-                            steps = angle*stepsPerFullTurn[i]/360.0
+double convert(double angle, int i) {double steps;
+                            steps = angle*stepsPerFullTurn[i]/360.0;
                             return steps;}
 
 void is_complete() {
@@ -227,8 +229,9 @@ void is_complete() {
     if (steppers[i].distanceToGo() == 0)  {continue;}
     else  {return;}
   }
-  Serial.print("Complete")
+  Serial.print("Complete");
   }
+
 
 void check_position() {
   //TODO have it memorize the angles measured by the magnets

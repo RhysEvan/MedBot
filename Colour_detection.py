@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 import time
 
-from connections.serial_com_GRBL import serial_bridge
+from connections.serial_com_GRBL import serial_bridge_GRBL
 from static.colour_GUI import Ui_MainWindow
 
 class Colour_detect():
@@ -95,8 +95,8 @@ class Colour_detect():
     def wound_encase(self, imageFrame):
         print("colour values still need to be changed!")
         hsvFrame = cv2.cvtColor(imageFrame, cv2.COLOR_BGR2HSV)
-        red_lower = np.array([150, 120, 160], np.uint8)
-        red_upper = np.array([180, 255, 255], np.uint8)
+        red_lower = np.array([172, 30, 53], np.uint8)
+        red_upper = np.array([180, 180, 210], np.uint8)
         red_mask = cv2.inRange(hsvFrame, red_lower, red_upper)
         kernal = np.ones((5, 5), "uint8")
         red_mask = cv2.dilate(red_mask, kernal)
@@ -138,7 +138,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle("My App")
-        self.com = serial_bridge()
+        self.com = serial_bridge_GRBL()
         self.cam = Feed(0)
         self.cam.start()
         self.cam.ImageUpdate.connect(self.illustrate)
@@ -172,7 +172,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.com.send_move("y "+str(theta_1*180/np.pi))
         self.com.send_move("z "+str(theta_2*180/np.pi))
 
-#app = QApplication(sys.argv)
-#window = MainWindow()
-#window.show()
-#app.exec()
+app = QApplication(sys.argv)
+window = MainWindow()
+window.show()
+app.exec()

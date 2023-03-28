@@ -1,3 +1,6 @@
-[submodule "Retna"]
-	path = Retna
-	url = https://github.com/EdgarCardenasDeLaHoz/Retna
+[submodule "retna"]
+	path = retna
+	url = https://github.com/EdgarCardenasDeLaHoz/retna
+[submodule "checkerboard_detection"]
+	path = checkerboard_detection
+	url = https://RhysEvansG@bitbucket.org/MichaelHillen/checkerboard_detection.git
