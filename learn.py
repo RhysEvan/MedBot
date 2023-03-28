@@ -12,7 +12,7 @@ def train_motors(For_model, model):
 
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
     for n in range(100):
-        inputs, target = For_model.generate_maps(5000)
+        inputs, target = For_model.generate_maps(1000)
         train_loop(model, inputs, target, distance_loss, optimizer)
         #if n%10==0: optimizer.param_groups[0]["lr"] = optimizer.param_groups[0]["lr"]*0.8    
 
@@ -70,7 +70,7 @@ def train_positions(For_model, model, n_cycles = 500):
 
 def train_positions_paths(For_model, model, n_cycles = 500):
 
-    optimizer = optim.Adam(model.parameters(), lr=1e-3)
+    optimizer = optim.Adam(model.parameters(), lr=1e-4)
     first = True
     second = False
     For_model
@@ -92,8 +92,8 @@ def train_positions_paths(For_model, model, n_cycles = 500):
      
         pred_xys = inverse.with_torch().forward_from_active(For_model, pred, orientation=orientation)
         pred_xys = pred_xys[:,-1,:]
-        if first or val_loss > 200 and not second:
-            loss = total_loss(pred_xys, inputs).mean()
+        if first or val_loss > 2 and not second:
+            loss = distance_loss(pred_xys, inputs).mean()
         else:
             return
             loss = total_loss(pred_xys, inputs).mean()
@@ -135,7 +135,7 @@ def train_positions_paths(For_model, model, n_cycles = 500):
 
 def evaluate_plot(For_model, model):
     
-    inputs, target = For_model.generate_paths(5)
+    inputs, target = For_model.generate_maps(100)
     inputs = torch.Tensor(inputs)
     model.eval()
 
@@ -146,8 +146,8 @@ def evaluate_plot(For_model, model):
      
     pred_xys = inverse.with_torch().forward_from_active(For_model, pred, orientation=orientation)
     pred_xys = pred_xys[:,-1,:]
-    loss = total_loss(pred_xys,inputs)
-    
+    print(distance_loss(pred_xys, inputs))
+
     pred_xys = np.array(pred_xys.detach()).squeeze()
     inputs = np.array(inputs)
 
@@ -155,47 +155,70 @@ def evaluate_plot(For_model, model):
     axs[0].plot(pred_xys[:,0],pred_xys[:,1],"ro")
     axs[0].plot(inputs[:,0],inputs[:,1],"bo")
     axs[0].plot([pred_xys[:,0],inputs[:,0]], [pred_xys[:,1],inputs[:,1]],"g-")
+    axs[0].set_xlabel("x")
+    axs[0].set_ylabel("y")
+    axs[0].set_title("red = prediction")
 
     axs[1].plot(pred_xys[:,0],pred_xys[:,2],"ro")
     axs[1].plot(inputs[:,0],inputs[:,2],"bo")
     axs[1].plot([pred_xys[:,0],inputs[:,0]], [pred_xys[:,2],inputs[:,2]],"g-")
+    axs[1].set_xlabel("x")
+    axs[1].set_ylabel("z")
+    axs[1].set_title("blue = target")
+
+    fig,axs = plt.subplots(1,3)
+    axs[0].plot(pred_xys[:,3],inputs[:,3], "o")
+    axs[0].set_xlabel("a")
+    axs[0].set_ylabel("a")
+
+    axs[1].plot(pred_xys[:,4],inputs[:,4], "o")
+    axs[1].set_xlabel("b")
+    axs[1].set_ylabel("b")
+    axs[1].set_title("euler angles")
+    
+    axs[2].plot(pred_xys[:,5],inputs[:,5], "o")
+    axs[2].set_xlabel("g")
+    axs[2].set_ylabel("g")
+    axs[2].set_title("blue = target")
+
+
     ######
 
-def total_loss(pred, targ):
+def total_loss(pred, targ, theta):
     x1 = distance_loss(pred, targ)
-    x2 = theta_loss(pred)
-    return .03*x2+x1
+    x2 = theta_loss(theta)
+    return .01*x2+x1
 
 def distance_loss(pred, targ): 
-    x = 0
-    for i in range(len(pred)):
-        cart_pred = pred[i][:3]
-        cart_targ = targ[i][:3]
-        eul_pred = pred[i][3:]
-        eul_targ = targ[i][3:]
-        dif_cart = ((cart_pred - cart_targ)**2).sum(dim=-1)
-        dif_eul = compare_angles(eul_pred, eul_targ)
-        x += (dif_cart*1 + dif_eul*1)/len(pred)
+    #print("pred")
+    #print(pred.round())
+    #print("targ")
+    #print(targ.round())
+    cart_pred = pred[:,:3]
+    cart_targ = targ[:,:3]
+    eul_pred = pred[:,3:]
+    eul_targ = targ[:,3:]
+    dif_cart = ((cart_pred - cart_targ)**2).sum(dim=-1)
+    dif_eul = compare_angles(eul_pred, eul_targ)
+    #print("dif cart")
+    #print(dif_cart)
+    #print("dif eul")
+    #print(dif_eul)
+    x = (dif_cart*1 + dif_eul*0)
     return x.mean()
 
 def theta_loss(pred):
     #input is the list with all theta values predicted by the ai.
-    x = 0
-    for i in range(len(pred)-1):
-        pred_next_cart = pred[i+1][:3]
-        pred_next_eul = pred[i+1][3:]
-        pred_prev_cart = pred[i][:3]
-        pred_prev_eul = pred[i][3:]
-        dif_cart = ((pred_next_cart - pred_prev_cart)**2).sum(dim=-1)
-        dif_eul = compare_angles(pred_next_eul, pred_prev_eul)
-        x += dif_cart + dif_eul
+    pred_next = pred[1:]
+    pred_prev = pred[:-1]
+    x = ((pred_next - pred_prev)**2).sum()
     return x.mean()
 
 def compare_angles(angle_pred, angle_targ):
     diff = torch.abs(angle_pred - angle_targ)
-    diff[diff>180] = 360 - diff[diff>180] 
+    diff[diff>180] = 360 - diff[diff>180]
     result = (diff**2).sum(dim=-1) 
-    return result.mean()
+    return result
 
 #########################################
 class NeuralNetworkBlind(nn.Module):
@@ -207,7 +230,6 @@ class NeuralNetworkBlind(nn.Module):
             Mod_list.append( block )
         self.blocks = nn.ModuleList(Mod_list)
         self.layer_first = nn.Linear(input, depth*2)
-        self.drop = nn.Dropout(0.5)
         self.layer_last = nn.Linear(depth*nlayers*2**(nlayers-1)+input-2*depth, output)
         
     def forward(self, x_in):

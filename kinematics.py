@@ -107,7 +107,7 @@ class Kinematics():
                 continue
             if len(limit)==0: continue
             while i == 0:
-                val = (limit[1]+limit[0])/100
+                val = (limit[1]+limit[0])/10
                 v = np.random.uniform(-val,val)
                 if not skip:
                     if pos[n]+v > limit[0] and pos[n]+v < limit[1]:
