@@ -72,7 +72,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         ## all GUI variable function connections ##
         trigger(self)
         print("add functionality to switch between active RGB and active Mapping")
-        ## call to button functions and their forward to internal functions ##       
+        ## call to button functions and their forward to internal functions ##
         self.show()
 
     ########################################

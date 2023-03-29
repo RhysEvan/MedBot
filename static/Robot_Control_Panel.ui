@@ -119,7 +119,7 @@
           </size>
          </property>
          <property name="text">
-          <string> </string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -176,7 +176,7 @@
           </size>
          </property>
          <property name="text">
-          <string> </string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -252,7 +252,7 @@
           </size>
          </property>
          <property name="text">
-          <string> </string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -271,7 +271,7 @@
           </size>
          </property>
          <property name="text">
-          <string> </string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -334,7 +334,7 @@
           </size>
          </property>
          <property name="text">
-          <string> </string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -448,7 +448,7 @@
           </size>
          </property>
          <property name="text">
-          <string> </string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -543,7 +543,7 @@
           </size>
          </property>
          <property name="text">
-          <string> </string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -562,7 +562,7 @@
           </size>
          </property>
          <property name="text">
-          <string> </string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -880,8 +880,8 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="4" column="1">
-         <widget class="QLineEdit" name="DH_param_5">
+        <item row="2" column="0">
+         <widget class="QLineEdit" name="DH_param_1">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -890,7 +890,7 @@ p, li { white-space: pre-wrap; }
           </property>
           <property name="maximumSize">
            <size>
-            <width>1000</width>
+            <width>500</width>
             <height>50</height>
            </size>
           </property>
@@ -912,8 +912,8 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QLineEdit" name="DH_param_1">
+        <item row="4" column="1">
+         <widget class="QLineEdit" name="DH_param_5">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -922,7 +922,7 @@ p, li { white-space: pre-wrap; }
           </property>
           <property name="maximumSize">
            <size>
-            <width>500</width>
+            <width>1000</width>
             <height>50</height>
            </size>
           </property>
@@ -951,6 +951,31 @@ p, li { white-space: pre-wrap; }
           </property>
           <property name="text">
            <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QListWidget" name="robot_options">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>10</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>500</width>
+            <height>200</height>
+           </size>
+          </property>
+          <property name="midLineWidth">
+           <number>2</number>
           </property>
          </widget>
         </item>
@@ -989,31 +1014,6 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QListWidget" name="robot_options">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>10</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>500</width>
-            <height>200</height>
-           </size>
-          </property>
-          <property name="midLineWidth">
-           <number>2</number>
-          </property>
-         </widget>
-        </item>
         <item row="3" column="0">
          <widget class="QLabel" name="label_12">
           <property name="maximumSize">
@@ -1024,20 +1024,6 @@ p, li { white-space: pre-wrap; }
           </property>
           <property name="text">
            <string>Dists</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QLabel" name="label_11">
-          <property name="text">
-           <string>Radius</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QLabel" name="label_13">
-          <property name="text">
-           <string>Active</string>
           </property>
          </widget>
         </item>
@@ -1057,10 +1043,24 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
+        <item row="3" column="1">
+         <widget class="QLabel" name="label_13">
+          <property name="text">
+           <string>Active</string>
+          </property>
+         </widget>
+        </item>
         <item row="3" column="2">
          <widget class="QLabel" name="label_22">
           <property name="text">
            <string>Limits</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>Radius</string>
           </property>
          </widget>
         </item>
@@ -1093,6 +1093,13 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Within this tab the type of Robot can be chose on the left. Within these are base examples. Your example can be created within the py file that stores all robot information in a dict.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;If you were to use on of the already preexisting models, but with different DH parameters, please update the text blocks underneith to have the correct values.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Then press the button at the bottom and wait till the text prompt says: &amp;quot;Finished&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0" colspan="3">
+         <widget class="QPushButton" name="Push_Changes">
+          <property name="text">
+           <string>Push changes to system</string>
           </property>
          </widget>
         </item>
@@ -1221,42 +1228,42 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="2">
         <widget class="QLabel" name="End_X_vis">
          <property name="text">
-          <string> </string>
+          <string/>
          </property>
         </widget>
        </item>
        <item row="1" column="2">
         <widget class="QLabel" name="End_Y_vis">
          <property name="text">
-          <string> </string>
+          <string/>
          </property>
         </widget>
        </item>
        <item row="2" column="2">
         <widget class="QLabel" name="End_Z_vis">
          <property name="text">
-          <string> </string>
+          <string/>
          </property>
         </widget>
        </item>
        <item row="3" column="2">
         <widget class="QLabel" name="End_al_vis">
          <property name="text">
-          <string> </string>
+          <string/>
          </property>
         </widget>
        </item>
        <item row="4" column="2">
         <widget class="QLabel" name="End_bt_vis">
          <property name="text">
-          <string> </string>
+          <string/>
          </property>
         </widget>
        </item>
        <item row="5" column="2">
         <widget class="QLabel" name="End_gm_vis">
          <property name="text">
-          <string> </string>
+          <string/>
          </property>
         </widget>
        </item>

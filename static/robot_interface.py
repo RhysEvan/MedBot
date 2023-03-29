@@ -1,7 +1,7 @@
 from static.presets_robot_models import preset_models
 from kinematics import get_DH_params
 from functools import partial
-from inverse_run import inverse_ai
+from Inverse_run import inverse_ai
 
 class dynamic_gui:
     def __init__(self, backend):

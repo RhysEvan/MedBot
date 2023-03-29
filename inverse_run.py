@@ -12,10 +12,11 @@ class inverse_ai():
         self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = get_DH_params(preset_models["HangingArm"])
         self.For_model = kinematics.Kinematics("HangingArm")
         self.model = torch.load(r"Inverse_Kinematics\kine_models\HangingArm.pt")
-        if coordinates == None:
-            self.gen_test()
-        else:
-            self.transform(coordinates)
+        if __name__ == "__main__":
+            if coordinates == None:
+                self.gen_test()
+            else:
+                self.transform(coordinates)
     
     def transform(self, coord):
         n = len(coord)
