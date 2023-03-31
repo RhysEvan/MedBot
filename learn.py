@@ -222,15 +222,15 @@ def compare_angles(angle_pred, angle_targ):
 
 #########################################
 class NeuralNetworkBlind(nn.Module):
-    def __init__(self, input, output, nlayers = 8, depth=20):
+    def __init__(self, input, output, nlayers = 8, width=20):
         super().__init__()
         Mod_list = []
         for i in range(nlayers):
-            block = linear_deep(depth*2**(i+1))
+            block = linear_deep(width*2**(i+1))
             Mod_list.append( block )
         self.blocks = nn.ModuleList(Mod_list)
-        self.layer_first = nn.Linear(input, depth*2)
-        self.layer_last = nn.Linear(depth*nlayers*2**(nlayers-1)+input-2*depth, output)
+        self.layer_first = nn.Linear(input, width*2)
+        self.layer_last = nn.Linear(width*nlayers*2**(nlayers-1)+input-2*width, output)
         
     def forward(self, x_in):
             x_next = self.layer_first(x_in)
@@ -253,17 +253,17 @@ class NeuralNetworkBlind(nn.Module):
 
 class NeuralNetworkStack(nn.Module):
 
-    def __init__(self, n_in, n_out, nlayers=8, depth=20):
+    def __init__(self, n_in, n_out, nlayers=8, width=20):
         super().__init__()
                 
         Mod_list = []
         for i in range(nlayers):
-            block = linear_layer(depth)
+            block = linear_layer(width)
             Mod_list.append( block )
         
         self.blocks = nn.ModuleList(Mod_list)
-        self.layer_first = nn.Linear(n_in, depth)
-        self.layer_last = nn.Linear(depth*(nlayers+1)+n_in, n_out)
+        self.layer_first = nn.Linear(n_in, width)
+        self.layer_last = nn.Linear(width*(nlayers+1)+n_in, n_out)
         
     def forward(self, x_in):
         x_next = self.layer_first(x_in)
@@ -286,18 +286,18 @@ class NeuralNetworkStack(nn.Module):
         return out
     
 class NeuralNetworkSkip(nn.Module):
-    def __init__(self, n_in, n_out, nlayers=8, depth=20):
+    def __init__(self, n_in, n_out, nlayers=8, width=20):
         super().__init__()
                 
         Mod_list = []
         for i in range(nlayers):
-            block = linear_layer(depth)
+            block = linear_layer(width)
             Mod_list.append( block )
         
         self.blocks = nn.ModuleList(Mod_list)
 
-        self.layer_first = nn.Linear(n_in, depth)
-        self.layer_last = nn.Linear(depth, n_out)
+        self.layer_first = nn.Linear(n_in, width)
+        self.layer_last = nn.Linear(width, n_out)
         
     def forward(self, x_in):
     
@@ -325,15 +325,15 @@ class NeuralNetwork(nn.Module):
         x = self.linear_relu_stack(x)
         return x
     
-def linear_layer(depth):
-    return nn.Sequential( nn.Linear(depth, depth*2),   nn.LeakyReLU(),
-                          nn.Linear(depth*2, depth),   nn.LeakyReLU()
+def linear_layer(width):
+    return nn.Sequential( nn.Linear(width, width*2),   nn.LeakyReLU(),
+                          nn.Linear(width*2, width),   nn.LeakyReLU()
     )
 
-def linear_deep(depth):
-    return nn.Sequential( nn.Linear(depth, depth*2), nn.LeakyReLU(),
-                          nn.Linear(depth*2,depth*4), nn.LeakyReLU(),
-                          nn.Linear(depth*4,depth*2), nn.LeakyReLU(),)
+def linear_deep(width):
+    return nn.Sequential( nn.Linear(width, width*2), nn.LeakyReLU(),
+                          nn.Linear(width*2,width*4), nn.LeakyReLU(),
+                          nn.Linear(width*4,width*2), nn.LeakyReLU(),)
 
 def get_DH_params(model):
     
