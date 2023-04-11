@@ -34,13 +34,14 @@ class dynamic_gui:
     def clicked(self):
         self.no_click = False
         self.robot = self.main.robot_options.currentItem()
-        self.main.graph.kin.model_param(self.robot.text())
+        self.main.graph.kin.model_type(self.robot.text())
         self.param_load()
         self.backend.motor_list = []
         self.backend.coord_list = []
         self.main.motorlist.clear()
         self.main.coordlist.clear()
         self.slider_change()
+        self.backend.slider_limits()
         motorlist = self.main.kinematics.motorscan()
         self.backend.model_build()
         self.main.graph.kin.update_position()
@@ -97,23 +98,30 @@ class dynamic_gui:
     #################################################################################
 
     def change_alpha(self,alpha):
-       self.param["alpha"] = alpha
+        try: self.param["alpha"] = string_to_list(alpha)
+        except: return
         
     def change_theta(self, theta):
-       self.param["theta"] = theta
+        try: self.param["theta"] = string_to_list(theta)
+        except: return
     
     def change_radius(self, radius):
-       self.param["radius"] = radius
+        try: self.param["radius"] = string_to_list(radius)
+        except: return
     
     def change_dists(self, dists):
-       self.param["dists"] = dists
+        try: self.param["dists"] = string_to_list(dists)
+        except: return
 
     def change_active(self, active):
-       self.param["active"] = active
+        try: self.param["active"] = string_to_list_active(active)
+        except: return
     
     def change_limits(self,limits):
-       self.param["limits"] = limits
-    
+        print(self.param)
+        try: self.param["limits"] = string_to_list2(limits)
+        except: print(self.param["limits"]) ; return
+            
     def param_load(self):
         if not self.first_param:
             self.param = self.robot_from_presets(self.robot.text())
@@ -158,7 +166,21 @@ class dynamic_gui:
             self.main.robot_options.insertItem(i,key)
     
     def update_visual(self):
-        self.clicked()
+        param = self.main.kinematics.DH_params(self.param)
+        print(param)
+        self.main.graph.kin.model_param(param)
+        self.backend.motor_list = []
+        self.backend.coord_list = []
+        self.main.motorlist.clear()
+        self.main.coordlist.clear()
+        self.slider_change()
+        self.backend.slider_limits()
+        motorlist = self.main.kinematics.motorscan()
+        self.backend.model_build()
+        self.main.graph.kin.update_position()
+        self.main.graph.update()
+        if self.main.vis_path == True:
+            self.main.graph.draw_path(self.backend.endpositions, self.first)
 
 def val(i, pos, limits, radius, theta, active):
     if i ==0 and pos != False:
@@ -169,3 +191,23 @@ def val(i, pos, limits, radius, theta, active):
             return str(radius[i])
         elif type == "t":
             return str(theta[i])
+
+def string_to_list(x):
+    return list(map(int, x[1:-1].split(',')))
+
+def string_to_list2(x):
+    y = []
+    res = list(x[2:-2].replace(" ","").split('],['))
+    print(res)
+    y = []
+    for r in res:
+        try: y.append(list(map(int,r.split(","))))
+        except: 
+            if r.strip() == '':
+                y.append([])
+            else:
+                continue
+    return y
+
+def string_to_list_active(x):
+    return list(map(str.strip, x.strip('][').replace("'", '').split(',')))

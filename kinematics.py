@@ -20,11 +20,17 @@ class Kinematics():
     def __init__(self, robot):
         self.json_info = json_handler()
         self.orientation = False
-        self.model_param(robot)
+        self.model_type(robot)
         self.update_position()    
+    
+    def model_type(self, robot):
+        atrdal = self.DH_params(self.json_info.unpack()[robot])
+        self.model_param(atrdal)
 
-    def model_param(self,robot):
-        atrdal = get_DH_params(self.json_info.unpack()[robot])
+    def DH_params(self, param):
+        return get_DH_params(param)
+
+    def model_param(self,atrdal):
         self.parameters = copy.deepcopy(atrdal)
         self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = self.parameters
         self.update_position()

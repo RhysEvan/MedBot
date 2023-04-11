@@ -34,7 +34,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         ## json compiler initiation ##
         self.file = json_handler()
         ## Initialisation of GUI ##
-        self.visual.kin.model_param(self.robot_type)
+        self.visual.kin.model_type(self.robot_type)
     
         if pleora:
             ## Threaded Camera Left## 
