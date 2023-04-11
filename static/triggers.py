@@ -38,4 +38,6 @@ class trigger():
         main.DH_param_4.textEdited.connect(main.back.dynamic.change_dists)
         main.DH_param_5.textEdited.connect(main.back.dynamic.change_active)
         main.DH_param_6.textEdited.connect(main.back.dynamic.change_limits)
+        main.Save_DH_param.clicked.connect(main.back.dynamic.json_type)
+        main.Push_Changes.clicked.connect(main.back.dynamic.model_list)
  

@@ -1,18 +1,22 @@
-from static.presets_robot_models import preset_models
 from kinematics import get_DH_params
 from functools import partial
 from Inverse_run import inverse_ai
+from PyQt5.QtWidgets import *
+import copy
+
 
 class dynamic_gui:
     def __init__(self, backend):
-        self.inverse = inverse_ai()
+        self.no_click = True
+        self.first_param = True
         self.backend = backend
         self.main = self.backend.main
+        self.param = self.robot_from_presets(self.main.robot_type)
         self.first = 0
         self.val = partial(self.slider_change)
-        for i,key in enumerate(preset_models.keys()):
-            self.main.robot_options.insertItem(i,key)
-        self.param_load(self.main.robot_type)
+        self.model_list()
+        self.param_load()
+        self.inverse = inverse_ai(self)
 
     def show_path(self):
         self.main.vis_path = not self.main.vis_path
@@ -28,9 +32,10 @@ class dynamic_gui:
         self.first = 1
 
     def clicked(self):
+        self.no_click = False
         self.robot = self.main.robot_options.currentItem()
         self.main.graph.kin.model_param(self.robot.text())
-        self.param_load(self.robot.text())
+        self.param_load()
         self.backend.motor_list = []
         self.backend.coord_list = []
         self.main.motorlist.clear()
@@ -92,45 +97,72 @@ class dynamic_gui:
     #################################################################################
 
     def change_alpha(self,alpha):
-        param = preset_models[self.main.robot_type]
-        param["alpha"] = alpha
+       self.param["alpha"] = alpha
         
     def change_theta(self, theta):
-        param = preset_models[self.main.robot_type]
-        param["theta"] = theta
+       self.param["theta"] = theta
     
     def change_radius(self, radius):
-        param = preset_models[self.main.robot_type]
-        param["radius"] = radius
+       self.param["radius"] = radius
     
-    def change_dists(self, dists): 
-        param = preset_models[self.main.robot_type]
-        param["dists"] = dists
+    def change_dists(self, dists):
+       self.param["dists"] = dists
 
     def change_active(self, active):
-        param = preset_models[self.main.robot_type]
-        param["active"] = active
+       self.param["active"] = active
     
     def change_limits(self,limits):
-        param = preset_models[self.main.robot_type]
-        param["limits"] = limits
+       self.param["limits"] = limits
     
-    def param_load(self, robot):
-        param = preset_models[robot]
-        self.main.DH_param_1.setText(str(param["alpha"]))
-        self.main.DH_param_2.setText(str(param["theta"]))
-        self.main.DH_param_3.setText(str(param["radius"]))
-        self.main.DH_param_4.setText(str(param["dists"]))
-        self.main.DH_param_5.setText(str(param["active"]))
-        self.main.DH_param_6.setText(str(param["limits"]))
+    def param_load(self):
+        if not self.first_param:
+            self.param = self.robot_from_presets(self.robot.text())
+        self.main.DH_param_1.setText(str(self.param["alpha"]))
+        self.main.DH_param_2.setText(str(self.param["theta"]))
+        self.main.DH_param_3.setText(str(self.param["radius"]))
+        self.main.DH_param_4.setText(str(self.param["dists"]))
+        self.main.DH_param_5.setText(str(self.param["active"]))
+        self.main.DH_param_6.setText(str(self.param["limits"]))
+        self.first_param = False
 
+    def json_type(self):
+        if self.no_click:
+            name , done = QInputDialog.getText(
+                    self.main, 'Saving with name', 'Enter the name:', QLineEdit.Normal, self.main.robot_type)
+        else:
+            name , done = QInputDialog.getText(
+            self.main, 'Saving with name', 'Enter the name:', QLineEdit.Normal, self.robot.text())
+        if done:
+            update = self.dictonary_handler(name)
+            self.main.file.transfer(update)
+            self.model_list()
+    
+    def robot_from_presets(self,name):
+        robots = self.presets()
+        robot = robots[name]
+        return robot
+
+    def presets(self):
+        self.main.file.filename = "./static/presets.json"
+        return self.main.file.unpack()
+
+    def dictonary_handler(self, name):
+        robot = self.main.file.unpack()
+        robot[name] = self.param
+        return robot
+    
+    def model_list(self):
+        robots = self.presets()
+        self.main.robot_options.clear()
+        for i,key in enumerate(robots.keys()):
+            self.main.robot_options.insertItem(i,key)
+    
+    def update_visual(self):
+        self.clicked()
 
 def val(i, pos, limits, radius, theta, active):
     if i ==0 and pos != False:
-        limits.pop(pos)
-        active.pop(pos)
-        radius.pop(pos)
-        theta.pop(pos)
+        limits.pop(pos)  ;  active.pop(pos)  ;  radius.pop(pos)  ;  theta.pop(pos)
     if i < len(limits): 
         type = active[i]
         if type == "r":

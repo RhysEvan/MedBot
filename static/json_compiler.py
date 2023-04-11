@@ -4,13 +4,13 @@ import os
 class json_handler():
     def __init__(self, parent=None):
         super().__init__()
-        self.filename = "./paths/data_test.json"
+        self.filename = "./static/presets.json"
 
     def transfer(self,data):
         if data == []:
             print("nothing to compile")
             return 
-        jsonString = json.dumps(data)
+        jsonString = json.dumps(data, indent=3)
         jsonFile = open(self.filename, "w")
         jsonFile.write(jsonString)
         jsonFile.close()
@@ -21,6 +21,3 @@ class json_handler():
         recording = json.loads(temp)
         file.close()
         return recording
-    
-    def presets_json(self):
-        print("work on it.")

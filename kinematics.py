@@ -13,21 +13,21 @@ import torch
 from scipy.spatial.transform import Rotation as R
 import copy
 
-import static.presets_robot_models as presets_robot_models
-
+from static.json_compiler import json_handler
 
 class Kinematics():
     
     def __init__(self, robot):
-
+        self.json_info = json_handler()
         self.orientation = False
         self.model_param(robot)
         self.update_position()    
 
     def model_param(self,robot):
-        atrdal = get_DH_params(presets_robot_models.preset_models[robot])
-        parameters = copy.deepcopy(atrdal)
-        self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = parameters
+        atrdal = get_DH_params(self.json_info.unpack()[robot])
+        self.parameters = copy.deepcopy(atrdal)
+        self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = self.parameters
+        self.update_position()
 
     def update_position(self, DH = None):
         

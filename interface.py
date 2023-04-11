@@ -10,7 +10,6 @@ from matplotlib import animation
 import copy
 #files
 from kinematics import Kinematics,forward_all, get_DH_params
-import static.presets_robot_models as presets_robot_models
 
 ################################################
 class interface(QWidget):

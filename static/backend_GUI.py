@@ -212,6 +212,7 @@ class backend():
             self.run_json()
 
 def motor_record(limit,motor):
+    item = ""
     idx = ["A","B","C","D","E","F"]
     for i in range(len(limit)):
         item += idx[i]+": "+str(motor[i].value())+" "

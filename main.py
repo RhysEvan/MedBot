@@ -23,6 +23,7 @@ except:
 class app_stitching(QMainWindow, Ui_MainWindow):
     def __init__(self, port = None, pleora= True):
         super().__init__()
+        self.custom_list = True
         self.vis_path = False
         self.animate = False
         self.map_run = False
@@ -30,8 +31,11 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.presets = True
         self.robot_type = "HangingArm"
         self.setupUi(self)
+        ## json compiler initiation ##
+        self.file = json_handler()
         ## Initialisation of GUI ##
         self.visual.kin.model_param(self.robot_type)
+    
         if pleora:
             ## Threaded Camera Left## 
             self.cam_l = Feed("2BA200004266") ## Number represents the camera adress on the computer ##
@@ -47,14 +51,15 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         ## conection to interface to create matplot visual ##
         self.graph = self.visual
         self.kinematics = self.graph.kin
+        self.kinematics.update_position()
+        self.graph.update()
         ## connection to arduino GRBL ##
         self.com = serial_bridge_GRBL()
         custom = False
         if self.com.device == None:
             self.com = serial_bridge_CUSTOM()
             custom = True
-        ## json compiler initiation ##
-        self.file = json_handler()
+
         ## all background related functions ##
         self.back = backend(self,custom_check = custom)
         ##link to 3D mapping code ##

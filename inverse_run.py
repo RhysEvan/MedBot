@@ -4,12 +4,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import torch
 from Inverse_Kinematics.forward import *
-from static.presets_robot_models import preset_models
 import kinematics
 from inverse import with_torch
 class inverse_ai():
-    def __init__(self, coordinates = None):
-        self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = get_DH_params(preset_models["HangingArm"])
+    def __init__(self, dynamic, coordinates = None):
+        self.dyn = dynamic
+        self.alpha, self.theta, self.radius, self.dists, self.active, self.limits = get_DH_params(self.dyn.robot_from_presets("HangingArm"))
         self.For_model = kinematics.Kinematics("HangingArm")
         self.model = torch.load(r"Inverse_Kinematics\kine_models\HangingArm.pt")
         if __name__ == "__main__":
