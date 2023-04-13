@@ -193,7 +193,7 @@ def val(i, pos, limits, radius, theta, active):
             return str(theta[i])
 
 def string_to_list(x):
-    return list(map(int, x[1:-1].split(',')))
+    return list(map(int, x[1:-1].replace(" ","").split(',')))
 
 def string_to_list2(x):
     y = []
