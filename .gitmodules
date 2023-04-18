@@ -1,3 +1,6 @@
 [submodule "retna"]
 	path = retna
 	url = https://github.com/EdgarCardenasDeLaHoz/retna
+[submodule "checherkboard_detection"]
+	path = checherkboard_detection
+	url = https://bitbucket.org/MichaelHillen/checkerboard_detection/src/main/
