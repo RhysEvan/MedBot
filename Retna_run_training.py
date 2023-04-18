@@ -92,6 +92,7 @@ class Main():
         #self.epoch = checkpoint['epoch']
         #self.optimizer = None
         self.model.eval()
+        if self.model is not None:  self.model = self.model.to("cuda:0")
 
     def loader(self):
         self.datas =  glob.glob(self.path_data)
@@ -112,9 +113,7 @@ class Main():
         print_mosaic(self.Loader,self.model)
         plt.show()
 
-    def cam_predict(self, crop, path, model):
-        self.load_state_dict(path, model)
-        if self.model is not None:  self.model = self.model.to("cuda:0")
+    def cam_predict(self, crop):
         crop = torch.from_numpy(resize(crop, (150,150)))
         crop = crop.permute(2,0,1)
         crop = torch.unsqueeze(crop,0)

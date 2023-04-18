@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 class prediction():
     def __init__(self):
         self.retna = Retna_run_training.Main("","",[])
+        self.retna.load_state_dict(r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models", "\\pleora_state_dict_2.pt")
 
     def paste_predict(self, image):
         if image is None:
@@ -18,7 +19,7 @@ class prediction():
         else:
             #contours = self.wound_encase(image)
             #crop = self.cropper(image, contours)
-            pred = self.retna.cam_predict(image, r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models", "\\pleora_state_dict_2.pt")
+            pred = self.retna.cam_predict(image)
             #skeleton = pred
             skeleton = skeletonize(pred)
             image = (resize(image, (480,640))*255).astype(np.uint8)
