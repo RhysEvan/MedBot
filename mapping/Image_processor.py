@@ -4,7 +4,7 @@ import os
 import numpy as np
 import mapping.Projector as Projector
 import mapping.InputParameters as InputParameters
-from CameraModel.Pleora.RGB.GenericRGBCamera import GenericRGBCamera
+from CameraModel.Pleora.PleoraCamera import PleoraCamera
 from skimage import img_as_ubyte
 import matplotlib.pyplot as plt
 
@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 class Image_Handle():
     def __init__(self,test = False, location_L = None, location_R = None):
         if test:
-            self.cam_L = GenericRGBCamera()
-            self.cam_R = GenericRGBCamera()
+            self.cam_L = PleoraCamera()
+            self.cam_R = PleoraCamera()
             self.loc_L = location_L
             self.loc_R = location_R
         elif not test:
@@ -28,6 +28,7 @@ class Image_Handle():
         self.cam_L.SetParameterDouble("ExposureTime", 17000)
         self.cam_L.SetParameterDouble("Gain", 15.5)
         self.cam_L.SetParameterDouble("Binning",2)
+        self.calib_percentile_whitebalanceL(99)
         ret = self.cam_R.Open(self.loc_R)
         if ret == None:
             return
@@ -35,7 +36,15 @@ class Image_Handle():
         self.cam_R.SetParameterDouble("ExposureTime", 17000)
         self.cam_R.SetParameterDouble("Gain", 15.5)
         self.cam_R.SetParameterDouble("Binning", 2)
+        self.calib_percentile_whitebalanceR(99)
 
+    def GetCalibrateFrame(self):
+        self.Image_L = cv2.cvtColor(self.cam_L.GetFrame().clip(0,255).astype(np.uint8), cv2.COLOR_BayerRGGB2RGB)
+        Pic_L = self.white_balance_image(self.Image_L,self.CalibL)
+        self.Image_R = cv2.cvtColor(self.cam_R.GetFrame().clip(0,255).astype(np.uint8), cv2.COLOR_BayerRGGB2RGB)
+        Pic_R = self.white_balance_image(self.Image_R,self.CalibR)
+        return [Pic_L , Pic_R]
+    
     def GetFrame(self):
         self.Image_L = cv2.cvtColor(self.cam_L.GetFrame().clip(0,255).astype(np.uint8), cv2.COLOR_BayerRGGB2GRAY)
         self.Image_R = cv2.cvtColor(self.cam_R.GetFrame().clip(0,255).astype(np.uint8), cv2.COLOR_BayerRGGB2GRAY)
@@ -148,6 +157,18 @@ class Image_Handle():
             else :
                 break
 
+    def white_balance_image(self, image, Calib):
+        return img_as_ubyte((image * 1.0 / Calib).clip(0, 1))
+
+    def calib_percentile_whitebalanceL(self, percentile_value):
+            image = self.cam_L.GetFrame()
+            image = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_BayerRGGB2RGB)
+            self.CalibL =  np.percentile(image, percentile_value, axis=(0, 1))
+
+    def calib_percentile_whitebalanceR(self, percentile_value):
+            image = self.cam_R.GetFrame()
+            image = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_BayerRGGB2RGB)
+            self.CalibR =  np.percentile(image, percentile_value, axis=(0, 1))
 
 
 

@@ -5,7 +5,7 @@ import time
 import numpy as np
 import cv2
 from skimage import img_as_ubyte
-from CameraModel.Pleora.RGB.GenericRGBCamera import GenericRGBCamera
+from CameraModel.Pleora.PleoraCamera import PleoraCamera
 from PIL import Image
 from PIL.ImageQt import ImageQt
 from static.prediction import prediction
@@ -14,7 +14,7 @@ from static.prediction import prediction
 class Feed(QThread):
     def __init__(self , location = None, parent=None):
         super(Feed,self).__init__(parent)
-        self.cam = GenericRGBCamera()
+        self.cam = PleoraCamera()
         self.loc = location
         self.predict = prediction()
         self.first = True

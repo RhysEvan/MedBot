@@ -79,7 +79,7 @@ class triangulator():
                         projpoints1 = np.array([[inverseLeftCam[ii][jj][0], inverseLeftCam[ii][jj][1]],
                                                 [inverseRightCam[ii][jj][0], inverseRightCam[ii][jj][1]]], dtype=np.float32)
 
-                        points4D = cv.triangulatePoints(p1, p2, projpoints1[0], projpoints1[1])  # De correcte manier
+                        points4D = cv.triangulatePoints(self.p1, self.p2, projpoints1[0], projpoints1[1])  # De correcte manier
                         points3D = points4D[:3] / points4D[3]  ## From Homogenous coordinates to Cartesian
                         testarray.append(points3D[:3])
 

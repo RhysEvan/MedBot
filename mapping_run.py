@@ -30,7 +30,7 @@ class Mapping():
         calibrate = input('Do you want to do a new calibration? Yes/no \nIf not, parameters of last calibration will be used. These may be incorrect. \nYes / no : ')
         if calibrate == 'yes' or calibrate == 'Yes':
             print('Starting Calibration...')
-            import mapping.StereoCalibration
+            import StereoCalibration_AI
         elif calibrate == 'no' or calibrate == 'No':
             print('Calibration parameters of last calibration used :')
             self.triang.PrintParameters()
