@@ -21,8 +21,6 @@ RightCamera = InputParameters.RightCamera
 detector = CBDPipeline(detector=GeigerDetector() ,expand=True, predict=True)
 detector.must_plot_iterations = False
 
-cams = Image_processor.Image_Handle(test = True, location_L =LeftCamera, location_R =RightCamera)
-cams.OpenCAM()
 ## Termination Criteria for iterative subpixel loop
 criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
@@ -37,6 +35,8 @@ imgPointsL = []  # 2d points in image plane.
 imgPointsR = []
 
 def picture_taking():
+    cams = Image_processor.Image_Handle(test = True, location_L =LeftCamera, location_R =RightCamera)
+    cams.OpenCAM()
     counter = 0
     print('Please take a minimum of 10 Images\n')
     while True :
@@ -73,33 +73,34 @@ def checkerboard_drawing(rgbL,rgbR,left,right):
     #board_xy_R = np.hstack((board_xy_R,np.zeros((len(board_xy_R),1))))
     print(len(board_uv_L) == len(objp))
     print(len(board_uv_R) == len(objp))
-    if results_L and results_R == 1 or 2 :
-        objPoints.append(objp)
+    if len(board_uv_L) == len(objp) and len(board_uv_R) == len(objp):
+        if results_L and results_R == 1 or 2 :
+            objPoints.append(objp)
 
-        #cornersL = cv.cornerSubPix(left, board_uv_L, (11, 11), (-1, -1), criteria)
-        imgPointsL.append(np.array(board_uv_L).astype(np.float32))
+            #cornersL = cv.cornerSubPix(left, board_uv_L, (11, 11), (-1, -1), criteria)
+            imgPointsL.append(np.array(board_uv_L).astype(np.float32))
 
-        #cornersR = cv.cornerSubPix(right, board_uv_R, (11, 11), (-1, -1), criteria)
-        imgPointsR.append(np.array(board_uv_R).astype(np.float32))
-        #cv.drawChessboardCorners(rgbL, chessboardSize, cornersL)
-        # Draw and display the corner
-        plt.imshow(rgbL)
-        plt.plot(board_uv_L[:, 0], board_uv_L[:, 1], 'go', markeredgecolor='k')
-        for i in range(0, board_uv_L.shape[0]):
-            plt.text(board_uv_L[i, 0], board_uv_L[i, 1], i, color="black")
-        title = "Detected checkerboard Left"
-        plt.title(title)
-        plt.show()
+            #cornersR = cv.cornerSubPix(right, board_uv_R, (11, 11), (-1, -1), criteria)
+            imgPointsR.append(np.array(board_uv_R).astype(np.float32))
+            #cv.drawChessboardCorners(rgbL, chessboardSize, cornersL)
+            # Draw and display the corner
+            plt.imshow(rgbL)
+            plt.plot(board_uv_L[:, 0], board_uv_L[:, 1], 'go', markeredgecolor='k')
+            for i in range(0, board_uv_L.shape[0]):
+                plt.text(board_uv_L[i, 0], board_uv_L[i, 1], i, color="black")
+            title = "Detected checkerboard Left"
+            plt.title(title)
+            plt.show()
 
-        plt.imshow(rgbR)
-        plt.plot(board_uv_R[:, 0], board_uv_R[:, 1], 'go', markeredgecolor='k')
-        for i in range(0, board_uv_R.shape[0]):
-            plt.text(board_uv_R[i, 0], board_uv_R[i, 1], i, color="black")
-        title = "Detected checkerboard Right"
-        plt.title(title)
-        plt.show()
-    else:
-        print("Error in finding chessboard corners")
+            plt.imshow(rgbR)
+            plt.plot(board_uv_R[:, 0], board_uv_R[:, 1], 'go', markeredgecolor='k')
+            for i in range(0, board_uv_R.shape[0]):
+                plt.text(board_uv_R[i, 0], board_uv_R[i, 1], i, color="black")
+            title = "Detected checkerboard Right"
+            plt.title(title)
+            plt.show()
+        else:
+            print("Error in finding chessboard corners")
 
 def matrix_determination(left,right):
 
@@ -141,7 +142,7 @@ def save_load(newCameraMatrixL,cameraMatrixL,newCameraMatrixR,cameraMatrixR,gray
         objPoints, imgPointsL, imgPointsR, newCameraMatrixL, distL, newCameraMatrixR, distR, gray.shape[::-1],
         criteria_stereo, flags)
 
-
+    print(retStereo)
     #################################### PROJECTION MATRICES #############################################################################
     # Projection matrices for both cameras (P = M*R|t)     (left camera uses the identity matrix)
 
@@ -183,11 +184,11 @@ def load_existing_img():
     imagesLeft = glob.glob('ChessboardLeftCam*.tiff')
     imagesRight = glob.glob('ChessboardRightCam*.tiff')           # Hier moeten nog de rechtse foto's komen
     for imgLeft, imgRight in zip(imagesLeft, imagesRight):
-        imgL = cv.imread(imgLeft)
-        imgR = cv.imread(imgRight)
-        grayL = cv.cvtColor(imgL, cv.COLOR_BGR2GRAY)
-        grayR = cv.cvtColor(imgR, cv.COLOR_BGR2GRAY)
-        checkerboard_drawing(imgL,imgR,grayL,grayR)
+            imgL = cv.imread(imgLeft)
+            imgR = cv.imread(imgRight)
+            grayL = cv.cvtColor(imgL, cv.COLOR_BGR2GRAY)
+            grayR = cv.cvtColor(imgR, cv.COLOR_BGR2GRAY)
+            checkerboard_drawing(imgL,imgR,grayL,grayR)
     newmatrixL, matrixL, newmatrixR, matrixR, dL, dR = matrix_determination(left = imgL,right = imgR)
     return [newmatrixL, matrixL, newmatrixR, matrixR, dL, dR, grayL]
 

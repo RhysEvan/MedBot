@@ -123,9 +123,9 @@ class Main():
         return P
 
 if __name__ == "__main__":
-    data_path = r"C:\Users\mheva\OneDrive\Bureaublad\temp/*"
-    model_path = r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models"
-    model = "\\pleora_state_dict_3.pt"
+    data_path = r"C:\Users\mheva\OneDrive\Bureaublad\Univerisity_Work\Master\Images\database_cadaver/*"
+    model_path = r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models_cad"
+    model = "\\any_loss_state_dict.pt"
     call = Main(data_path,
                 model_path,
                 [32,32,16,16,16,8],
@@ -139,7 +139,7 @@ if __name__ == "__main__":
     #for i in range(1):
     #    try: call.training(model, 50, True, loss=50, train=200, cycles=10, patience = None, photo=False)
     #call.training(model, 10000, False, loss=80, train=10, cycles=10, patience = 80, photo=False)
-    call.load_state_dict(model)
+    call.load_state_dict(model_path,model)
     #call.call_trained_full_model(model_path, model)
     call.mosaic()
 

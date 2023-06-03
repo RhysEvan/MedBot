@@ -1,11 +1,11 @@
 import glob
 import cv2 as cv
 import numpy as np
-import Graycode
+import mapping.Graycode as Graycode
 import os
-import Image_processor
+import mapping.Image_processor as Image_processor
 import pickle
-import InputParameters
+import mapping.InputParameters as InputParameters
 import csv
 import copy
 import matplotlib.pyplot as plt
@@ -16,10 +16,6 @@ frameSize = (640,480)
 LeftCamera = InputParameters.LeftCamera
 RightCamera = InputParameters.RightCamera
 
-camL = Image_processor.Image_Handle(LeftCamera)
-camR = Image_processor.Image_Handle(RightCamera)
-camL.OpenCAM()
-camR.OpenCAM()
 ## Termination Criteria for iterative subpixel loop
 criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
@@ -34,12 +30,13 @@ imgPointsL = []  # 2d points in image plane.
 imgPointsR = []
 
 def picture_taking():
+    cams = Image_processor.Image_Handle(test = True, location_L =LeftCamera, location_R =RightCamera)
+    cams.OpenCAM()
     counter = 0
     print('Please take a minimum of 10 Images\n')
     while True :
         os.chdir(InputParameters.ChessboardImagesDirectory)
-        frameL = camL.GetFrame()
-        frameR = camR.GetFrame()
+        frameL,frameR = cams.GetCalibrateFrame()
         plt.imshow(frameL)
         plt.show()
         plt.imshow(frameR)
@@ -48,8 +45,8 @@ def picture_taking():
         if "s" == reply:
                 imgL = copy.deepcopy(frameL)
                 imgR = copy.deepcopy(frameR)
-                grayL = cv.cvtColor(imgL, cv.COLOR_BGR2GRAY)
-                grayR = cv.cvtColor(imgR, cv.COLOR_BGR2GRAY)
+                grayL = cv.cvtColor(imgL, cv.COLOR_RGB2GRAY)
+                grayR = cv.cvtColor(imgR, cv.COLOR_RGB2GRAY)
                 checkerboard_drawing(imgL,imgR,grayL,grayR)
                 affirm = input("type y if happy:\n")
                 if affirm == "y":
@@ -126,7 +123,7 @@ def save_load(newCameraMatrixL,cameraMatrixL,newCameraMatrixR,cameraMatrixR,gray
         objPoints, imgPointsL, imgPointsR, newCameraMatrixL, distL, newCameraMatrixR, distR, gray.shape[::-1],
         criteria_stereo, flags)
 
-
+    print(retStereo)
     #################################### PROJECTION MATRICES #############################################################################
     # Projection matrices for both cameras (P = M*R|t)     (left camera uses the identity matrix)
 

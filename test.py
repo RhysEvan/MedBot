@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 os.chdir("..")
 print(os.getcwd())
-fns = glob.glob(r"C:\Users\mheva\OneDrive\Bureaublad\checkerboard_test\*")
+fns = glob.glob(r"C:\Users\mheva\OneDrive\Bureaublad\Univerisity_Work\Semester-2\Visie\checkerboard_test\*")
 #I = plt.imread(fns[2])
 #if I.ndim == 3: im = I.mean(axis=2)
 

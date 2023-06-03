@@ -165,21 +165,21 @@ def evaluate_plot(For_model, model):
     axs[1].set_xlabel("x")
     axs[1].set_ylabel("z")
     axs[1].set_title("blue = target")
+    if inputs.shape[-1]!=3:
+        fig,axs = plt.subplots(1,3)
+        axs[0].plot(pred_xys[:,3],inputs[:,3], "o")
+        axs[0].set_xlabel("a")
+        axs[0].set_ylabel("a")
 
-    fig,axs = plt.subplots(1,3)
-    axs[0].plot(pred_xys[:,3],inputs[:,3], "o")
-    axs[0].set_xlabel("a")
-    axs[0].set_ylabel("a")
-
-    axs[1].plot(pred_xys[:,4],inputs[:,4], "o")
-    axs[1].set_xlabel("b")
-    axs[1].set_ylabel("b")
-    axs[1].set_title("euler angles")
-    
-    axs[2].plot(pred_xys[:,5],inputs[:,5], "o")
-    axs[2].set_xlabel("g")
-    axs[2].set_ylabel("g")
-    axs[2].set_title("blue = target")
+        axs[1].plot(pred_xys[:,4],inputs[:,4], "o")
+        axs[1].set_xlabel("b")
+        axs[1].set_ylabel("b")
+        axs[1].set_title("euler angles")
+        
+        axs[2].plot(pred_xys[:,5],inputs[:,5], "o")
+        axs[2].set_xlabel("g")
+        axs[2].set_ylabel("g")
+        axs[2].set_title("blue = target")
 
 
     ######
