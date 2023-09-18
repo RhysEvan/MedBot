@@ -4,8 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import torch
 from Inverse_Kinematics.forward import *
-import kinematics
-from inverse import with_torch
+import Inverse_Kinematics.kinematics as kinematics
+from Inverse_Kinematics.inverse import with_torch
 class inverse_ai():
     def __init__(self, dynamic, coordinates = None):
         self.dyn = dynamic

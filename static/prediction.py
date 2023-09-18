@@ -1,4 +1,4 @@
-import Retna_run_training
+import retna.Retna_run_training as Retna_run_training
 import numpy as np
 from skimage.morphology import skeletonize, thin
 from skimage.transform import resize

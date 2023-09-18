@@ -6,7 +6,7 @@ import torch.optim as optim
 
 import matplotlib.pyplot as plt
 import torch
-import inverse
+import Inverse_Kinematics.inverse as inverse
 
 def train_motors(For_model, model):
 
