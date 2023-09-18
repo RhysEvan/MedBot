@@ -10,3 +10,6 @@
 [submodule "threed_mapping"]
 	path = threed_mapping
 	url = https://github.com/RhysEvan/threed_mapping
+[submodule "kinematics"]
+	path = Inverse_kinematics_ML
+	url = https://github.com/RhysEvan/Inverse_kinematics_ML
