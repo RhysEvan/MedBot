@@ -1,7 +1,7 @@
 .ipynb_checkpoints
 *.egg-info
 /CameraModel
-
+/mapping/Images
 *.png
 
 # Byte-compiled / optimized / DLL files
