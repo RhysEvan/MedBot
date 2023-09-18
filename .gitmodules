@@ -4,3 +4,6 @@
 [submodule "checherkboard_detection"]
 	path = checherkboard_detection
 	url = https://bitbucket.org/MichaelHillen/checkerboard_detection/src/main/
+[submodule "Arduino_robot_control"]
+	path = Arduino_robot_control
+	url = https://github.com/RhysEvan/Arduino_robot_control
