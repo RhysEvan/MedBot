@@ -1,10 +1,10 @@
-from mapping.Image_processor import Image_Handle
-from mapping.Graycode import *
-from mapping.Triangulation import triangulator
+from threed_mapping.Image_processor import Image_Handle
+from threed_mapping.Graycode import *
+from threed_mapping.Triangulation import triangulator
 import cv2
-from mapping.InputParameters import *
+from threed_mapping.InputParameters import *
 import time
-from mapping.Detection import Detecting
+from threed_mapping.Detection import Detecting
 
 
 ## Gray code Pattern Generation (gets saved)

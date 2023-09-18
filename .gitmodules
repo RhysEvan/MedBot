@@ -7,3 +7,6 @@
 [submodule "Arduino_robot_control"]
 	path = Arduino_robot_control
 	url = https://github.com/RhysEvan/Arduino_robot_control
+[submodule "threed_mapping"]
+	path = threed_mapping
+	url = https://github.com/RhysEvan/threed_mapping

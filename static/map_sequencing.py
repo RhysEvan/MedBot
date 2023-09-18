@@ -1,4 +1,4 @@
-from . import mapping_run
+from . import threed_mapping_run
 
 class Map():
     def __init__(self, main):
