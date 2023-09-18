@@ -1,4 +1,3 @@
-
 #include <SoftwareSerial.h>                         //libraries for the processing of the serial command and to controll the stepper motors
 #include <SerialCommand.h>
 #include <AccelStepper.h>

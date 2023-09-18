@@ -15,7 +15,7 @@ from static.triggers import trigger
 #from static.map_sequencing import Map
 #try:
 from connections.cameras import *
-pleora_lib = True
+pleora_lib = False
 #except:
 #    print("Pleora Library not Installed")
 #    pleora_lib = False

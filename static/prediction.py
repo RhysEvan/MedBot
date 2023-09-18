@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 class prediction():
     def __init__(self):
         self.retna = Retna_run_training.Main("","",[])
-        self.retna.load_state_dict(r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models", "\\pleora_state_dict_2.pt")
+        self.retna.load_state_dict(r"C:\Users\mheva\OneDrive\Documents\GitHub\Stitching_Arm_Master_Thesis\Retna\models_synth", "\\pleora_state_dict_2.pt")
 
     def paste_predict(self, image):
         if image is None:
