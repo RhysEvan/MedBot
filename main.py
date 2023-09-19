@@ -62,7 +62,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
             custom = True
 
         ## all background related functions ##
-        self.back = backend(self,custom_check = custom)
+        self.back = backend(self, self.kinematics, custom_check = custom)
         ##link to 3D mapping code ##
         #self.mapping = Map(self)
 

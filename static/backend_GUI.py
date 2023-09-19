@@ -5,9 +5,9 @@ from .robot_interface import dynamic_gui, val
 from PyQt5.QtWidgets import *
 
 class backend():
-    def __init__(self, main, custom_check = False):
+    def __init__(self, main, kinematics, custom_check = False):
         self.main = main
-        self.dynamic = dynamic_gui(self)
+        self.dynamic = dynamic_gui(self, kinematics)
         ## initial values for the recording list of xyz values ##
         self.x_loc = None
         self.y_loc = None
@@ -34,10 +34,12 @@ class backend():
         self.port_type = custom_check
 
     def copying(self):
-        self.limits = copy.deepcopy(self.main.graph.kin.limits)
-        self.active = copy.deepcopy(self.main.graph.kin.active)
-        self.radius = copy.deepcopy(self.main.graph.kin.radius)
-        self.theta = copy.deepcopy(self.main.graph.kin.theta)
+
+        x = self.main.graph.kin
+        self.limits = copy.deepcopy(x.limits)
+        self.active = copy.deepcopy(x.active)
+        self.radius = copy.deepcopy(x.radius)
+        self.theta = copy.deepcopy(x.theta)
     
     def slider_limits(self):
         for i, lim in enumerate(self.limits):

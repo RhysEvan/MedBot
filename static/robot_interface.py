@@ -6,7 +6,7 @@ import copy
 
 
 class dynamic_gui:
-    def __init__(self, backend):
+    def __init__(self, backend, forward_kine):
         self.no_click = True
         self.first_param = True
         self.backend = backend
@@ -16,7 +16,7 @@ class dynamic_gui:
         self.val = partial(self.slider_change)
         self.model_list()
         self.param_load()
-        self.inverse = inverse_ai(self)
+        self.inverse = inverse_ai(self, forward=forward_kine)
 
     def show_path(self):
         self.main.vis_path = not self.main.vis_path

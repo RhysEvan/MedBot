@@ -16,7 +16,7 @@ class interface(QWidget):
     
     def __init__(self, parent, robot="Prismatic3"):
         super(QWidget, self).__init__(parent)
-        self.kin = Kinematics(robot)
+        self.kin = Kinematics(robot, json_path="./Inverse_kinematics_ML/presets.json")
         self.setup_fig()
 
     def setup_fig(self):
