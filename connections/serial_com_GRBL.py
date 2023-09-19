@@ -45,6 +45,7 @@ class serial_bridge_GRBL:
 
     def connect_to_ports_win(self, pos_ports, find_name):
         ## Search for Suitable Port
+        ard = None
         print(pos_ports)
         if pos_ports != []:
             for port in pos_ports: 

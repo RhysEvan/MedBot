@@ -9,7 +9,7 @@ from matplotlib.figure import Figure
 from matplotlib import animation
 import copy
 #files
-from Inverse_Kinematics.kinematics import Kinematics,forward_all, get_DH_params
+from Inverse_kinematics_ML.kinematics import Kinematics,forward_all, get_DH_params
 
 ################################################
 class interface(QWidget):
