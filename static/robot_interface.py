@@ -1,8 +1,6 @@
-from Inverse_kinematics_ML.kinematics import get_DH_params
 from functools import partial
 from Inverse_kinematics_ML.Inverse_run import inverse_ai
 from PyQt5.QtWidgets import *
-import copy
 
 
 class dynamic_gui:
