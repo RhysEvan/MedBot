@@ -33,6 +33,7 @@ class dynamic_gui:
         self.no_click = False
         self.robot = self.main.robot_options.currentItem()
         self.main.graph.kin.model_type(self.robot.text())
+        self.inverse.update_model_type(self.main.graph.kin)
         self.param_load()
         self.backend.motor_list = []
         self.backend.coord_list = []
