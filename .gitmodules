@@ -7,3 +7,6 @@
 [submodule "kinematics"]
 	path = Inverse_kinematics_ML
 	url = https://github.com/RhysEvan/Inverse_kinematics_ML
+[submodule "retna"]
+	path = retna
+	url = https://github.com/RhysEvan/retna
