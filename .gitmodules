@@ -1,6 +1,3 @@
-[submodule "retna"]
-	path = retna
-	url = https://github.com/EdgarCardenasDeLaHoz/retna
 [submodule "checherkboard_detection"]
 	path = checherkboard_detection
 	url = https://bitbucket.org/MichaelHillen/checkerboard_detection/src/main/
@@ -13,3 +10,6 @@
 [submodule "kinematics"]
 	path = Inverse_kinematics_ML
 	url = https://github.com/RhysEvan/Inverse_kinematics_ML
+[submodule "retna_fork"]
+	path = retna
+	url = https://github.com/RhysEvan/retna
