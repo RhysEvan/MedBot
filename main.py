@@ -29,7 +29,7 @@ class app_stitching(QMainWindow, Ui_MainWindow):
         self.map_run = False
         # if self.presets is true it loads in the base preset py file. If it is false it will load in the custom json.
         self.presets = True
-        self.robot_type = "HangingArm"
+        self.robot_type = "MedBot"
         self.setupUi(self)
         ## json compiler initiation ##
         self.file = json_handler()

@@ -150,7 +150,7 @@ class dynamic_gui:
         return robot
 
     def presets(self):
-        self.main.file.filename = "./static/presets.json"
+        self.main.file.filename = "./Inverse_kinematics_ML/presets.json"
         return self.main.file.unpack()
 
     def dictonary_handler(self, name):
