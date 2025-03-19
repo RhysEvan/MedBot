@@ -1,6 +1,6 @@
 # Master Thesis: Autonomous robot used for medical applications
 
-##Overview
+## Overview
 
 This project presents a robotic arm mounted onto a large XY-translation stage, designed to perform precise movements and tasks.
 The system integrates multiple submodules to enhance functionality and user interaction. A graphical user interface (GUI) is included to simplify user control and operation.
@@ -30,7 +30,7 @@ Launch the GUI and select the desired operational mode.
 Input movement commands or use the inverse kinematics module for automated positioning.
 Utilize the 3D scanning feature for structured light triangulation.
 
-## Restuls
+## Results
 
 The performance of the laceration detection was reliable and robust on cadavers and synthetic skin samples:
   ![image](https://github.com/user-attachments/assets/23193109-ef9f-43e1-91ce-e7dcb9d904ba)
