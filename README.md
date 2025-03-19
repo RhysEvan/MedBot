@@ -1,6 +1,6 @@
-#### Master Thesis: Autonomous robot used for medical applications
+# Master Thesis: Autonomous robot used for medical applications
 
-Overview
+##Overview
 
 This project presents a robotic arm mounted onto a large XY-translation stage, designed to perform precise movements and tasks.
 The system integrates multiple submodules to enhance functionality and user interaction. A graphical user interface (GUI) is included to simplify user control and operation.
@@ -9,18 +9,18 @@ The project was done in less than a year with a group of six students.
 2 Master students and 4 bachelor students.
 I was lead organiser and sole programmer whilst the other group members focused on the mechanical side.
 
-## Submodules
+### Submodules
 
-# Arduino_robot_control
+#### Arduino_robot_control
   Facilitates interaction between the robotic arm and an Arduino microcontroller.
   Ensures efficient command transmission.
-# Inverse Kinematics Machine Learning Module
+#### Inverse Kinematics Machine Learning Module
   Implements machine learning methods to solve inverse kinematics problems.
   Enhances movement precision and adaptability for various tasks.
-# Triangulation Module for 3D Scanning
+#### Triangulation Module for 3D Scanning
   Utilizes structured light (gray-code) to perform 3D scanning.
   Enables object recognition and environmental mapping.
-# Retna
+#### Retna
   Tool for semantic segmentation for laceration detection.
 
 
