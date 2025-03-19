@@ -1,3 +1,6 @@
+> [!WARNING]
+> **DO NOT REPLICATE OR USE THIS WORK AS IT IS NOT IN ANY WAY MEDICALLY APPROVED OR SAFE**
+
 # Master Thesis: Autonomous robot used for medical applications
 
 ## Overview
